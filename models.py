@@ -94,36 +94,43 @@ class StyleEncoder(nn.Module):
         # self.conv1 = conv(3,64,3,1,1,norm = None,activ = None)
         # self.resblk = ResnetBlock(64, None, None)
         # self.avgpool = nn.AveragePool2d()
-        
-        # 1. Define the encoder
-        self.conv1 = conv(3, conv_dim, 3, 2, 1, norm=norm, init_zero_weights=init_zero_weights, activ='relu')
-        self.conv2 = conv(conv_dim, conv_dim*2, 3, 2, 1, norm=norm, init_zero_weights=init_zero_weights, activ='relu')
 
+        # It's going to be something similar to the paper/hw3 but not the same
+        # start off w/ conv like hw 3
+        # then blocks of resblocks w/ avg pools that halve the image size to 4x4
+        # finally linear + relu to get a 1 hot vector
+
+        # # 1. Define the encoder
+        # self.conv1 = conv(3, conv_dim, 3, 2, 1, norm=norm, init_zero_weights=init_zero_weights, activ='relu')
+        # self.conv2 = conv(conv_dim, conv_dim*2, 3, 2, 1, norm=norm, init_zero_weights=init_zero_weights, activ='relu')
+        self.conv1 = conv(3, conv_dim, 4, norm = norm, activ='relu',init_zero_weights = init_zero_weights) # 128 -> 64
+        self.conv2 = conv(conv_dim, conv_dim*2, 4, norm = norm, activ='relu',init_zero_weights = init_zero_weights) # 64 -> 32
+        
         # 2. Define the transformation part
         self.resnet_block = nn.Sequential(
-            ResnetBlock(conv_dim*2, norm='instance', activ='relu'),
-            nn.AveragePool2d(4, 2, 1),
-            ResnetBlock(conv_dim*2, norm='instance', activ='relu'),
-            nn.AveragePool2d(4, 2, 1),
-            ResnetBlock(conv_dim*2, norm='instance', activ='relu'),
-            nn.AveragePool2d(4, 2, 1),
+            ResnetBlock(conv_dim*4, norm='instance', activ='relu'),
+            nn.AveragePool2d(4, 2, 1), # 32 -> 16
+            ResnetBlock(conv_dim*4, norm='instance', activ='relu'),
+            nn.AveragePool2d(4, 2, 1), # 16 -> 8
+            ResnetBlock(conv_dim*4, norm='instance', activ='relu'),
+            nn.AveragePool2d(4, 2, 1), # 8 -> 4
         )
 
         # 3. Define the linear part
-        self.conv3 = conv(conv_dim//2, 1, 3, 2, 1, norm=norm, init_zero_weights=init_zero_weights, activ='leaky')
-        self.conv3 = conv(conv_dim//2, 1, 3, 2, 1, norm=norm, init_zero_weights=init_zero_weights, activ='leaky')
-
-        self.fc1 = nn.Linear(img_size*img_size*conv_dim//..., 256)  # Flattened size after 3 conv layers
-        self.relu = nn.Relu()
-        self.fc2 = nn.Linear(256, num_classes)  # Final layer for classification
+        self.conv3 = conv(conv_dim*4, conv_dim*4, 4, 2, 1, norm=norm, init_zero_weights=init_zero_weights, activ='leaky') # 4 -> 1
+        
+        self.lin1 = nn.Linear(conv_dim * 4, num_classes)  # Final layer for classification
+        self.relu = nn.Relu() 
+        # idk
 
     def forward(self, x):
-        x = self.pool(self.relu(self.conv1(x)))  # Apply conv1 + relu + pool
-        x = self.pool(self.relu(self.conv2(x)))  # Apply conv2 + relu + pool
-        x = self.pool(self.relu(self.conv3(x)))  # Apply conv3 + relu + pool
-        x = x.view(-1, 128 * 28 * 28)  # Flatten the tensor for FC layer
-        x = self.relu(self.fc1(x))  # Apply fc1 + relu
-        x = self.fc2(x)  # Apply fc2 (output)
+        x = self.conv1(x)
+        x = self.conv2(x)
+        x = self.resnet_block(x)
+        x = self.conv3(x)
+        x = x.view(-1, 1)  # Flatten for linear layer
+        x = self.lin1(x)  
+        x = self.relu(x)
         return x.squeeze()
     
 class DCGenerator(nn.Module):
