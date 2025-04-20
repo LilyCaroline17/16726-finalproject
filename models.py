@@ -112,19 +112,26 @@ class Generator(nn.Module):
         self.conv2 = conv(conv_dim, conv_dim*2, 4, norm = norm, activ='relu',init_zero_weights = init_zero_weights) # 64 -> 32
         self.conv3 = conv(conv_dim*2, conv_dim*4, 4, norm = norm, activ='relu',init_zero_weights = init_zero_weights) # 32 -> 16
 
+        # 1.5. Convert the 1 hot vector to something that matches the latent vector's shape
+        self.mlp =  nn.Sequential(
+            nn.Linear(num_classes,32), 
+            nn.Relu(), 
+            nn.Linear(32,16), 
+        )
+
         # 2. Define the transformation part of the generator
         # want it to take in the 1 hot vector to transform it
         self.resnet_block = nn.Sequential(
-            ResnetBlock(conv_dim*4 + num_classes, norm='instance', activ='relu'), 
-            ResnetBlock(conv_dim*4 + num_classes, norm='instance', activ='relu'), 
-            ResnetBlock(conv_dim*4 + num_classes, norm='instance', activ='relu'), 
+            ResnetBlock(conv_dim*4, norm='instance', activ='relu'), 
+            ResnetBlock(conv_dim*4, norm='instance', activ='relu'), 
+            ResnetBlock(conv_dim*4, norm='instance', activ='relu'), 
         )
 
         # 3. Define the decoder part of the generator
         # want it to take in the 1 hot vector too
-        self.up_conv1 = up_conv(conv_dim*4 + num_classes, conv_dim*2, 3, norm = norm, activ='relu') 
-        self.up_conv2 = up_conv(conv_dim*2 + num_classes, conv_dim, 3, norm = norm, activ='relu') 
-        self.up_conv3 = up_conv(conv_dim + num_classes, 3, 3, norm = None, activ='tanh') 
+        self.up_conv1 = up_conv(conv_dim*4, conv_dim*2, 3, norm = norm, activ='relu') 
+        self.up_conv2 = up_conv(conv_dim*2 , conv_dim, 3, norm = norm, activ='relu') 
+        self.up_conv3 = up_conv(conv_dim , 3, 3, norm = None, activ='tanh') 
 
     # assumes hotv of dim: batch * num_classes
     def forward(self, x, hotv):
@@ -132,25 +139,17 @@ class Generator(nn.Module):
         x = self.conv2(x)
         x = self.conv3(x)
 
-        style = hotv.unsqueeze(2).unsqueeze(3).expand(-1, -1, x.size(2),x.size(3))
-        x = torch.cat((x, style), dim=1)
-        x = self.resnet_block(x) 
-
-        style = hotv.unsqueeze(2).unsqueeze(3).expand(-1, -1, x.size(2),x.size(3))
-        x = torch.cat((x, style), dim=1)
+        # slap on that conditional variable
+        style = self.mlp(hotv)
+        x = x + style
+        x = self.resnet_block(x)
         x = self.up_conv1(x)
-
-        style = hotv.unsqueeze(2).unsqueeze(3).expand(-1, -1, x.size(2),x.size(3))
-        x = torch.cat((x, style), dim=1)
         x = self.up_conv2(x)
-        
-        style = hotv.unsqueeze(2).unsqueeze(3).expand(-1, -1, x.size(2),x.size(3))
-        x = torch.cat((x, style), dim=1)
         x = self.up_conv3(x)
         return x.squeeze()
 
+# takes in image (128x128), identifies if it's real/fake
 class Discriminator(nn.Module):
-    # takes in image (128x128), identifies if it's real/fake
     def __init__(self, conv_dim=64, norm='instance'):
         super().__init__() 
         self.conv1 = conv(3, conv_dim, 4, 2, 1, norm, False, 'relu') #128 -> 64
@@ -169,44 +168,6 @@ class Discriminator(nn.Module):
         x = self.conv5(x)
         return x.squeeze()
 
-# class DCGenerator(nn.Module):
-
-#     def __init__(self, noise_size, conv_dim=64):
-#         super().__init__()
-#         ###########################################
-#         ##   FILL THIS IN: CREATE ARCHITECTURE   ##
-#         ########################################### 
-#         # For the first layer (up_conv1) it is better to directly apply convolution layer without any upsampling to get 4x4 output
-#         # To do so, you’ll need to think about what you kernel and padding size should be in this case. 
-#         self.up_conv1 = conv(noise_size, conv_dim*8, 4,1,3, norm='instance', activ='relu')
-#         self.up_conv2 = up_conv(conv_dim*8, conv_dim*4, 3, norm='instance', activ='relu')
-#         self.up_conv3 = up_conv(conv_dim*4, conv_dim*2, 3, norm='instance', activ='relu')
-#         self.up_conv4 = up_conv(conv_dim*2, conv_dim, 3, norm='instance', activ='relu')
-#         self.up_conv5 = up_conv(conv_dim, 3, 3, norm = None,activ='tanh') 
-
-#     def forward(self, z):
-#         """
-#         Generate an image given a sample of random noise.
-
-#         Input
-#         -----
-#             z: BS x noise_size x 1 x 1   -->  16x100x1x1
-
-#         Output
-#         ------
-#             out: BS x channels x image_width x image_height  -->  16x3x64x64
-#         """
-#         ###########################################
-#         ##   FILL THIS IN: FORWARD PASS   ##
-#         ###########################################
-#         z = self.up_conv1(z)
-#         z = self.up_conv2(z)
-#         z = self.up_conv3(z)
-#         z = self.up_conv4(z)
-#         z = self.up_conv5(z)
-#         return z.squeeze()
-
-
 class ResnetBlock(nn.Module):
 
     def __init__(self, conv_dim, norm, activ):
@@ -220,105 +181,6 @@ class ResnetBlock(nn.Module):
     def forward(self, x):
         out = x + self.conv_layer(x)
         return out
-
-
-# class CycleGenerator(nn.Module):
-#     """Architecture of the generator network."""
-
-#     def __init__(self, conv_dim=64, init_zero_weights=False, norm='instance'):
-#         super().__init__()
-
-#         ###########################################
-#         ##   FILL THIS IN: CREATE ARCHITECTURE   ##
-#         ###########################################
-
-#         # 1. Define the encoder part of the generator
-#         self.conv1 = conv(3, conv_dim, 4, norm = norm, activ='relu',init_zero_weights = init_zero_weights)
-#         self.conv2 = conv(conv_dim, conv_dim*2, 4, norm = norm, activ='relu',init_zero_weights = init_zero_weights)
-
-#         # 2. Define the transformation part of the generator
-#         self.resnet_block = ResnetBlock(conv_dim*2, norm=norm, activ='relu')
-
-#         # 3. Define the decoder part of the generator
-#         self.up_conv1 = up_conv(conv_dim*2, conv_dim, 3, norm = norm, activ='relu') 
-#         self.up_conv2 = up_conv(conv_dim, 3, 3, norm = None, activ='tanh')
-
-#     def forward(self, x):
-#         """
-#         Generate an image conditioned on an input image.
-
-#         Input
-#         -----
-#             x: BS x 3 x 32 x 32
-
-#         Output
-#         ------
-#             out: BS x 3 x 32 x 32
-#         """
-#         ###########################################
-#         ##   FILL THIS IN: FORWARD PASS   ##
-#         ###########################################
-#         x = self.conv1(x)
-#         x = self.conv2(x)
-        
-#         x = self.resnet_block(x)
-        
-#         x = self.up_conv1(x)
-#         x = self.up_conv2(x)
-#         return x
-
-
-# class DCDiscriminator(nn.Module):
-#     """Architecture of the discriminator network."""
-
-#     def __init__(self, conv_dim=64, norm='instance'):
-#         super().__init__() 
-#         self.conv1 = conv(3, conv_dim, 4, 2, 1, norm, False, 'relu')
-#         self.conv2 = conv(conv_dim, conv_dim*2, 4, 2, 1, norm, False, 'relu')
-#         self.conv3 = conv(conv_dim*2, conv_dim*4, 4, 2, 1, norm, False, 'relu')
-#         self.conv4 = conv(conv_dim*4, conv_dim*8, 4, 2, 1, norm, False, 'relu')
-#         self.conv5 = conv(conv_dim*8, 1, 4,1, 0, None, False, None)
-
-#     def forward(self, x):
-#         """Forward pass, x is (B, C, H, W)."""
-#         x = self.conv1(x)
-#         x = self.conv2(x)
-#         x = self.conv3(x)
-#         x = self.conv4(x)
-#         x = self.conv5(x)
-#         return x.squeeze()
-
-
-# class PatchDiscriminator(nn.Module):
-#     """Architecture of the patch discriminator network."""
-
-#     def __init__(self, conv_dim=64, norm='batch'):
-#         super().__init__()
-
-#         ###########################################
-#         ##   FILL THIS IN: CREATE ARCHITECTURE   ##
-#         ###########################################
-#         self.conv1 = conv(3, conv_dim, 4, 2, 1, norm, False, 'relu')
-#         self.conv2 = conv(conv_dim, conv_dim*2, 4, 2, 1, norm, False, 'relu')
-#         self.conv3 = conv(conv_dim*2, conv_dim*4, 4, 2, 1, norm, False, 'relu')
-#         # self.conv4 = conv(conv_dim*4, conv_dim*8, 4, 2, 1, norm, False, 'relu')
-#         self.conv5 = conv(conv_dim*4,4,2,1, 0, None, False, None) # want to merge to 1x4x4
-
-#         # Hint: it should look really similar to DCDiscriminator.
-
-
-#     def forward(self, x):
-
-#         ###########################################
-#         ##   FILL THIS IN: FORWARD PASS   ##
-#         ###########################################
-#         x = self.conv1(x)
-#         x = self.conv2(x)
-#         x = self.conv3(x)
-#         # x = self.conv4(x)
-#         x = self.conv5(x)
-#         return x.squeeze()
-
 
 if __name__ == "__main__":
     a = torch.rand(4, 3, 128, 128)
