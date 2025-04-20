@@ -58,14 +58,15 @@ def create_model(opts):
 
 
 def checkpoint(iteration, model, opts):
-    """Save generators G_LtoX, G_XtoY and discriminators D_X, D_L."""
+    """Save model"""
     path = os.path.join(
         opts.checkpoint_dir, 'style_identifier_iter%d.pkl' % iteration
     )
     torch.save(model.state_dict(), path)
 
+
 # probably want update to dataloader_images dataloader_labels <--- @EMILY
-def training_loop(dataloader_X, dataloader_L, opts):
+def training_loop(dataloader_X, opts):
     """Runs the training loop.
         * Saves checkpoint every opts.checkpoint_every iterations
         * Saves generated samples every opts.sample_every iterations
@@ -78,40 +79,34 @@ def training_loop(dataloader_X, dataloader_L, opts):
     # Create optimizers for the generators and discriminators
     optimizer = optim.Adam(params, opts.lr, [opts.beta1, opts.beta2]) 
 
-    iter_X = iter(dataloader_X)
-    iter_L = iter(dataloader_L)
+    iter_X = iter(dataloader_X) 
 
     # Get some fixed data for sampling test loss?
     # that allow us to inspect the model's performance.
-    fixed_X = utils.to_var(next(iter_X))
-    fixed_L = utils.to_var(next(iter_L))
+    fixed_X = utils.to_var(next(iter_X)) 
 
-    iter_per_epoch = min(len(iter_X), len(iter_L))
+    iter_per_epoch = len(iter_X)
 
     for iteration in range(1, opts.train_iters + 1):
 
         # Reset data_iter for each epoch
         if iteration % iter_per_epoch == 0:
             iter_X = iter(dataloader_X)
-            iter_L = iter(dataloader_L)
 
         images_X = next(iter_X)
-        images_X = utils.to_var(images_X)
-
-        lables = next(iter_L)
-        lables = utils.to_var(lables)
+        images_X,labels = utils.to_var(images_X)
 
         # TRAIN THE DISCRIMINATORS
         # 1. Compute the discriminator losses on real images
-        loss = torch.mean(model(images_X) - lables) 
+        loss = torch.mean(model(images_X) - labels) 
 
-        # sum up the losses and update D_X and D_L
+        # sum up the losses and update D_X and  
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
 
         # plot the losses in tensorboard
-        logger.add_scalar('lableTraining', loss, iteration)
+        logger.add_scalar('labelTraining', loss, iteration)
 
         # Print the log info
         if iteration % opts.log_step == 0:
@@ -128,16 +123,15 @@ def training_loop(dataloader_X, dataloader_L, opts):
 
 def main(opts):
     """Loads the data and starts the training loop."""
-    # Create  dataloaders for images from the two domains X and Y
-    dataloader_X = get_data_loader(opts.X, opts=opts)
-    dataloader_L = get_data_loader(opts.Y, opts=opts)
+    # Create dataloaders for images w/ labels
+    dataloader_X = get_data_loader(opts.X, opts=opts) 
 
     # Create checkpoint and sample directories
     utils.create_dir(opts.checkpoint_dir)
     utils.create_dir(opts.sample_dir)
 
     # Start training
-    training_loop(dataloader_X, dataloader_L, opts)
+    training_loop(dataloader_X, opts)
 
 
 def print_opts(opts):
@@ -178,8 +172,7 @@ def create_parser():
     parser.add_argument('--lambda_cycle', type=float, default=10)
 
     # Data sources
-    parser.add_argument('--X', type=str, default='../lables/0001.가르마/0126.CP032677')
-    parser.add_argument('--Y', type=str, default='cat/grumpifyBprocessed')
+    parser.add_argument('--X', type=str, default='..') 
     parser.add_argument('--ext', type=str, default='*.png')
     parser.add_argument('--use_diffaug', action='store_true')
     parser.add_argument('--data_preprocess', type=str, default='vanilla')

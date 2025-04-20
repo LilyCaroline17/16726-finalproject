@@ -23,17 +23,17 @@ STYLE_TO_IDX = {style: i for i, style in enumerate(STYLE_CLASSES)}
 class StyleImageDataset(Dataset):
     """Loads images and 1-hot encoded 'basestyle' vectors from JSONs"""
 
-    def __init__(self, main_dir, ext='*.png', transform=None):
-        self.main_dir = main_dir
+    def __init__(self, root_dir, ext='*.jpg', transform=None):
+        self.label_dir = os.path.join(root_dir, "labels")
+        self.image_dir = os.path.join(root_dir, "hair_images")
         self.transform = transform
         self.samples = []
 
-        self._load_dataset(ext) 
-
-        print(f"Loaded {len(self.samples)} samples from {main_dir}")
+        self._load_dataset(ext)
+        print(f"Loaded {len(self.samples)} samples from {self.label_dir}")
 
     def _load_dataset(self, ext):
-        json_files = glob.glob(os.path.join(self.main_dir, "*.json"))
+        json_files = glob.glob(os.path.join(self.label_dir, "*", "*", "*.json"))
 
         for json_path in json_files:
             try:
@@ -42,21 +42,22 @@ class StyleImageDataset(Dataset):
             except json.JSONDecodeError:
                 continue
 
-            image_filename = data.get("path")
-            if not image_filename:
-                continue
-            print("HEY",image_filename)
-
-            # Assume image is in the same folder
-            image_path = os.path.join(self.main_dir, os.path.basename(image_filename))
-            if not os.path.exists(image_path) or not image_path.endswith(ext.split(".")[-1]):
-                continue
-
             style = data.get("basestyle")
             if style not in STYLE_TO_IDX:
                 continue
 
+            # Reconstruct the relative path to image
+            json_rel_path = os.path.relpath(json_path, self.label_dir)
+            folder1, folder2, filename = json_rel_path.split(os.sep)
+            image_filename = os.path.splitext(filename)[0].replace("_", "-") + ".jpg"
+            image_path = os.path.join(self.image_dir, folder1, folder2, image_filename)
+
+            if not os.path.exists(image_path):
+                continue
+
             self.samples.append((image_path, STYLE_TO_IDX[style]))
+            print("YAY", image_path, "found!",json_path, style)
+            break
 
     def __len__(self):
         return len(self.samples)
