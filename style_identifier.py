@@ -43,7 +43,15 @@ def print_model(m):
     print(m)
     print("---------------------------------------")
 
-
+def get_latest_checkpoint(checkpoint_dir):
+    checkpoints = [f for f in os.listdir(checkpoint_dir) if f.startswith('style_identifier_iter') and f.endswith('.pkl')]
+    if not checkpoints:
+        return None, 0
+    checkpoints.sort(key=lambda x: int(x.split('iter')[1].split('.pkl')[0]))
+    latest = checkpoints[-1]
+    iteration = int(latest.split('iter')[1].split('.pkl')[0])
+    return os.path.join(checkpoint_dir, latest), iteration
+    
 def create_model(opts):
     """Builds the generators and discriminators.
     """ 
@@ -54,15 +62,31 @@ def create_model(opts):
         model.cuda()
         print('Models moved to GPU.')
 
-    return model
+    optimizer = optim.Adam(model.parameters(), opts.lr, [opts.beta1, opts.beta2])
 
+    checkpoint_path, resume_iter = get_latest_checkpoint(opts.checkpoint_dir)
+    if checkpoint_path:
+        print(f"Loading checkpoint from {checkpoint_path}")
+        checkpoint_data = torch.load(checkpoint_path)
+        model.load_state_dict(checkpoint_data['model_state_dict'])
+        optimizer.load_state_dict(checkpoint_data['optimizer_state_dict'])
+        opts.resume_iter = resume_iter
+    else:
+        opts.resume_iter = 0
+        print(f"Checkpoints not found. Starting from scratch.")
 
-def checkpoint(iteration, model, opts):
-    """Save model"""
+    return model, optimizer
+
+def checkpoint(iteration, model, optimizer, opts):
+    """Save model and optimizer"""
     path = os.path.join(
         opts.checkpoint_dir, 'style_identifier_iter%d.pkl' % iteration
     )
-    torch.save(model.state_dict(), path)
+    torch.save({
+        'iteration': iteration,
+        'model_state_dict': model.state_dict(),
+        'optimizer_state_dict': optimizer.state_dict()
+    }, path) 
 
 
 # probably want update to dataloader_images dataloader_labels <--- @EMILY
@@ -72,24 +96,19 @@ def training_loop(dataloader_X, opts):
         * Saves generated samples every opts.sample_every iterations
     """
     # Create generators and discriminators
-    model = create_model(opts)
+    model, optimizer = create_model(opts)
 
     params = list(model.parameters()) 
-
-    # Create optimizers for the generators and discriminators
-    optimizer = optim.Adam(params, opts.lr, [opts.beta1, opts.beta2]) 
 
     iter_X = iter(dataloader_X) 
 
     # Get some fixed data for sampling test loss?
     # that allow us to inspect the model's performance.
     pair = next(iter_X) 
-    fixed_X = (utils.to_var(pair[0]), utils.to_var(pair[1])) 
-
-
-    iter_per_epoch = len(iter_X)
-
-    for iteration in range(1, opts.train_iters + 1):
+    fixed_X = (utils.to_var(pair[0]), utils.to_var(pair[1]))  
+    iter_per_epoch = len(dataloader_X)
+    
+    for iteration in range(opts.resume_iter + 1, opts.train_iters + 1):
 
         # Reset data_iter for each epoch
         if iteration % iter_per_epoch == 0:
@@ -100,7 +119,8 @@ def training_loop(dataloader_X, opts):
 
         # TRAIN THE DISCRIMINATORS
         # 1. Compute the discriminator losses on real images
-        loss = torch.mean(model(images_X) - labels) 
+        out = model(images_X)
+        loss = torch.mean((model(images_X) - labels) ** 2)  
 
         # sum up the losses and update D_X and  
         optimizer.zero_grad()
@@ -120,7 +140,7 @@ def training_loop(dataloader_X, opts):
 
         # Save the model parameters
         if iteration % opts.checkpoint_every == 0:
-            checkpoint(iteration, model, opts)
+            checkpoint(iteration, model, optimizer, opts) 
 
 
 def main(opts):
@@ -165,7 +185,8 @@ def create_parser():
     parser.add_argument('--init_type', type=str, default='naive')
 
     # Training hyper-parameters
-    parser.add_argument('--train_iters', type=int, default=10000)
+    parser.add_argument('--train_iters', type=int, default=100000) # 55670 samples, so idk if this needs adjusting
+    parser.add_argument('--resume_iter', type=int, default=0)
     parser.add_argument('--batch_size', type=int, default=16)
     parser.add_argument('--num_workers', type=int, default=2)
     parser.add_argument('--lr', type=float, default=0.0003)
