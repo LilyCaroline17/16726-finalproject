@@ -83,19 +83,17 @@ class StyleIdentifier(nn.Module):
         )
 
         # 3. Linear to num_classes
-        self.conv3 = conv(conv_dim*2, conv_dim*2, 4, 1, 0, norm=norm, init_zero_weights=init_zero_weights, activ='leaky') # 4 -> 1
+        self.conv3 = conv(conv_dim*2, conv_dim*2, 4, 1, 0, norm=None, init_zero_weights=init_zero_weights, activ='leaky') # 4 -> 1
         
         self.lin1 = nn.Linear(conv_dim * 2, num_classes)  # Final layer for classification
         self.ReLU = nn.ReLU()  
 
     def forward(self, x):
-        x = self.conv1(x)
-        x = self.conv2(x)
-        x = self.resnet_block(x)
-        x = self.conv3(x)
-        # x = x.view(-1, 1)  # Flatten for linear layer
-        x.squeeze() # maybe this works better
-        print(x.shape)
+        x = self.conv1(x) 
+        x = self.conv2(x) 
+        x = self.resnet_block(x) 
+        x = self.conv3(x) 
+        x = torch.flatten(x, 1)  # Flatten for linear layer 
         x = self.lin1(x)  
         x = self.ReLU(x)
         return x.squeeze()
