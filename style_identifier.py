@@ -83,7 +83,9 @@ def training_loop(dataloader_X, opts):
 
     # Get some fixed data for sampling test loss?
     # that allow us to inspect the model's performance.
-    fixed_X = utils.to_var(next(iter_X)) 
+    pair = next(iter_X) 
+    fixed_X = (utils.to_var(pair[0]), utils.to_var(pair[1])) 
+
 
     iter_per_epoch = len(iter_X)
 
@@ -93,8 +95,8 @@ def training_loop(dataloader_X, opts):
         if iteration % iter_per_epoch == 0:
             iter_X = iter(dataloader_X)
 
-        images_X = next(iter_X)
-        images_X,labels = utils.to_var(images_X)
+        images_X = next(iter_X) 
+        images_X,labels = (utils.to_var(images_X[0]), utils.to_var(images_X[1]))  
 
         # TRAIN THE DISCRIMINATORS
         # 1. Compute the discriminator losses on real images

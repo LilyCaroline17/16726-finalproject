@@ -19,7 +19,7 @@ def up_conv(in_channels, out_channels, kernel_size, stride=1, padding=1,
     elif norm == 'instance':
         layers.append(nn.InstanceNorm2d(out_channels))
 
-    if activ == 'relu':
+    if activ == 'ReLU':
         layers.append(nn.ReLU())
     elif activ == 'leaky':
         layers.append(nn.LeakyReLU())
@@ -49,7 +49,7 @@ def conv(in_channels, out_channels, kernel_size, stride=2, padding=1,
     elif norm == 'instance':
         layers.append(nn.InstanceNorm2d(out_channels))
 
-    if activ == 'relu':
+    if activ == 'ReLU':
         layers.append(nn.ReLU())
     elif activ == 'leaky':
         layers.append(nn.LeakyReLU())
@@ -66,27 +66,27 @@ class StyleIdentifier(nn.Module):
         # It's going to be something similar to the paper/hw3 but not the same
         # start off w/ conv like hw 3
         # then blocks of resblocks w/ avg pools that halve the image size to 4x4
-        # finally linear + relu to get a 1 hot vector
+        # finally linear + ReLU to get a 1 hot vector
 
         # # 1. Conv
-        self.conv1 = conv(3, conv_dim, 4, norm = norm, activ='relu',init_zero_weights = init_zero_weights) # 128 -> 64
-        self.conv2 = conv(conv_dim, conv_dim*2, 4, norm = norm, activ='relu',init_zero_weights = init_zero_weights) # 64 -> 32
+        self.conv1 = conv(3, conv_dim, 4, norm = norm, activ='ReLU',init_zero_weights = init_zero_weights) # 128 -> 64
+        self.conv2 = conv(conv_dim, conv_dim*2, 4, norm = norm, activ='ReLU',init_zero_weights = init_zero_weights) # 64 -> 32
         
         # 2. Resenet Block
         self.resnet_block = nn.Sequential(
-            ResnetBlock(conv_dim*2, norm='instance', activ='relu'),
-            nn.AveragePool2d(4, 2, 1), # 32 -> 16
-            ResnetBlock(conv_dim*2, norm='instance', activ='relu'),
-            nn.AveragePool2d(4, 2, 1), # 16 -> 8
-            ResnetBlock(conv_dim*2, norm='instance', activ='relu'),
-            nn.AveragePool2d(4, 2, 1), # 8 -> 4
+            ResnetBlock(conv_dim*2, norm='instance', activ='ReLU'),
+            nn.AvgPool2d(4, 2, 1), # 32 -> 16
+            ResnetBlock(conv_dim*2, norm='instance', activ='ReLU'),
+            nn.AvgPool2d(4, 2, 1), # 16 -> 8
+            ResnetBlock(conv_dim*2, norm='instance', activ='ReLU'),
+            nn.AvgPool2d(4, 2, 1), # 8 -> 4
         )
 
         # 3. Linear to num_classes
         self.conv3 = conv(conv_dim*2, conv_dim*2, 4, 2, 1, norm=norm, init_zero_weights=init_zero_weights, activ='leaky') # 4 -> 1
         
         self.lin1 = nn.Linear(conv_dim * 2, num_classes)  # Final layer for classification
-        self.relu = nn.Relu()  
+        self.ReLU = nn.ReLU()  
 
     def forward(self, x):
         x = self.conv1(x)
@@ -94,9 +94,9 @@ class StyleIdentifier(nn.Module):
         x = self.resnet_block(x)
         x = self.conv3(x)
         # x = x.view(-1, 1)  # Flatten for linear layer
-        x.squeeze() # maybe this works better
+        # x.squeeze() # maybe this works better
         x = self.lin1(x)  
-        x = self.relu(x)
+        x = self.ReLU(x)
         return x.squeeze()
 
 # takes in the hot vector, tries to generate latent s.t generator will produce the input training image
@@ -108,29 +108,29 @@ class Generator(nn.Module):
         super().__init__() 
         # 1. Define the encoder part of the generator
         # img to latent space
-        self.conv1 = conv(3, conv_dim, 4, norm = norm, activ='relu',init_zero_weights = init_zero_weights) # 128 -> 64
-        self.conv2 = conv(conv_dim, conv_dim*2, 4, norm = norm, activ='relu',init_zero_weights = init_zero_weights) # 64 -> 32
-        self.conv3 = conv(conv_dim*2, conv_dim*4, 4, norm = norm, activ='relu',init_zero_weights = init_zero_weights) # 32 -> 16
+        self.conv1 = conv(3, conv_dim, 4, norm = norm, activ='ReLU',init_zero_weights = init_zero_weights) # 128 -> 64
+        self.conv2 = conv(conv_dim, conv_dim*2, 4, norm = norm, activ='ReLU',init_zero_weights = init_zero_weights) # 64 -> 32
+        self.conv3 = conv(conv_dim*2, conv_dim*4, 4, norm = norm, activ='ReLU',init_zero_weights = init_zero_weights) # 32 -> 16
 
         # 1.5. Convert the 1 hot vector to something that matches the latent vector's shape
         self.mlp =  nn.Sequential(
             nn.Linear(num_classes,32), 
-            nn.Relu(), 
+            nn.ReLU(), 
             nn.Linear(32,16), 
         )
 
         # 2. Define the transformation part of the generator
         # want it to take in the 1 hot vector to transform it
         self.resnet_block = nn.Sequential(
-            ResnetBlock(conv_dim*4, norm='instance', activ='relu'), 
-            ResnetBlock(conv_dim*4, norm='instance', activ='relu'), 
-            ResnetBlock(conv_dim*4, norm='instance', activ='relu'), 
+            ResnetBlock(conv_dim*4, norm='instance', activ='ReLU'), 
+            ResnetBlock(conv_dim*4, norm='instance', activ='ReLU'), 
+            ResnetBlock(conv_dim*4, norm='instance', activ='ReLU'), 
         )
 
         # 3. Define the decoder part of the generator
         # want it to take in the 1 hot vector too
-        self.up_conv1 = up_conv(conv_dim*4, conv_dim*2, 3, norm = norm, activ='relu') 
-        self.up_conv2 = up_conv(conv_dim*2 , conv_dim, 3, norm = norm, activ='relu') 
+        self.up_conv1 = up_conv(conv_dim*4, conv_dim*2, 3, norm = norm, activ='ReLU') 
+        self.up_conv2 = up_conv(conv_dim*2 , conv_dim, 3, norm = norm, activ='ReLU') 
         self.up_conv3 = up_conv(conv_dim , 3, 3, norm = None, activ='tanh') 
 
     # assumes hotv of dim: batch * num_classes
@@ -152,10 +152,10 @@ class Generator(nn.Module):
 class Discriminator(nn.Module):
     def __init__(self, conv_dim=64, norm='instance'):
         super().__init__() 
-        self.conv1 = conv(3, conv_dim, 4, 2, 1, norm, False, 'relu') #128 -> 64
-        self.conv2 = conv(conv_dim, conv_dim*2, 4, 2, 1, norm, False, 'relu') # 64->32
-        self.conv3 = conv(conv_dim*2, conv_dim*4, 4, 2, 1, norm, False, 'relu') # 32->16
-        self.conv4 = conv(conv_dim*4, conv_dim*8, 4, 2, 1, norm, False, 'relu') # 16->8
+        self.conv1 = conv(3, conv_dim, 4, 2, 1, norm, False, 'ReLU') #128 -> 64
+        self.conv2 = conv(conv_dim, conv_dim*2, 4, 2, 1, norm, False, 'ReLU') # 64->32
+        self.conv3 = conv(conv_dim*2, conv_dim*4, 4, 2, 1, norm, False, 'ReLU') # 32->16
+        self.conv4 = conv(conv_dim*4, conv_dim*8, 4, 2, 1, norm, False, 'ReLU') # 16->8
         self.conv5 = conv(conv_dim*8, 1, 4,1, 0, None, False, None) # 8->4
         # based on these dim, its a patch discriminator 
 
