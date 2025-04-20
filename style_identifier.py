@@ -20,9 +20,9 @@ import torch.optim as optim
 import numpy as np
 
 import utils
-from data_loader import get_data_loader
+from dataloader import get_data_loader
 from models import StyleIdentifier
-from diff_augment import DiffAugment
+# from diff_augment import DiffAugment
 policy = 'color,translation,cutout'
 
 
@@ -158,7 +158,7 @@ def create_parser():
     parser = argparse.ArgumentParser()
 
     # Model hyper-parameters
-    parser.add_argument('--image_size', type=int, default=64)
+    parser.add_argument('--image_size', type=int, default=128)
     parser.add_argument('--disc', type=str, default='dc')  # or 'patch'
     parser.add_argument('--gen', type=str, default='cycle')
     parser.add_argument('--g_conv_dim', type=int, default=32)
@@ -178,7 +178,7 @@ def create_parser():
     parser.add_argument('--lambda_cycle', type=float, default=10)
 
     # Data sources
-    parser.add_argument('--X', type=str, default='cat/grumpifyAprocessed')
+    parser.add_argument('--X', type=str, default='../lables/0001.가르마/0126.CP032677')
     parser.add_argument('--Y', type=str, default='cat/grumpifyBprocessed')
     parser.add_argument('--ext', type=str, default='*.png')
     parser.add_argument('--use_diffaug', action='store_true')
