@@ -6,6 +6,7 @@ from PIL import Image
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 import torch
+from torch.utils.data import random_split
 
 # Sample usage:
 # get_data_loader(data_path, opts)
@@ -118,13 +119,18 @@ def get_data_loader(data_path, opts):
     else:
         raise ValueError(f"Unknown data_preprocess type: {opts.data_preprocess}")
 
-    dataset = StyleImageDataset(
-        data_path, opts.ext, transform
-    )
+    full_dataset = StyleImageDataset(data_path, opts.ext, transform)
 
-    dloader = DataLoader(
-        dataset=dataset, batch_size=opts.batch_size,
+    val_split = int(len(full_dataset) * 0.2)
+    train_dataset, val_dataset = random_split(full_dataset, [len(full_dataset) - val_split, val_split])
+    
+    train_loader = DataLoader(
+        dataset=train_dataset, batch_size=opts.batch_size,
         shuffle=True, num_workers=opts.num_workers
     )
+    val_loader = DataLoader(
+        dataset=val_dataset, batch_size=opts.batch_size,
+        shuffle=False, num_workers=opts.num_workers
+    )
 
-    return dloader
+    return train_loader, val_loader
