@@ -137,6 +137,36 @@ def training_loop(dataloader_X, opts):
                     iteration, opts.train_iters,loss.item(),
                 )
             )
+            G.eval()
+            D.eval()
+            with torch.no_grad():
+                val_d_loss_total = 0.0
+                val_g_loss_total = 0.0
+                val_batches = 0
+        
+                for val_images, val_labels in validationloader:
+                    val_images = utils.to_var(val_images)
+                    val_labels = utils.to_var(val_labels)
+        
+                    # Discriminator loss on validation
+                    val_fake_images = G(val_images, val_labels)
+                    val_d_real = torch.mean((D(val_images) - 1) ** 2)
+                    val_d_fake = torch.mean((D(val_fake_images)) ** 2)
+                    val_d_loss = val_d_real + val_d_fake
+        
+                    # Generator loss on validation
+                    val_g_loss = torch.mean((D(val_fake_images) - 1) ** 2)
+        
+                    val_d_loss_total += val_d_loss.item()
+                    val_g_loss_total += val_g_loss.item()
+                    val_batches += 1
+        
+                avg_val_d_loss = val_d_loss_total / val_batches
+                avg_val_g_loss = val_g_loss_total / val_batches
+        
+                print('Validation | d_loss: {:6.4f} | g_loss: {:6.4f}'.format(avg_val_d_loss, avg_val_g_loss))
+            G.train()
+            D.train()
 
         # Save the model parameters
         if iteration % opts.checkpoint_every == 0:
