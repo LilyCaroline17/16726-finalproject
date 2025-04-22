@@ -34,7 +34,7 @@ import numpy as np
 
 import utils
 from data_loader import get_data_loader
-from models import CycleGenerator, DCDiscriminator, PatchDiscriminator
+from models import Generator, Discriminator, StyleIdentifier
 from diff_augment import DiffAugment
 
 policy = "color,translation,cutout"
@@ -68,14 +68,12 @@ def print_models(G, D, style_iden):
 
 
 def create_model(opts):
-    """Builds the generators and discriminators."""
-    model_dict = {"cycle": CycleGenerator}
-    G = model_dict[opts.gen](conv_dim=opts.g_conv_dim, norm=opts.norm)
+    """Builds the generators and discriminators.""" 
+    G = Generator(conv_dim=opts.g_conv_dim, norm=opts.norm)
+ 
+    D = Discriminator(conv_dim=opts.d_conv_dim, norm=opts.norm)
 
-    model_dict = {"dc": DCDiscriminator, "patch": PatchDiscriminator}
-    D = model_dict[opts.disc](conv_dim=opts.d_conv_dim, norm=opts.norm)
-
-    style_iden = model_dict[opts.style_iden](conv_dim=opts.d_conv_dim, norm=opts.norm)
+    style_iden = StyleIdentifier(conv_dim=opts.d_conv_dim, norm=opts.norm)
 
     print_models(G, D, style_iden)
 
@@ -122,6 +120,31 @@ def merge_images(source, outputs, opts, k=10):
         merged[:, i * h : (i + 1) * h, (j * 2 + 1) * h : (j * 2 + 2) * h] = t
     return merged.transpose(1, 2, 0)
 
+def make_grid(images, nrow=4):
+    """
+    Arrange images into a grid.
+    
+    Args:
+        images (Tensor): shape [N, C, H, W]
+        nrow (int): number of images per row
+    
+    Returns:
+        grid (Tensor): [C, H_total, W_total]
+    """
+    N, C, H, W = images.size()
+    ncol = (N + nrow - 1) // nrow  # number of rows needed
+
+    # Add padding if necessary
+    pad = nrow * ncol - N
+    if pad > 0:
+        padding = torch.zeros((pad, C, H, W), device=images.device)
+        images = torch.cat([images, padding], dim=0)
+
+    images = images.reshape(ncol, nrow, C, H, W)
+    images = images.permute(2, 0, 3, 1, 4)  # C, ncol, H, nrow, W
+    images = images.reshape(C, ncol * H, nrow * W)
+    # images = images.permute(1, 2, 0).cpu().numpy() # H, W, C
+    return images.transpose(1, 2, 0)
 
 # have maybe 2 ppl images, have them try on all other 30 hair styles
 def save_samples(iteration, fixed_X, G, opts):
@@ -134,7 +157,9 @@ def save_samples(iteration, fixed_X, G, opts):
 
     image, new_imgs = utils.to_data(image), utils.to_data(new_imgs)
 
-    merged = merge_images(image, new_imgs, opts)
+    all_images = torch.cat([image, new_imgs], dim=0)
+
+    merged = make_grid(all_images, int(math.sqrt(31)))  
     path = os.path.join(opts.sample_dir, "sample-{:06d}-X-Y.png".format(iteration))
     merged = np.uint8(255 * (merged + 1) / 2)
     imageio.imwrite(path, merged)
