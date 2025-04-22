@@ -90,7 +90,7 @@ def checkpoint(iteration, model, optimizer, opts):
 
 
 # probably want update to dataloader_images dataloader_labels <--- @EMILY
-def training_loop(dataloader_X, opts):
+def training_loop(dataloader_X, validation_loader, opts):
     """Runs the training loop.
         * Saves checkpoint every opts.checkpoint_every iterations
         * Saves generated samples every opts.sample_every iterations
@@ -137,36 +137,26 @@ def training_loop(dataloader_X, opts):
                     iteration, opts.train_iters,loss.item(),
                 )
             )
-            G.eval()
-            D.eval()
+            model.eval()
             with torch.no_grad():
-                val_d_loss_total = 0.0
-                val_g_loss_total = 0.0
+                val_loss_total = 0.0
                 val_batches = 0
         
-                for val_images, val_labels in validationloader:
+                for val_images, val_labels in validation_loader:
                     val_images = utils.to_var(val_images)
                     val_labels = utils.to_var(val_labels)
         
-                    # Discriminator loss on validation
-                    val_fake_images = G(val_images, val_labels)
-                    val_d_real = torch.mean((D(val_images) - 1) ** 2)
-                    val_d_fake = torch.mean((D(val_fake_images)) ** 2)
-                    val_d_loss = val_d_real + val_d_fake
+                    val_outputs = model(val_images)
+                    val_loss = torch.mean((val_outputs - val_labels) ** 2)
         
-                    # Generator loss on validation
-                    val_g_loss = torch.mean((D(val_fake_images) - 1) ** 2)
-        
-                    val_d_loss_total += val_d_loss.item()
-                    val_g_loss_total += val_g_loss.item()
+                    val_loss_total += val_loss.item()
                     val_batches += 1
         
-                avg_val_d_loss = val_d_loss_total / val_batches
-                avg_val_g_loss = val_g_loss_total / val_batches
+                avg_val_loss = val_loss_total / val_batches
+                print('Validation | loss: {:6.4f}'.format(avg_val_loss))
+                logger.add_scalar('labelValidation', avg_val_loss, iteration)
         
-                print('Validation | d_loss: {:6.4f} | g_loss: {:6.4f}'.format(avg_val_d_loss, avg_val_g_loss))
-            G.train()
-            D.train()
+            model.train()
 
         # Save the model parameters
         if iteration % opts.checkpoint_every == 0:
@@ -176,14 +166,14 @@ def training_loop(dataloader_X, opts):
 def main(opts):
     """Loads the data and starts the training loop."""
     # Create dataloaders for images w/ labels
-    dataloader_X = get_data_loader(opts.X, opts=opts) 
+    dataloader_X, validation_loader = get_data_loader(opts.X, opts=opts) 
 
     # Create checkpoint and sample directories
     utils.create_dir(opts.checkpoint_dir)
     utils.create_dir(opts.sample_dir)
 
     # Start training
-    training_loop(dataloader_X, opts)
+    training_loop(dataloader_X, validation_loader, opts)
 
 
 def print_opts(opts):
