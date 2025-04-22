@@ -258,7 +258,7 @@ def training_loop(dataloader_X, opts):
 def main(opts):
     """Loads the data and starts the training loop."""
     # Create  dataloaders for images from the two domains X and Y
-    dataloader_X = get_data_loader(opts.X, opts=opts) 
+    dataloader_X, validationloader = get_data_loader(opts.X, opts=opts) 
 
     # Create checkpoint and sample directories
     utils.create_dir(opts.checkpoint_dir)
