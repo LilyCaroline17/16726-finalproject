@@ -134,3 +134,32 @@ def get_data_loader(data_path, opts):
     )
 
     return train_loader, val_loader
+
+def get_all_data_loader(data_path, opts):
+    """Creates DataLoader with image + style vector"""
+    if opts.data_preprocess == 'resize_only':
+        transform = transforms.Compose([
+            transforms.Resize((opts.image_size, opts.image_size), Image.BICUBIC),
+            transforms.ToTensor(),
+            transforms.Normalize((0.5,) * 3, (0.5,) * 3),
+        ])
+    elif opts.data_preprocess == 'vanilla':
+        load_size = int(1.1 * opts.image_size)
+        transform = transforms.Compose([
+            transforms.Resize((load_size, load_size), Image.BICUBIC),
+            transforms.RandomCrop(opts.image_size),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            transforms.Normalize((0.5,) * 3, (0.5,) * 3),
+        ])
+    else:
+        raise ValueError(f"Unknown data_preprocess type: {opts.data_preprocess}")
+
+    full_dataset = StyleImageDataset(data_path, opts.ext, transform)
+    
+    full_loader = DataLoader(
+        dataset=full_dataset, batch_size=opts.batch_size,
+        shuffle=True, num_workers=opts.num_workers
+    )
+
+    return full_loader
