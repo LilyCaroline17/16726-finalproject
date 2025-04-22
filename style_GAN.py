@@ -25,6 +25,7 @@ import argparse
 import os
 
 import math
+import re
 
 import imageio
 from torch.utils.tensorboard import SummaryWriter
@@ -70,20 +71,57 @@ def print_models(G, D, style_iden):
 def create_model(opts):
     """Builds the generators and discriminators."""
     G = Generator(conv_dim=opts.g_conv_dim, norm=opts.norm)
-
     D = Discriminator(conv_dim=opts.d_conv_dim, norm=opts.norm)
+    g_optimizer = optim.Adam(G.parameters(), opts.lr, [opts.beta1, opts.beta2])
+    d_optimizer = optim.Adam(D.parameters(), opts.lr, [opts.beta1, opts.beta2])
 
     style_iden = StyleIdentifier(conv_dim=opts.d_conv_dim, norm=opts.norm)
-
-    print_models(G, D, style_iden)
 
     if torch.cuda.is_available():
         G.cuda()
         D.cuda()
         style_iden.cuda()
         print("Models moved to GPU.")
+ 
 
-    return G, D, style_iden
+    if os.path.isdir(opts.iden_checkpoint_dir):
+        # Find all checkpoints like style_identifier_iterXXXXXX.pkl
+        checkpoints = [f for f in os.listdir(opts.iden_checkpoint_dir) if f.startswith('style_identifier_iter') and f.endswith('.pkl')]
+        
+        if len(checkpoints) == 0:
+            raise FileNotFoundError(f"No style identifier checkpoints found in {opts.iden_checkpoint_dir}")
+
+        # Extract iteration numbers
+        def get_iter_num(filename):
+            match = re.search(r'iter(\d+)', filename)
+            return int(match.group(1)) if match else -1
+
+        checkpoints.sort(key=get_iter_num)
+        latest_ckpt = checkpoints[-1]
+        latest_ckpt_path = os.path.join(opts.iden_checkpoint_dir, latest_ckpt)
+
+        print(f"Loading Style Identifier from {latest_ckpt_path}")
+        style_iden.load_state_dict(torch.load(latest_ckpt_path))
+    else:
+        raise FileNotFoundError(f"Style identifier directory not found: {opts.iden_checkpoint_dir}")  
+    
+    # Check if checkpoint exists
+    latest_ckpt_dir = None
+    if os.path.exists(opts.checkpoint_dir):
+        checkpoints = sorted([d for d in os.listdir(opts.checkpoint_dir) if d.endswith('itr')])
+        if len(checkpoints) > 0:
+            latest_ckpt_dir = os.path.join(opts.checkpoint_dir, checkpoints[-1])  # Use the latest one
+
+    if latest_ckpt_dir:
+        print(f"Loading models from checkpoint: {latest_ckpt_dir}")
+        G.load_state_dict(torch.load(os.path.join(latest_ckpt_dir, 'G.pkl')))
+        D.load_state_dict(torch.load(os.path.join(latest_ckpt_dir, 'D.pkl')))
+    else:
+        print("No checkpoint found, initializing new models.")
+
+    print_models(G, D, style_iden)
+
+    return G, D, style_iden, g_optimizer, d_optimizer
 
 
 def checkpoint(iteration, G, D, g_optimizer, d_optimizer, opts):
@@ -197,14 +235,8 @@ def training_loop(dataloader_X, opts):
     * Saves generated samples every opts.sample_every iterations
     """
     # Create generators and discriminators
-    G, D, style_iden = create_model(opts)
+    G, D, style_iden, g_optimizer, d_optimizer = create_model(opts)
 
-    g_params = list(G.parameters())
-    d_params = list(D.parameters())
-
-    # Create optimizers for the generators and discriminators
-    g_optimizer = optim.Adam(g_params, opts.lr, [opts.beta1, opts.beta2])
-    d_optimizer = optim.Adam(d_params, opts.lr, [opts.beta1, opts.beta2])
 
     iter_X = iter(dataloader_X)
     iter_per_epoch = len(dataloader_X)
@@ -366,10 +398,11 @@ def create_parser():
 
     # Saving directories and checkpoint/sample iterations
     parser.add_argument("--checkpoint_dir", default="checkpoints_stylegan")
+    parser.add_argument("--iden_checkpoint_dir", default="checkpoints_cyclegan")
     parser.add_argument("--sample_dir", type=str, default="cyclegan")
     parser.add_argument("--log_step", type=int, default=10)
     parser.add_argument("--sample_every", type=int, default=100)
-    parser.add_argument("--checkpoint_every", type=int, default=800)
+    parser.add_argument("--checkpoint_every", type=int, default=1000)
 
     parser.add_argument("--gpu", type=str, default="0")
 
