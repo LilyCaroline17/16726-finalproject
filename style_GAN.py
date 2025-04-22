@@ -188,15 +188,13 @@ def make_grid(images, nrow=4):
 
 
 # have maybe 2 ppl images, have them try on all other 30 hair styles
-def save_samples(iteration, fixed_X, G, opts):
+def save_samples(iteration, fixed_X, G, opts, style_iden):
     """Saves samples from generator"""
 
     image, label = (utils.to_var(fixed_X[0])[0].unsqueeze(0), utils.to_var(fixed_X[1])[0].unsqueeze(0))
     image_expanded, new_label, _ = diff_labels_for_generation(label, image)
 
-    new_imgs = G(image_expanded, new_label)
-
-    # image, new_imgs = utils.to_data(image), utils.to_data(new_imgs)
+    new_imgs = G(image_expanded, new_label)  
 
     all_images = torch.cat([image, new_imgs], dim=0)
 
@@ -256,7 +254,7 @@ def training_loop(dataloader_X, opts):
     # that allow us to inspect the model's performance. 
     fixed_X = next(iter_X)
 
-    for iteration in range(1, opts.train_iters + 1):
+    for iteration in range(0, opts.train_iters + 1):
 
         # Reset data_iter for each epoch
         if iteration % iter_per_epoch == 0:
@@ -343,7 +341,7 @@ def training_loop(dataloader_X, opts):
 
         # Save the generated samples
         if iteration % opts.sample_every == 0:
-            save_samples(iteration, fixed_X, G, opts)
+            save_samples(iteration, fixed_X, G, opts, style_iden)
 
         # Save the model parameters
         if iteration % opts.checkpoint_every == 0:
@@ -398,7 +396,7 @@ def create_parser():
     parser.add_argument("--beta1", type=float, default=0.5)
     parser.add_argument("--beta2", type=float, default=0.999)
     parser.add_argument("--lambda_cycle", type=float, default=10)
-    parser.add_argument("--lambda_style", type=float, default=1)
+    parser.add_argument("--lambda_style", type=float, default=10)
 
     # Data sources
     parser.add_argument("--X", type=str, default="..")
