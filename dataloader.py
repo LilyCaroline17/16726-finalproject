@@ -60,7 +60,7 @@ class StyleImageDataset(Dataset):
         self._load_dataset(ext)
         print(f"Loaded {len(self.samples)} samples from {self.label_dir}")
 
-    def _load_dataset(self, ext):
+    def _load_dataset(self, ext): 
         json_files = glob.glob(os.path.join(self.label_dir, "*", "*", "*.json")) 
         for json_path in json_files:
             try:
@@ -82,7 +82,7 @@ class StyleImageDataset(Dataset):
             if not os.path.exists(image_path):
                 continue
 
-            self.samples.append((image_path, STYLE_TO_IDX[style])) 
+            self.samples.append((image_path, STYLE_TO_IDX[style]))  
 
     def __len__(self):
         return len(self.samples)

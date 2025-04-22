@@ -113,9 +113,9 @@ class Generator(nn.Module):
 
         # 1.5. Convert the 1 hot vector to something that matches the latent vector's shape
         self.mlp =  nn.Sequential(
-            nn.Linear(num_classes,32), 
+            nn.Linear(num_classes,conv_dim*4), 
             nn.ReLU(), 
-            nn.Linear(32,16), 
+            nn.Linear(conv_dim*4,conv_dim*4), 
         )
 
         # 2. Define the transformation part of the generator
@@ -133,13 +133,14 @@ class Generator(nn.Module):
         self.up_conv3 = up_conv(conv_dim , 3, 3, norm = None, activ='tanh') 
 
     # assumes hotv of dim: batch * num_classes
-    def forward(self, x, hotv):
-        x = self.conv1(x)
-        x = self.conv2(x)
-        x = self.conv3(x)
+    def forward(self, x, hotv): 
+        x = self.conv1(x) 
+        x = self.conv2(x) 
+        x = self.conv3(x) 
 
         # slap on that conditional variable
-        style = self.mlp(hotv)
+        style = self.mlp(hotv).unsqueeze(2).unsqueeze(3) # (batch, conv_dim*4, 1, 1)
+        style = style.expand(-1, -1, x.size(2), x.size(3)) # copy for all dim
         x = x + style
         x = self.resnet_block(x)
         x = self.up_conv1(x)

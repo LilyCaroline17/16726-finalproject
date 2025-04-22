@@ -34,9 +34,9 @@ import torch.optim as optim
 import numpy as np
 
 import utils
-from data_loader import get_data_loader
+from dataloader import get_data_loader,get_all_data_loader
 from models import Generator, Discriminator, StyleIdentifier
-from diff_augment import DiffAugment
+# from diff_augment import DiffAugment
 
 policy = "color,translation,cutout"
 
@@ -100,8 +100,8 @@ def create_model(opts):
         latest_ckpt = checkpoints[-1]
         latest_ckpt_path = os.path.join(opts.iden_checkpoint_dir, latest_ckpt)
 
-        print(f"Loading Style Identifier from {latest_ckpt_path}")
-        style_iden.load_state_dict(torch.load(latest_ckpt_path))
+        print(f"Loading Style Identifier from {latest_ckpt_path}") 
+        style_iden.load_state_dict(torch.load(latest_ckpt_path)['model_state_dict'])
     else:
         raise FileNotFoundError(f"Style identifier directory not found: {opts.iden_checkpoint_dir}")  
     
@@ -126,6 +126,7 @@ def create_model(opts):
 
 def checkpoint(iteration, G, D, g_optimizer, d_optimizer, opts):
     """Save generators, discriminators, and optimizers"""
+    os.mkdir(os.path.join(opts.checkpoint_dir, "%ditr" % iteration))
     G_path = os.path.join(opts.checkpoint_dir, "%ditr/G.pkl" % iteration)
     D_path = os.path.join(opts.checkpoint_dir, "%ditr/D.pkl" % iteration)
     g_opt_path = os.path.join(opts.checkpoint_dir, "%ditr/g_optimizer.pkl" % iteration)
@@ -181,7 +182,8 @@ def make_grid(images, nrow=4):
     images = images.reshape(ncol, nrow, C, H, W)
     images = images.permute(2, 0, 3, 1, 4)  # C, ncol, H, nrow, W
     images = images.reshape(C, ncol * H, nrow * W)
-    # images = images.permute(1, 2, 0).cpu().numpy() # H, W, C
+    # images = images.permute(1, 2, 0).cpu().numpy() # H, W, C 
+    images = utils.to_data(images)
     return images.transpose(1, 2, 0)
 
 
@@ -189,12 +191,12 @@ def make_grid(images, nrow=4):
 def save_samples(iteration, fixed_X, G, opts):
     """Saves samples from generator"""
 
-    image, label = (utils.to_var(fixed_X[0])[0], utils.to_var(fixed_X[1])[0])
+    image, label = (utils.to_var(fixed_X[0])[0].unsqueeze(0), utils.to_var(fixed_X[1])[0].unsqueeze(0))
     image_expanded, new_label, _ = diff_labels_for_generation(label, image)
 
     new_imgs = G(image_expanded, new_label)
 
-    image, new_imgs = utils.to_data(image), utils.to_data(new_imgs)
+    # image, new_imgs = utils.to_data(image), utils.to_data(new_imgs)
 
     all_images = torch.cat([image, new_imgs], dim=0)
 
@@ -205,26 +207,34 @@ def save_samples(iteration, fixed_X, G, opts):
     print("Saved {}".format(path))
 
 
-def diff_labels_for_generation(labels, images):
+def diff_labels_for_generation(labels, images):  
+    batchsize = labels.shape[0]
     # Repeat each image 30 times (31 total styles, want to try other 30)
-    images_expanded = images.unsqueeze(1).repeat(
-        1, 30, 1, 1, 1
-    )  # (batch_size, num_styles, C, H, W)
-    images_expanded = images_expanded.view(
-        -1, *images.shape[1:]
-    )  # (batch_size * num_styles, C, H, W)
+    images_expanded = images.unsqueeze(1).repeat(1, 30, 1, 1, 1).view(-1, *images.shape[1:])  
+    # (batch_size * num_styles, C, H, W)
+    
+    # Possible labels
+    all_labels =utils.to_var( torch.eye(31) ) # Step 3: For each label, pick the 30 rows not corresponding to ground truth
+    true_indices = labels.argmax(dim=1)  # (batch_size,)
 
-    # create new style vectors for each image
-    new_style_indices = utils.to_var(torch.arange(31)).repeat(
-        opts.batch_size
-    )  # (batch_size * num_styles,)
-    new_labels = torch.nn.functional.one_hot(new_style_indices, 31).float()
+    # Now, for each sample, we need all labels except the true one
+    mask = utils.to_var(torch.ones((batchsize, 31), dtype=torch.bool))
+    mask[utils.to_var(torch.arange(batchsize)), true_indices] = False
+    # mask.scatter_(1, true_indices.unsqueeze(1), False)  # set true index to False (mask it out)
 
-    # original labels same shape as num_styles, with ground truth
-    orig_labels = (
-        labels.unsqueeze(1).repeat(1, 30).view(-1)
-    )  # (batch_size * num_styles,)
-    orig_labels = torch.nn.functional.one_hot(orig_labels, 31).float()
+    new_labels = all_labels.repeat(batchsize, 1, 1)  # (batch_size, 31, 31)
+    new_labels = new_labels[mask]  # Select the rows where the mask is True
+    new_labels = new_labels.view(batchsize * 30, 31)  # (batch_size * 30, 31)
+
+    # # Step 4: Expand the mask to match the shape of `all_labels`
+    # expanded_mask = mask.unsqueeze(2).expand(opts.batch_size, 31, 31)  # (batch_size, 31, 31)
+    
+    # # Step 5: Apply the mask to select the correct labels and reshape
+    # new_labels = all_labels.unsqueeze(0).expand(opts.batch_size, 31, 31)  # (batch_size, 31, 31)
+    # new_labels = new_labels[expanded_mask].view(opts.batch_size * 30, 31)  # (batch_size * 30, 31)
+
+    # Step 6: Repeat the original labels
+    orig_labels = labels.unsqueeze(1).expand(-1, 30, -1).reshape(batchsize * 30, 31)  # (batch_size * 30, 31)
 
     return images_expanded, new_labels, orig_labels
 
@@ -243,8 +253,8 @@ def training_loop(dataloader_X, opts):
 
     # Get some fixed data for sampling.
     # These are images that are held constant throughout training,
-    # that allow us to inspect the model's performance.
-    fixed_X = utils.to_var(next(iter_X))
+    # that allow us to inspect the model's performance. 
+    fixed_X = next(iter_X)
 
     for iteration in range(1, opts.train_iters + 1):
 
@@ -369,7 +379,7 @@ def create_parser():
     parser = argparse.ArgumentParser()
 
     # Model hyper-parameters
-    parser.add_argument("--image_size", type=int, default=64)
+    parser.add_argument("--image_size", type=int, default=128)
     parser.add_argument("--disc", type=str, default="dc")  # or 'patch'
     parser.add_argument("--gen", type=str, default="cycle")
     parser.add_argument("--g_conv_dim", type=int, default=32)
