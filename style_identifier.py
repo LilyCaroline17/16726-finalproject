@@ -136,7 +136,11 @@ def training_loop(dataloader_X, validation_loader, opts):
                 'Iteration [{:5d}/{:5d}] | loss: {:6.4f}'.format(
                     iteration, opts.train_iters,loss.item(),
                 )
-            )
+            ) 
+        # Save the model parameters
+        if iteration % opts.checkpoint_every == 0:
+            checkpoint(iteration, model, optimizer, opts) 
+
             model.eval()
             with torch.no_grad():
                 val_loss_total = 0.0
@@ -157,10 +161,6 @@ def training_loop(dataloader_X, validation_loader, opts):
                 logger.add_scalar('labelValidation', avg_val_loss, iteration)
         
             model.train()
-
-        # Save the model parameters
-        if iteration % opts.checkpoint_every == 0:
-            checkpoint(iteration, model, optimizer, opts) 
 
 
 def main(opts):

@@ -12,7 +12,7 @@ from torch.utils.data import random_split
 # get_data_loader(data_path, opts)
 
 # Define and freeze the style classes
-STYLE_CLASSES = sorted(set(STYLE_CLASSES = [
+STYLE_CLASSES = sorted(set( [
     "가르마",
     "기타남자스타일",
     "기타레이어드",
@@ -121,7 +121,7 @@ def get_data_loader(data_path, opts):
 
     full_dataset = StyleImageDataset(data_path, opts.ext, transform)
 
-    val_split = int(len(full_dataset) * 0.2)
+    val_split = int(len(full_dataset) * 0.002)
     train_dataset, val_dataset = random_split(full_dataset, [len(full_dataset) - val_split, val_split])
     
     train_loader = DataLoader(
