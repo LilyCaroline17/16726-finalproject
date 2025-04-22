@@ -41,7 +41,7 @@ from models import Generator, Discriminator, StyleIdentifier
 policy = "color,translation,cutout"
 
 
-SEED = 11
+SEED = 2
 
 # Set the random seed manually for reproducibility.
 np.random.seed(SEED)

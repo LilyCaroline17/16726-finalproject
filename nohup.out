@@ -173,3 +173,80 @@ StyleIdentifier(
   (ReLU): ReLU()
 )
 ---------------------------------------
+Iteration [   10/10000] | d_real_loss: 0.3784 | d_fake_loss: 0.2827 | d_total_loss: 0.6610 |  g_loss: 1.2520
+Iteration [   20/10000] | d_real_loss: 0.2274 | d_fake_loss: 0.2603 | d_total_loss: 0.4878 |  g_loss: 0.5475
+Iteration [   30/10000] | d_real_loss: 0.2972 | d_fake_loss: 0.2501 | d_total_loss: 0.5474 |  g_loss: 0.4415
+Iteration [   40/10000] | d_real_loss: 0.2978 | d_fake_loss: 0.2498 | d_total_loss: 0.5476 |  g_loss: 0.5583
+Iteration [   50/10000] | d_real_loss: 0.2361 | d_fake_loss: 0.2884 | d_total_loss: 0.5244 |  g_loss: 0.3916
+Iteration [   60/10000] | d_real_loss: 0.3454 | d_fake_loss: 0.1985 | d_total_loss: 0.5439 |  g_loss: 0.2922
+Iteration [   70/10000] | d_real_loss: 0.2659 | d_fake_loss: 0.2294 | d_total_loss: 0.4953 |  g_loss: 0.3262
+Iteration [   80/10000] | d_real_loss: 0.3396 | d_fake_loss: 0.1458 | d_total_loss: 0.4854 |  g_loss: 0.2962
+Iteration [   90/10000] | d_real_loss: 0.1402 | d_fake_loss: 0.3389 | d_total_loss: 0.4791 |  g_loss: 0.4689
+Iteration [  100/10000] | d_real_loss: 0.5215 | d_fake_loss: 0.1115 | d_total_loss: 0.6331 |  g_loss: 0.1239
+Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-000100.png
+Iteration [  110/10000] | d_real_loss: 0.0634 | d_fake_loss: 0.5385 | d_total_loss: 0.6019 |  g_loss: 0.9053
+Iteration [  120/10000] | d_real_loss: 0.2359 | d_fake_loss: 0.2117 | d_total_loss: 0.4476 |  g_loss: 0.3679
+Iteration [  130/10000] | d_real_loss: 0.2710 | d_fake_loss: 0.1527 | d_total_loss: 0.4237 |  g_loss: 0.4141
+Iteration [  140/10000] | d_real_loss: 0.1733 | d_fake_loss: 0.2495 | d_total_loss: 0.4228 |  g_loss: 0.6187
+Iteration [  150/10000] | d_real_loss: 0.6048 | d_fake_loss: 0.0343 | d_total_loss: 0.6391 |  g_loss: 0.0814
+Iteration [  160/10000] | d_real_loss: 0.3776 | d_fake_loss: 0.0882 | d_total_loss: 0.4658 |  g_loss: 0.2562
+Iteration [  170/10000] | d_real_loss: 0.1309 | d_fake_loss: 0.3017 | d_total_loss: 0.4326 |  g_loss: 0.6864
+Iteration [  180/10000] | d_real_loss: 0.2699 | d_fake_loss: 0.1559 | d_total_loss: 0.4257 |  g_loss: 0.3792
+Iteration [  190/10000] | d_real_loss: 0.0558 | d_fake_loss: 0.5602 | d_total_loss: 0.6160 |  g_loss: 0.9620
+Iteration [  200/10000] | d_real_loss: 0.1895 | d_fake_loss: 0.2019 | d_total_loss: 0.3914 |  g_loss: 0.5249
+Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-000200.png
+Iteration [  210/10000] | d_real_loss: 0.2861 | d_fake_loss: 0.1574 | d_total_loss: 0.4435 |  g_loss: 0.3465
+Iteration [  220/10000] | d_real_loss: 0.0903 | d_fake_loss: 0.4376 | d_total_loss: 0.5279 |  g_loss: 0.8803
+Iteration [  230/10000] | d_real_loss: 0.1251 | d_fake_loss: 0.3064 | d_total_loss: 0.4315 |  g_loss: 0.7032
+Iteration [  240/10000] | d_real_loss: 0.4663 | d_fake_loss: 0.0418 | d_total_loss: 0.5081 |  g_loss: 0.1968
+Iteration [  250/10000] | d_real_loss: 0.6589 | d_fake_loss: 0.0521 | d_total_loss: 0.7110 |  g_loss: 0.1289
+Iteration [  260/10000] | d_real_loss: 0.4283 | d_fake_loss: 0.0738 | d_total_loss: 0.5022 |  g_loss: 0.2427
+Iteration [  270/10000] | d_real_loss: 0.2210 | d_fake_loss: 0.2270 | d_total_loss: 0.4480 |  g_loss: 0.4493
+Iteration [  280/10000] | d_real_loss: 0.2850 | d_fake_loss: 0.1412 | d_total_loss: 0.4262 |  g_loss: 0.2775
+Iteration [  290/10000] | d_real_loss: 0.1888 | d_fake_loss: 0.2478 | d_total_loss: 0.4365 |  g_loss: 0.5849
+Iteration [  300/10000] | d_real_loss: 0.4228 | d_fake_loss: 0.0983 | d_total_loss: 0.5211 |  g_loss: 0.2871
+Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-000300.png
+Iteration [  310/10000] | d_real_loss: 0.1920 | d_fake_loss: 0.1973 | d_total_loss: 0.3893 |  g_loss: 0.5106
+Iteration [  320/10000] | d_real_loss: 0.3285 | d_fake_loss: 0.1114 | d_total_loss: 0.4399 |  g_loss: 0.3473
+Iteration [  330/10000] | d_real_loss: 0.3326 | d_fake_loss: 0.1081 | d_total_loss: 0.4407 |  g_loss: 0.3096
+Iteration [  340/10000] | d_real_loss: 0.2700 | d_fake_loss: 0.1983 | d_total_loss: 0.4683 |  g_loss: 0.4874
+Iteration [  350/10000] | d_real_loss: 0.2457 | d_fake_loss: 0.1748 | d_total_loss: 0.4204 |  g_loss: 0.4834
+Iteration [  360/10000] | d_real_loss: 0.1375 | d_fake_loss: 0.2590 | d_total_loss: 0.3964 |  g_loss: 0.6437
+Iteration [  370/10000] | d_real_loss: 0.2535 | d_fake_loss: 0.1835 | d_total_loss: 0.4370 |  g_loss: 0.4670
+Iteration [  380/10000] | d_real_loss: 0.1965 | d_fake_loss: 0.1744 | d_total_loss: 0.3709 |  g_loss: 0.5127
+Iteration [  390/10000] | d_real_loss: 0.3007 | d_fake_loss: 0.1778 | d_total_loss: 0.4785 |  g_loss: 0.3093
+Iteration [  400/10000] | d_real_loss: 0.1619 | d_fake_loss: 0.2504 | d_total_loss: 0.4123 |  g_loss: 0.4473
+Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-000400.png
+Iteration [  410/10000] | d_real_loss: 0.2966 | d_fake_loss: 0.1570 | d_total_loss: 0.4536 |  g_loss: 0.4318
+Iteration [  420/10000] | d_real_loss: 0.2456 | d_fake_loss: 0.1660 | d_total_loss: 0.4115 |  g_loss: 0.4284
+Iteration [  430/10000] | d_real_loss: 0.5234 | d_fake_loss: 0.0519 | d_total_loss: 0.5753 |  g_loss: 0.1112
+Iteration [  440/10000] | d_real_loss: 0.2243 | d_fake_loss: 0.1637 | d_total_loss: 0.3879 |  g_loss: 0.3394
+Iteration [  450/10000] | d_real_loss: 0.2144 | d_fake_loss: 0.2353 | d_total_loss: 0.4497 |  g_loss: 0.5052
+Iteration [  460/10000] | d_real_loss: 0.1910 | d_fake_loss: 0.2346 | d_total_loss: 0.4256 |  g_loss: 0.4389
+Iteration [  470/10000] | d_real_loss: 0.2825 | d_fake_loss: 0.1447 | d_total_loss: 0.4272 |  g_loss: 0.3267
+Iteration [  480/10000] | d_real_loss: 0.2317 | d_fake_loss: 0.2118 | d_total_loss: 0.4434 |  g_loss: 0.3541
+Iteration [  490/10000] | d_real_loss: 0.1655 | d_fake_loss: 0.2432 | d_total_loss: 0.4087 |  g_loss: 0.5239
+Iteration [  500/10000] | d_real_loss: 0.2126 | d_fake_loss: 0.2183 | d_total_loss: 0.4309 |  g_loss: 0.5190
+Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-000500.png
+Iteration [  510/10000] | d_real_loss: 0.1863 | d_fake_loss: 0.2183 | d_total_loss: 0.4046 |  g_loss: 0.5200
+Iteration [  520/10000] | d_real_loss: 0.2060 | d_fake_loss: 0.2264 | d_total_loss: 0.4325 |  g_loss: 0.3962
+Iteration [  530/10000] | d_real_loss: 0.0919 | d_fake_loss: 0.3781 | d_total_loss: 0.4701 |  g_loss: 0.7417
+Iteration [  540/10000] | d_real_loss: 0.1068 | d_fake_loss: 0.3260 | d_total_loss: 0.4328 |  g_loss: 0.8160
+Iteration [  550/10000] | d_real_loss: 0.2958 | d_fake_loss: 0.1809 | d_total_loss: 0.4768 |  g_loss: 0.2566
+Iteration [  560/10000] | d_real_loss: 0.1911 | d_fake_loss: 0.2254 | d_total_loss: 0.4165 |  g_loss: 0.4912
+Iteration [  570/10000] | d_real_loss: 0.3288 | d_fake_loss: 0.1630 | d_total_loss: 0.4917 |  g_loss: 0.3529
+Iteration [  580/10000] | d_real_loss: 0.1075 | d_fake_loss: 0.2677 | d_total_loss: 0.3752 |  g_loss: 0.7429
+Iteration [  590/10000] | d_real_loss: 0.2308 | d_fake_loss: 0.2388 | d_total_loss: 0.4696 |  g_loss: 0.4450
+Iteration [  600/10000] | d_real_loss: 0.4184 | d_fake_loss: 0.0809 | d_total_loss: 0.4993 |  g_loss: 0.1707
+Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-000600.png
+Iteration [  610/10000] | d_real_loss: 0.3731 | d_fake_loss: 0.0724 | d_total_loss: 0.4455 |  g_loss: 0.3180
+Iteration [  620/10000] | d_real_loss: 0.4744 | d_fake_loss: 0.0462 | d_total_loss: 0.5206 |  g_loss: 0.1997
+Iteration [  630/10000] | d_real_loss: 0.1699 | d_fake_loss: 0.3197 | d_total_loss: 0.4897 |  g_loss: 0.3747
+Iteration [  640/10000] | d_real_loss: 0.2591 | d_fake_loss: 0.1725 | d_total_loss: 0.4316 |  g_loss: 0.5009
+Iteration [  650/10000] | d_real_loss: 0.1348 | d_fake_loss: 0.3399 | d_total_loss: 0.4747 |  g_loss: 0.5624
+Iteration [  660/10000] | d_real_loss: 0.0851 | d_fake_loss: 0.3534 | d_total_loss: 0.4385 |  g_loss: 0.8170
+Iteration [  670/10000] | d_real_loss: 0.2364 | d_fake_loss: 0.1270 | d_total_loss: 0.3634 |  g_loss: 0.3786
+Iteration [  680/10000] | d_real_loss: 0.2738 | d_fake_loss: 0.1329 | d_total_loss: 0.4067 |  g_loss: 0.4347
+Iteration [  690/10000] | d_real_loss: 0.2100 | d_fake_loss: 0.2202 | d_total_loss: 0.4303 |  g_loss: 0.3754
+Iteration [  700/10000] | d_real_loss: 0.1040 | d_fake_loss: 0.3216 | d_total_loss: 0.4256 |  g_loss: 0.6246
+Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-000700.png
