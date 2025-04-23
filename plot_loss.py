@@ -2,7 +2,7 @@ import re
 import matplotlib.pyplot as plt
 
 # Load your log file
-log_path = 'nohup.out'
+log_path = 'pretrained_style_identifier_output.txt'
 with open(log_path, 'r') as f:
     lines = f.readlines()
 
@@ -41,4 +41,5 @@ plt.ylabel('Loss')
 plt.title('Training and Validation Loss Over Time')
 plt.legend()
 plt.grid(True)
+plt.savefig('pretrained_style_iden_plot.png')
 plt.show()

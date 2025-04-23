@@ -12,7 +12,8 @@
 #    To train with cycle consistency loss:
 #       python cycle_gan.py --use_cycle_consistency_loss
 
-#   To train with pertrained: nohup python style_GAN.py --iden_checkpoint_dir checkpoints_pretrained_style_id --iden "pretrained"
+#   To train with pertrained: 
+#   python style_GAN.py --iden_checkpoint_dir checkpoints_pretrained_style_id --iden "pretrained"
 #
 #
 #    For optional experimentation:
@@ -92,11 +93,11 @@ def create_model(opts):
         style_iden.fc = nn.Linear(style_iden.fc.in_features, 31)
 
 
-    if torch.cuda.is_available():
-        G.cuda()
-        D.cuda()
-        style_iden.cuda()
-        print("Models moved to GPU.")
+    # if torch.cuda.is_available():
+    #     G.cuda()
+    #     D.cuda()
+    #     style_iden.cuda()
+    #     print("Models moved to GPU.")
  
 
     if os.path.isdir(opts.iden_checkpoint_dir):
@@ -269,7 +270,7 @@ def training_loop(dataloader_X, opts):
     # that allow us to inspect the model's performance. 
     fixed_X = next(iter_X)
 
-    for iteration in range(0, opts.train_iters + 1):
+    for iteration in range(1, opts.train_iters + 1):
 
         # Reset data_iter for each epoch
         if iteration % iter_per_epoch == 0:
@@ -277,6 +278,10 @@ def training_loop(dataloader_X, opts):
 
         images = next(iter_X)
         images, labels = (utils.to_var(images[0]), utils.to_var(images[1]))
+        # image, label = (utils.to_var(fixed_X[0])[0].unsqueeze(0), utils.to_var(fixed_X[1])[0].unsqueeze(0))
+    
+        if iteration ==1:
+            print(style_iden(images[0].unsqueeze(0)),torch.max(style_iden(images[0].unsqueeze(0))),labels[0].unsqueeze(0))
 
         # TRAIN THE DISCRIMINATORS
         # 1. Compute the discriminator losses on real images
