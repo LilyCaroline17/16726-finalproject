@@ -61,80 +61,79 @@ def create_model(opts):
         model.cuda()
         print("Models moved to GPU.")
 
-    # 5. Loss + Optimizer
-    style_counts = {
-        "가르마": 12510,
-        "기타남자스타일": 11242,
-        "기타레이어드": 48240,
-        "기타여자스타일": 2964,
-        "남자일반숏": 12577,
-        "댄디": 7798,
-        "루프": 2544,
-        "리젠트": 9837,
-        "리프": 7276,
-        "미스티": 6161,
-        "바디": 20810,
-        "베이비": 3076,
-        "보니": 15469,
-        "보브": 20811,
-        "빌드": 23617,
-        "소프트투블럭댄디": 7446,
-        "숏단발": 13614,
-        "쉐도우": 10298,
-        "쉼표": 2401,
-        "스핀스왈로": 4936,
-        "시스루댄디": 4981,
-        "애즈": 8143,
-        "에어": 29418,
-        "여자일반숏": 5527,
-        "원랭스": 34040,
-        "원블럭댄디": 3869,
-        "테슬": 2926,
-        "포마드": 7970,
-        "플리츠": 15370,
-        "허쉬": 34040,
-        "히피": 13455,
-    }
+    # # 5. Loss + Optimizer
+    # style_counts = {
+    #     "가르마": 12510,
+    #     "기타남자스타일": 11242,
+    #     "기타레이어드": 48240,
+    #     "기타여자스타일": 2964,
+    #     "남자일반숏": 12577,
+    #     "댄디": 7798,
+    #     "루프": 2544,
+    #     "리젠트": 9837,
+    #     "리프": 7276,
+    #     "미스티": 6161,
+    #     "바디": 20810,
+    #     "베이비": 3076,
+    #     "보니": 15469,
+    #     "보브": 20811,
+    #     "빌드": 23617,
+    #     "소프트투블럭댄디": 7446,
+    #     "숏단발": 13614,
+    #     "쉐도우": 10298,
+    #     "쉼표": 2401,
+    #     "스핀스왈로": 4936,
+    #     "시스루댄디": 4981,
+    #     "애즈": 8143,
+    #     "에어": 29418,
+    #     "여자일반숏": 5527,
+    #     "원랭스": 34040,
+    #     "원블럭댄디": 3869,
+    #     "테슬": 2926,
+    #     "포마드": 7970,
+    #     "플리츠": 15370,
+    #     "허쉬": 34040,
+    #     "히피": 13455,
+    # }
 
-    STYLE_CLASSES = sorted(set( [
-        "가르마",
-        "기타남자스타일",
-        "기타레이어드",
-        "기타여자스타일",
-        "남자일반숏",
-        "댄디",
-        "루프",
-        "리젠트",
-        "리프",
-        "미스티",
-        "바디",
-        "베이비",
-        "보니",
-        "보브",
-        "빌드",
-        "소프트투블럭댄디",
-        "숏단발",
-        "쉐도우",
-        "쉼표",
-        "스핀스왈로",
-        "시스루댄디",
-        "애즈",
-        "에어",
-        "여자일반숏",
-        "원랭스",
-        "원블럭댄디",
-        "테슬",
-        "포마드",
-        "플리츠",
-        "허쉬",
-        "히피",
-    ]))
-    STYLE_TO_IDX = {style: i for i, style in enumerate(STYLE_CLASSES)} 
-    class_counts = torch.tensor([style_counts[style] for style in STYLE_CLASSES], dtype=torch.float)
+    # STYLE_CLASSES = sorted(set( [
+    #     "가르마",
+    #     "기타남자스타일",
+    #     "기타레이어드",
+    #     "기타여자스타일",
+    #     "남자일반숏",
+    #     "댄디",
+    #     "루프",
+    #     "리젠트",
+    #     "리프",
+    #     "미스티",
+    #     "바디",
+    #     "베이비",
+    #     "보니",
+    #     "보브",
+    #     "빌드",
+    #     "소프트투블럭댄디",
+    #     "숏단발",
+    #     "쉐도우",
+    #     "쉼표",
+    #     "스핀스왈로",
+    #     "시스루댄디",
+    #     "애즈",
+    #     "에어",
+    #     "여자일반숏",
+    #     "원랭스",
+    #     "원블럭댄디",
+    #     "테슬",
+    #     "포마드",
+    #     "플리츠",
+    #     "허쉬",
+    #     "히피",
+    # ]))
+    # STYLE_TO_IDX = {style: i for i, style in enumerate(STYLE_CLASSES)} 
+    # class_counts = torch.tensor([style_counts[style] for style in STYLE_CLASSES], dtype=torch.float)
 
-    class_weights = 1.0 / (class_counts.float() + 1e-6)
-    criterion = nn.CrossEntropyLoss(weight=utils.to_var(class_weights))
-    optimizer = optim.Adam(model.fc.parameters(), lr=1e-3)  # Only train the head
+    # class_weights = 1.0 / (class_counts.float() + 1e-6) 
+    optimizer = optim.Adam(model.fc.parameters(), lr=opts.lr)  # Only train the head
  
     print_model(model)
 
@@ -149,7 +148,7 @@ def create_model(opts):
         opts.resume_iter = 0
         print(f"Checkpoints not found. Starting from scratch.")
 
-    return model, optimizer, criterion
+    return model, optimizer#, criterion
 
 
 def checkpoint(iteration, model, optimizer, opts):
@@ -172,7 +171,7 @@ def training_loop(dataloader_X, validation_loader, opts):
     * Saves generated samples every opts.sample_every iterations
     """
     # Create generators and discriminators
-    model, optimizer, criterion = create_model(opts)
+    model, optimizer = create_model(opts)
 
     params = list(model.parameters())
 
@@ -192,11 +191,14 @@ def training_loop(dataloader_X, validation_loader, opts):
 
         images_X = next(iter_X)
         images_X, labels = (utils.to_var(images_X[0]), utils.to_var(images_X[1]))
+        # print(images_X.device, labels.device)
+
 
         # TRAIN THE DISCRIMINATORS
         # 1. Compute the discriminator losses on real images
         out = model(images_X)
-        loss = criterion(out, labels)
+        loss_fn = nn.BCEWithLogitsLoss()
+        loss = loss_fn(out, labels.float())
         # loss = torch.mean((model(images_X) - labels) ** 2)
 
         # sum up the losses and update D_X and
@@ -230,7 +232,9 @@ def training_loop(dataloader_X, validation_loader, opts):
                     val_labels = utils.to_var(val_labels)
 
                     val_outputs = model(val_images)
-                    val_loss = criterion(val_outputs, val_labels)
+                    loss_fn = nn.BCEWithLogitsLoss()
+                    val_loss = loss_fn(out, labels.float())
+                    # val_loss = criterion(val_outputs, val_labels)
                     # val_loss = torch.mean((val_outputs - val_labels) ** 2)
 
                     val_loss_total += val_loss.item()
@@ -284,12 +288,12 @@ def create_parser():
 
     # Training hyper-parameters
     parser.add_argument(
-        "--train_iters", type=int, default=100000
-    )  # 55670 samples, so idk if this needs adjusting
+        "--train_iters", type=int, default=50000
+    )  # 55670 samples, but pretrained model so we cut down a bit
     parser.add_argument("--resume_iter", type=int, default=0)
     parser.add_argument("--batch_size", type=int, default=16)
     parser.add_argument("--num_workers", type=int, default=2)
-    parser.add_argument("--lr", type=float, default=0.0003)
+    parser.add_argument("--lr", type=float, default=0.0001) # also lower cus finetuning
     parser.add_argument("--beta1", type=float, default=0.5)
     parser.add_argument("--beta2", type=float, default=0.999)
     parser.add_argument("--lambda_cycle", type=float, default=10)
@@ -305,7 +309,7 @@ def create_parser():
     parser.add_argument("--sample_dir", type=str, default="pretrained")
     parser.add_argument("--log_step", type=int, default=10)
     parser.add_argument("--sample_every", type=int, default=100)
-    parser.add_argument("--checkpoint_every", type=int, default=1000)
+    parser.add_argument("--checkpoint_every", type=int, default=800)
 
     parser.add_argument("--gpu", type=str, default="0")
 
