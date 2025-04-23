@@ -11,6 +11,8 @@
 #
 #    To train with cycle consistency loss:
 #       python cycle_gan.py --use_cycle_consistency_loss
+
+#   To train with pertrained: nohup python style_GAN.py --iden_checkpoint_dir checkpoints_pretrained_style_id --iden "pretrained"
 #
 #
 #    For optional experimentation:
@@ -29,6 +31,8 @@ import re
 
 import imageio
 from torch.utils.tensorboard import SummaryWriter
+from torchvision import models, transforms
+import torch.nn as nn
 import torch
 import torch.optim as optim
 import numpy as np
@@ -75,7 +79,18 @@ def create_model(opts):
     g_optimizer = optim.Adam(G.parameters(), opts.lr, [opts.beta1, opts.beta2])
     d_optimizer = optim.Adam(D.parameters(), opts.lr, [opts.beta1, opts.beta2])
 
-    style_iden = StyleIdentifier(conv_dim=opts.d_conv_dim, norm=opts.norm)
+    # style_models = {"ours":StyleIdentifier, "pretrained":models.resnet18(pretrained=True)}
+    style_iden = None
+    if opts.iden == "ours": style_iden = StyleIdentifier(conv_dim=opts.d_conv_dim, norm=opts.norm)
+    else:
+        style_iden = models.resnet18(pretrained=True)
+        # Freeze all pretrained layers
+        for param in style_iden.parameters():
+            param.requires_grad = False
+
+        # Replace the classifier head
+        style_iden.fc = nn.Linear(style_iden.fc.in_features, 31)
+
 
     if torch.cuda.is_available():
         G.cuda()
@@ -380,6 +395,7 @@ def create_parser():
     parser.add_argument("--image_size", type=int, default=128)
     parser.add_argument("--disc", type=str, default="dc")  # or 'patch'
     parser.add_argument("--gen", type=str, default="cycle")
+    parser.add_argument("--iden", type=str, default="ours")
     parser.add_argument("--g_conv_dim", type=int, default=32)
     parser.add_argument("--d_conv_dim", type=int, default=32)
     parser.add_argument("--norm", type=str, default="instance")

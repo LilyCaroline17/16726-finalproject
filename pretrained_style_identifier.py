@@ -233,9 +233,7 @@ def training_loop(dataloader_X, validation_loader, opts):
 
                     val_outputs = model(val_images)
                     loss_fn = nn.BCEWithLogitsLoss()
-                    val_loss = loss_fn(out, labels.float())
-                    # val_loss = criterion(val_outputs, val_labels)
-                    # val_loss = torch.mean((val_outputs - val_labels) ** 2)
+                    val_loss = loss_fn(out, labels.float()) 
 
                     val_loss_total += val_loss.item()
                     val_batches += 1
