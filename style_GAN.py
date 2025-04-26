@@ -280,8 +280,8 @@ def training_loop(dataloader_X, opts):
         images, labels = (utils.to_var(images[0]), utils.to_var(images[1]))
         # image, label = (utils.to_var(fixed_X[0])[0].unsqueeze(0), utils.to_var(fixed_X[1])[0].unsqueeze(0))
     
-        if iteration ==1:
-            print(style_iden(images[0].unsqueeze(0)),torch.max(style_iden(images[0].unsqueeze(0))),labels[0].unsqueeze(0))
+        if iteration ==1:  
+            print(torch.sigmoid(style_iden(images[0].unsqueeze(0))),labels[0].unsqueeze(0))
 
         # TRAIN THE DISCRIMINATORS
         # 1. Compute the discriminator losses on real images
@@ -334,8 +334,8 @@ def training_loop(dataloader_X, opts):
                 criterion = torch.nn.CrossEntropyLoss()
                 target_classes = torch.argmax(
                     orig_labels, dim=1
-                )  # because CE expects class index
-                style_loss = criterion(style_iden(fake_images), target_classes)
+                )  # because CE expects class index 
+                style_loss = criterion(torch.sigmoid(style_iden(fake_images)), target_classes)
 
             g_loss += opts.lambda_style * style_loss
             logger.add_scalar("G/style", opts.lambda_style * style_loss, iteration)
