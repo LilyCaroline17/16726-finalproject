@@ -1,0 +1,323 @@
+<html>
+   <head>
+    <style>
+        /* General Styles */
+        body {
+           font-family: "Optima", sans-serif;
+           color: darksalmon;
+           background-color:floralwhite;
+           margin: 0;
+           padding: 0;
+        }
+        h1 {
+           text-align: center;
+           font-size: 2.8em; 
+           margin: 0px;
+        }
+        h2 {
+           text-align: center;
+           background-color:blanchedalmond;
+           padding: 12px;
+           border-radius: 8px;
+           margin: 40px auto 20px auto;
+           width: 80%;
+           color:darksalmon;
+           font-size: 1.8em;
+        }
+        div {
+           text-align: center;
+           background-color:white;
+           border-radius: 12px;
+           /* padding: 20px; */
+           margin: 20px auto;
+           width: 85%;
+        }
+        p {
+           text-align: left;
+           font-size: 18px;
+           padding: 0 100px;
+           line-height: 1.6; 
+        }
+        /* Image Layout */
+        .image-wrapper {
+           display: flex;
+           flex-direction: column;
+           gap: 20px;
+           margin-top: 20px;
+           box-shadow: 0px 4px 10px peachpuff;
+        }
+        .image-row {
+           display: flex;
+           gap: 25px;
+           justify-content: center;
+           flex-wrap: wrap;
+        }
+        .image-container {
+           text-align: center;
+           max-width: 400px;
+        }
+        img {
+           width: 100%;
+           height: auto;
+           max-width: 500px;
+           border-radius: 8px;
+           transition: transform 0.3s ease-in-out;
+        }
+        img:hover {
+           transform: scale(1.03);
+        }
+        figcaption {
+           margin-top: 8px;
+           font-size: 16px;
+           /* color: #444; */
+           font-weight: bold;
+        }
+        /* Title and Header Section */
+        .title-container {
+           text-align: center; 
+           background-color:peachpuff;  
+           width: 85%; 
+        }
+        .title-container p { 
+           margin-top: 5px;
+           text-align: center;
+        }
+        .styled-table {
+   width: 85%;
+   margin: 20px auto;
+   border-collapse: collapse;
+   box-shadow: 0px 4px 10px peachpuff;
+   background: white;
+   text-align: center;
+   border-radius: 12px;
+   overflow: hidden;
+}
+
+.styled-table th, .styled-table td {
+   padding: 15px;
+   border: 1px solid peachpuff;
+}
+
+.styled-table th {
+   background-color: blanchedalmond;
+   font-size: 1.2em;
+   color: darksalmon;
+}
+
+.styled-table img {
+   width: 100px; /* Adjust image size */
+   height: auto;
+   border-radius: 8px;
+   transition: transform 0.3s ease-in-out;
+}
+     </style>
+   </head>
+   <body>
+      <div class="title-container">
+         <h1>Project 4: Neural Style Transfer</h1>
+         <p>By Flora Cheng<br>
+            16-726 Learning-Based Image Synthesis (Spring 2025)</p>
+      </div>
+      <h2>Introduction</h2>
+      <p>
+        In this project, a neural style transfer is implemented, where given an input style and content image, the outputed image will resembles the specific content in a certain artistic style. 
+    </p>
+
+      <h2>Part 1: Content Reconstruction</h2>
+      <p>        
+        In the first part of the project, we start from random noise and optimize it in content space. 
+        This will be done by inserting a content loss layer into a pre-trained VGG19 model. The content loss layer will compare using least square loss the input image's output at that point in the model to the goal: the model at that point's output when ran on the original content image.
+        <!-- It helps you get familiar with the general idea of optimizing pixels with respect to certain losses.  -->
+        
+        Below we can see the effects of having the content loss layer inserted after different convolution layers. This was ran with the input image being randomly generated noise.
+    </p>
+    <div class="image-wrapper"><div class="image-container">
+        <img src="outputs/starry_night_tubingen/Content Image.png"> 
+        <figcaption>Content Image that the model is trying to match </figcaption>
+     </div>
+        <div class="image-row">
+            <div class="image-container">
+                <img src="outputs/starry_night_tubingen/Reconstructed Image conv 1.png"> 
+                <figcaption>Reconstructed image with content loss after 1st Conv2d layer</figcaption>
+             </div><div class="image-container">
+                <img src="outputs/starry_night_tubingen/Reconstructed Image conv 2.png"> 
+                <figcaption>Reconstructed image with content loss after 2nd Conv2d layer</figcaption>
+             </div><div class="image-container">
+                <img src="outputs/starry_night_tubingen/Reconstructed Image conv 3.png"> 
+                <figcaption>Reconstructed image with content loss after 3rd Conv2d layer</figcaption>
+             </div><div class="image-container">
+                <img src="outputs/starry_night_tubingen/Reconstructed Image conv 4.png"> 
+                <figcaption>Reconstructed image with content loss after 4th Conv2d layer</figcaption>
+             </div><div class="image-container">
+                <img src="outputs/starry_night_tubingen/Reconstructed Image conv 5.png"> 
+                <figcaption>Reconstructed image with content loss after 5th Conv2d layer</figcaption>
+             </div>
+        </div>
+     </div>
+    <p>
+        We can see that as the content loss is moved into later layers of the model, the image is a bit more pixelated, distorted, and less saturated, as there are less layers afterwards to adjust the final output to look like the content image. Thus, we can see that earlier content loss would result in an image that is closer to the original content image, while later loss may result in an image that may differ a bit.
+        Out of these possible content losses, I personally chose the content loss after the 5th convolutional layer, so that it will slightly resemble the content image and maybe loose some detail, but will hopefully really look like it's drawn in the style of the style image.
+        <!-- Choose your favorite one (specify it on the website).  -->
+        <br>
+        
+        Now with 2 different noises as input images, our training only with content loss gives the following results. 
+        <!-- Please include your results on the website and compare each other with the content image. [15 points] -->
+    </p>
+    <div class="image-wrapper"><div class="image-container">
+        <img src="outputs/starry_night_phipps/Content Image.png"> 
+        <figcaption>Content Image that the model is trying to match </figcaption>
+     </div>
+        <div class="image-row">
+            <div class="image-container">
+                <img src="outputs/starry_night_phipps/Reconstructed Image 1 5.png"> 
+                <figcaption>Reconstructed image 1</figcaption>
+             </div><div class="image-container">
+                <img src="outputs/starry_night_phipps/Reconstructed Image.png"> 
+                <figcaption>Reconstructed image 2</figcaption>
+             </div>
+        </div>
+     </div>
+      
+      <h2>Part 2: Texture Synthesis</h2>
+      <p>
+        In the second part of this project, content is ignored and the goal is to optimize textures. This was done by similarly including a style loss layer after some layers in the pretrained model. The style loss layer uses a Gram matrix as a style measurement, which gives the correlation of two vectors on every dimension and is used to represent a style (by including potential information about the correlation between edges or colors). Then the loss can be found as the squared difference between the a gram matrix of an the model's output of the input and the gram matrix of the model's output of the style image.
+        <!-- This builds some intuitive connection between style-space distance and gram matrix.  --> 
+         <br>
+
+       Below I tested a couple optimiziations of texture loss at different layers and combinations of layers:
+      </p>
+      <div class="image-wrapper"><div class="image-container">
+        <img src="outputs/starry_night_phipps/Style Image.png"> 
+        <figcaption>Style Image that the model is matching </figcaption>
+     </div>
+        <div class="image-row">
+            <div class="image-container">
+                <img src="outputs/starry_night_tubingen/Synthesized Texture all.png"> 
+                <figcaption>Generated style with style loss after every convolution layer </figcaption>
+             </div>
+             <div class="image-container">
+                <img src="outputs/starry_night_tubingen/Synthesized Texture 1 3 5.png"> 
+                <figcaption>Generated style with style loss after the 1st, 3rd, and 5th convolution layer </figcaption>
+             </div>
+             <div class="image-container">
+                <img src="outputs/starry_night_tubingen/Synthesized Texture 1.png"> 
+                <figcaption>Generated style with style loss after the 1st convolution layer </figcaption>
+             </div>
+             <div class="image-container">
+                <img src="outputs/starry_night_tubingen/Synthesized Texture 5.png"> 
+                <figcaption>Generated style with style loss after the 5th convolution layer </figcaption>
+             </div>
+        </div>
+     </div>
+     <p>We can see as we use less style layers, we end up with a less detailed texture result, where there's less notable brush stroke and theres larger blotches of colors. And in the cases with just a single layer, it's pretty noisy and isn't a very cohesive layer, where having just style loss in the earlier layers looks like noise with a couple strokes and having the style loss in a later layer results in more details but still a lot of noise.
+        To get something with a closer texture to the original style image, I would pick to have style loss after each layer, such that we can guarantee the model's style is very close to the original style image.<br>
+
+        With this optimization, we can see the following results when starting from noise and generating the styles:
+    </p>
+    <div class="image-wrapper"><div class="image-container">
+      <img src="outputs/picasso_dancing/Style Image.png"> 
+      <figcaption>Style Image that the model is trying to match </figcaption>
+   </div>
+      <div class="image-row">
+          <div class="image-container">
+              <img src="outputs/picasso_dancing/Synthesized Texture 1.png"> 
+              <figcaption>Style image 1</figcaption>
+           </div><div class="image-container">
+              <img src="outputs/picasso_dancing/Synthesized Texture 2.png"> 
+              <figcaption>Style image 2</figcaption>
+           </div>
+      </div>
+   </div> 
+
+      <h2>Part 3: Style Transfer</h2>
+      <p>
+        Lastly, the previous two parts are combined to perform neural style transfer, where we use both style loss and content loss.
+        
+        <!-- Tune the hyper-parameters until you are satisfied. Pay special attention to whether your gram matrix is normalized over feature pixels or not. It will result in different hyper-parameters by an order of 4-5.  -->
+        
+        <!-- Please briefly describe your implementation details on the website. [10 points] -->
+        The final model is the VGG19 model that has a content loss layer inserted after the 5th convolutional layer and a style loss layer after every convolutional layer. The model is cut off after the last content and style loss layer.
+
+        When running the model, at each step, the input image values are bounded to [0,1], where values outside of the bounds are set to the limits (0/1). Then the loss is found by taking the sum of the losses of the loss layers and multiplying them by their corresponding weights.<br>
+
+        The following images were generated with a noise image as the input image.
+        <!-- <br>
+        Please report at least a 2x2 grid of results that are optimized from two content images mixing with two style images accordingly. (Remember to also include content and style images therefore the grid is actually 3x3) [10 points]</p> -->
+        <table class="styled-table">
+            <thead>
+               <tr>
+                  <th>Content \ Style</th>
+                  <th><img src="outputs/the_scream_tubingen/Style Image.png" alt="The Scream Style"><br>The Scream</th>
+                  <th><img src="outputs/picasso_phipps/Style Image.png" alt="Picasso Style"><br>Picasso</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <td><img src="outputs/picasso_tubingen/Content Image.png" alt="Tubingen Content"><br>Tubingen</td>
+                  <td><img src="outputs/the_scream_tubingen/Output Image from noise.png" alt="Output Scream Tubingen"></td>
+                  <td><img src="outputs/picasso_tubingen/Output Image from noise.png" alt="Output Picasso Tubingen"></td>
+               </tr>
+               <tr>
+                  <td><img src="outputs/picasso_phipps/Content Image.png" alt="Phipps Content"><br>Phipps</td>
+                  <td><img src="outputs/the_scream_phipps/Output Image from noise.png" alt="Output Scream Phipps"></td>
+                  <td><img src="outputs/picasso_phipps/Output Image from noise.png" alt="Output Picasso Phipps"></td>
+               </tr>
+            </tbody>
+         </table>
+        <p>
+        Note these images were generated with the input as random noise. However we could also try using the content image as input too. Because we are starting with the content image, we can note below that the content input image result has more accurate results?</p>
+        <div class="image-wrapper">
+            <div class="image-row">
+            <div class="image-container">
+                <img src="outputs/picasso_dancing/Style Image.png"> 
+                <figcaption>Style image</figcaption>
+             </div><div class="image-container">
+                <img src="outputs/picasso_dancing/Content Image.png"> 
+                <figcaption>Content image</figcaption>
+             </div>
+        </div>
+            <div class="image-row">
+                <div class="image-container">
+                    <img src="outputs/picasso_dancing/Output Image from noise.png"> 
+                    <figcaption>Noise as Input</figcaption>
+                 </div><div class="image-container">
+                    <img src="outputs/picasso_dancing/Output Image from content image.png"> 
+                    <figcaption>Content image as Input</figcaption>
+                 </div>
+            </div>
+         </div> 
+        <p>
+        Now lets try the style transfer on some of my own images. I used an image taken at a lantern festival for the content and a background I drew a while ago as the style.
+      </p>
+      <div class="image-wrapper">
+        <div class="image-row">
+        <div class="image-container">
+            <img src="outputs/sunset_lanterns/Style Image.png"> 
+            <figcaption>Style image</figcaption>
+         </div><div class="image-container">
+            <img src="outputs/sunset_lanterns/Content Image.png"> 
+            <figcaption>Content image</figcaption>
+         </div><div class="image-container">
+            <img src="outputs/sunset_lanterns/Output Image from noise.png"> 
+            <figcaption>output image</figcaption>
+         </div>
+    </div>  
+</div>  
+      <h2>Bells & Whistles</h2>
+      <p>Let's see how well this applies to images generated in previous assignments</p>
+      <div class="image-wrapper">
+        <div class="image-row">
+        <div class="image-container">
+            <img src="outputs/picasso_hw2/Style Image.png"> 
+            <figcaption>Style image</figcaption>
+         </div><div class="image-container">
+            <img src="outputs/picasso_hw2/Content Image.png"> 
+            <figcaption>Content image</figcaption>
+         </div><div class="image-container">
+            <img src="outputs/picasso_hw2/Output Image from noise.png"> 
+            <figcaption>output image</figcaption>
+         </div>
+    </div>  
+</div>  
+   </body>
+</html>
