@@ -114,23 +114,26 @@
    </head>
    <body>
       <div class="title-container">
-         <h1>Project 4: Neural Style Transfer</h1>
-         <p>By Flora Cheng<br>
+         <h1>FINAL PROJECT</h1>
+         <p>By Flora Cheng and Emily Guo<br>
             16-726 Learning-Based Image Synthesis (Spring 2025)</p>
       </div>
       <h2>Introduction</h2>
       <p>
-        In this project, a neural style transfer is implemented, where given an input style and content image, the outputed image will resembles the specific content in a certain artistic style. 
+        In this project, ...
+        arcitlse
+        whatever is on our document/slides
+        planned structure:
+        take from slides
     </p>
 
-      <h2>Part 1: Content Reconstruction</h2>
+      <h2>Part 1: Naive Model????</h2>
       <p>        
-        In the first part of the project, we start from random noise and optimize it in content space. 
-        This will be done by inserting a content loss layer into a pre-trained VGG19 model. The content loss layer will compare using least square loss the input image's output at that point in the model to the goal: the model at that point's output when ran on the original content image.
-        <!-- It helps you get familiar with the general idea of optimizing pixels with respect to certain losses.  -->
-        
-        Below we can see the effects of having the content loss layer inserted after different convolution layers. This was ran with the input image being randomly generated noise.
-    </p>
+        In the first part of the project, we started from HW3 as a basis
+        ...
+        this wasn't very good...
+        why? 
+      </p>
     <div class="image-wrapper"><div class="image-container">
         <img src="outputs/starry_night_tubingen/Content Image.png"> 
         <figcaption>Content Image that the model is trying to match </figcaption>
@@ -155,13 +158,9 @@
         </div>
      </div>
     <p>
-        We can see that as the content loss is moved into later layers of the model, the image is a bit more pixelated, distorted, and less saturated, as there are less layers afterwards to adjust the final output to look like the content image. Thus, we can see that earlier content loss would result in an image that is closer to the original content image, while later loss may result in an image that may differ a bit.
-        Out of these possible content losses, I personally chose the content loss after the 5th convolutional layer, so that it will slightly resemble the content image and maybe loose some detail, but will hopefully really look like it's drawn in the style of the style image.
-        <!-- Choose your favorite one (specify it on the website).  -->
-        <br>
-        
-        Now with 2 different noises as input images, our training only with content loss gives the following results. 
-        <!-- Please include your results on the website and compare each other with the content image. [15 points] -->
+       results look pretty similar, likely becuase of weights on the style + reconstruction loss
+
+       also further checking: the classification not very good. :((
     </p>
     <div class="image-wrapper"><div class="image-container">
         <img src="outputs/starry_night_phipps/Content Image.png"> 
@@ -178,13 +177,14 @@
         </div>
      </div>
       
-      <h2>Part 2: Texture Synthesis</h2>
+      <h2>Part 2: Pretrained model</h2>
       <p>
-        In the second part of this project, content is ignored and the goal is to optimize textures. This was done by similarly including a style loss layer after some layers in the pretrained model. The style loss layer uses a Gram matrix as a style measurement, which gives the correlation of two vectors on every dimension and is used to represent a style (by including potential information about the correlation between edges or colors). Then the loss can be found as the squared difference between the a gram matrix of an the model's output of the input and the gram matrix of the model's output of the style image.
-        <!-- This builds some intuitive connection between style-space distance and gram matrix.  --> 
-         <br>
+        In the second part of this project, we tried a pretrained model, maybe it will be better at extracting features!
+        changed the loss from L1/L2 to BCE -- idk i think better for image features
 
-       Below I tested a couple optimiziations of texture loss at different layers and combinations of layers:
+        probably in both parts: instert loss graph
+        
+        I'll run for some results...
       </p>
       <div class="image-wrapper"><div class="image-container">
         <img src="outputs/starry_night_phipps/Style Image.png"> 
@@ -229,20 +229,13 @@
       </div>
    </div> 
 
-      <h2>Part 3: Style Transfer</h2>
+      <h2>Part 3: CLIP</h2>
       <p>
-        Lastly, the previous two parts are combined to perform neural style transfer, where we use both style loss and content loss.
+         Consider the possibilty that maybe training data isn't enought/consistnetn enough for models to pic up features
+         ==> use clip, already has embeddings
+         ==> updated flow chart: style loss if found w/ clip using cosine loss
         
-        <!-- Tune the hyper-parameters until you are satisfied. Pay special attention to whether your gram matrix is normalized over feature pixels or not. It will result in different hyper-parameters by an order of 4-5.  -->
-        
-        <!-- Please briefly describe your implementation details on the website. [10 points] -->
-        The final model is the VGG19 model that has a content loss layer inserted after the 5th convolutional layer and a style loss layer after every convolutional layer. The model is cut off after the last content and style loss layer.
-
-        When running the model, at each step, the input image values are bounded to [0,1], where values outside of the bounds are set to the limits (0/1). Then the loss is found by taking the sum of the losses of the loss layers and multiplying them by their corresponding weights.<br>
-
-        The following images were generated with a noise image as the input image.
-        <!-- <br>
-        Please report at least a 2x2 grid of results that are optimized from two content images mixing with two style images accordingly. (Remember to also include content and style images therefore the grid is actually 3x3) [10 points]</p> -->
+      </p>
         <table class="styled-table">
             <thead>
                <tr>
@@ -303,8 +296,13 @@
          </div>
     </div>  
 </div>  
-      <h2>Bells & Whistles</h2>
-      <p>Let's see how well this applies to images generated in previous assignments</p>
+      <h2>Application</h2>
+      <p>
+         The final goal, was to be able to take in a face, and output a new hairstyel:
+
+         flowchart: 
+         face ==> blurr => model G => transplant face ==> output!
+      </p>
       <div class="image-wrapper">
         <div class="image-row">
         <div class="image-container">
@@ -319,5 +317,7 @@
          </div>
     </div>  
 </div>  
+<h2>Final Results</h2>
+<p>uhhhhhhhhhhh hope</p>
    </body>
 </html>
