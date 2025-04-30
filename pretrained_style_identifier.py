@@ -153,7 +153,7 @@ def create_model(opts):
 
 def checkpoint(iteration, model, optimizer, opts):
     """Save model and optimizer"""
-    path = os.path.join(opts.checkpoint_dir, "style_identifier_iter%d.pkl" % iteration)
+    path = os.path.join(opts.checkpoint_dir, "style_identifier_iter.pkl")
     torch.save(
         {
             "iteration": iteration,
