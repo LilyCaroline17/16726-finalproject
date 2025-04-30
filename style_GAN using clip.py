@@ -173,7 +173,9 @@ def create_model(opts):
 
 def checkpoint(iteration, G, D, g_optimizer, d_optimizer, opts):
     """Save generators, discriminators, and optimizers"""
-    os.mkdir(os.path.join(opts.checkpoint_dir, "%ditr" % iteration))
+    directory = os.path.join(opts.checkpoint_dir, "%ditr" % iteration)
+    if not os.path.exists(directory):
+        os.mkdir(directory)
     G_path = os.path.join(opts.checkpoint_dir, "%ditr/G.pkl" % iteration)
     D_path = os.path.join(opts.checkpoint_dir, "%ditr/D.pkl" % iteration)
     g_opt_path = os.path.join(opts.checkpoint_dir, "%ditr/g_optimizer.pkl" % iteration)
@@ -368,21 +370,16 @@ def training_loop(dataloader_X, opts):
                     logits_per_image, logits_per_text = style_iden(
                         image_features, text_features
                     )
-
-                    criterion = torch.nn.CrossEntropyLoss()
-                    target_classes = torch.argmax(orig_labels, dim=1)
-                    style_loss = criterion(
-                        logits_per_image.softmax(dim=-1), target_classes
-                    )
+                    target_labels = torch.argmax(new_labels, dim=1) 
+                    predicted_labels = (logits_per_image).argmax(dim=1)
+                    style_loss = (predicted_labels == target_labels).float().mean()
 
                 elif opts.iden == "ours":
                     ...
-                elif opts.iden == "pretrained":
-                    criterion = torch.nn.CrossEntropyLoss()
-                    target_classes = torch.argmax(orig_labels, dim=1)
-                    style_loss = criterion(
-                        (style_iden(fake_images)).softmax(dim=-1), target_classes
-                    )
+                elif opts.iden == "pretrained": 
+                    target_labels = torch.argmax(new_labels, dim=1) 
+                    predicted_labels = (style_iden(fake_images)).argmax(dim=1)
+                    style_loss = (predicted_labels == target_labels).float().mean()
 
             g_loss += opts.lambda_style * style_loss
             logger.add_scalar("G/style", opts.lambda_style * style_loss, iteration)
