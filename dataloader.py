@@ -163,6 +163,18 @@ def get_all_data_loader(data_path, opts):
             transforms.ToTensor(),
             transforms.Normalize((0.5,) * 3, (0.5,) * 3),
         ])
+    elif opts.data_preprocess == 'clip':
+        # based on clip github's preprocessing
+        transform = transforms.Compose([
+            transforms.Resize(224, interpolation=Image.BICUBIC),
+            transforms.CenterCrop(224),
+            transforms.Lambda(lambda img: img.convert("RGB")),
+            transforms.ToTensor(),
+            transforms.Normalize(
+                mean=(0.48145466, 0.4578275, 0.40821073),
+                std=(0.26862954, 0.26130258, 0.27577711)
+            ),
+        ]) 
     else:
         raise ValueError(f"Unknown data_preprocess type: {opts.data_preprocess}")
 

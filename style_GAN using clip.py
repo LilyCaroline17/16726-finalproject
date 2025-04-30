@@ -103,22 +103,22 @@ def create_model(opts):
     # style_models = {"ours":StyleIdentifier, "pretrained":models.resnet18(pretrained=True)}
     style_iden = None
     if opts.iden == "clip":
-        model, preprocess = clip.load("ViT-B/32")
+        style_iden, _ = clip.load("ViT-B/32") # no preprocessing, will have the dataset do that ahead of time -- hopefully this doesn't interfere too much with gan input/output
 
-        if torch.cuda.is_available():
-            G.cuda()
-            D.cuda()
-            model.cuda()
-            preprocess.cuda()
-            print("Models moved to GPU.")
+        # if torch.cuda.is_available():
+        #     G.cuda()
+        #     D.cuda()
+        #     model.cuda()
+        #     preprocess.cuda()
+        #     print("Models moved to GPU.")
 
-        style_iden = (model, preprocess)
+        # style_iden = (model, preprocess)
 
-        # image = preprocess(Image.open("CLIP.png")).unsqueeze(0).to(device)
-        # text = clip.tokenize(["a diagram", "a dog", "a cat"]).to(device)
+        # # image = preprocess(Image.open("CLIP.png")).unsqueeze(0).to(device)
+        # # text = clip.tokenize(["a diagram", "a dog", "a cat"]).to(device)
 
-        print_models(G, D, style_iden)
-        return G, D, style_iden, g_optimizer, d_optimizer
+        # print_models(G, D, style_iden)
+        # return G, D, style_iden, g_optimizer, d_optimizer
 
     elif opts.iden == "ours":
         style_iden = StyleIdentifier(conv_dim=opts.d_conv_dim, norm=opts.norm)
@@ -281,11 +281,12 @@ def training_loop(dataloader_X, opts):
     """
     # Create generators and discriminators
     G, D, style_iden, g_optimizer, d_optimizer = create_model(opts)
-    preprocess = None
+    # preprocess = None
     text_features = None
 
-    if isinstance(style_iden, tuple):
-        style_iden, preprocess = style_iden
+    # if isinstance(style_iden, tuple):
+    #     style_iden, preprocess = style_iden
+    if opts.iden == "clip":
         text_tokens = utils.to_var(clip.tokenize(STYLE_CLASSES))
         text_features = style_iden.encode_text(text_tokens)
 
@@ -363,10 +364,10 @@ def training_loop(dataloader_X, opts):
             with torch.no_grad():
                 style_loss = 0
                 if opts.iden == "clip":
-                    imgencoded = utils.to_var(
-                        preprocess(fake_images)
-                    )  # UH, might not be right
-                    image_features = style_iden.encode_image(imgencoded)
+                    # imgencoded = utils.to_var(
+                    #     preprocess(fake_images)
+                    # )  # UH, might not be right
+                    image_features = style_iden.encode_image(fake_images)
                     logits_per_image, logits_per_text = style_iden(
                         image_features, text_features
                     )
@@ -489,8 +490,10 @@ if __name__ == "__main__":
     opts.sample_dir = os.path.join(
         "output/", opts.sample_dir, "%s_%g" % (opts.X.split("/")[0], opts.lambda_cycle)
     )
+    if opts.style_iden == "clip":
+        opts.preprocess = "clip"
     opts.sample_dir += "%s_%s_%s_%s_%s" % (
-        opts.data_preprocess,
+        opts.style_iden,
         opts.norm,
         opts.disc,
         opts.gen,
