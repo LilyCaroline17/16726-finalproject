@@ -733,4 +733,1539 @@ Iteration [ 4010/50000] | loss: 3.0161
 Iteration [ 4020/50000] | loss: 2.8988
 Iteration [ 4030/50000] | loss: 2.2397
 Iteration [ 4040/50000] | loss: 2.7876
-Iteration [ 4050/50000] | loss: 2.42
+Iteration [ 4050/50000] | loss: 2.42/home/ubuntu/anaconda3/lib/python3.9/site-packages/torchvision/transforms/transforms.py:329: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
+  warnings.warn(
+/home/ubuntu/anaconda3/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/ubuntu/anaconda3/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+================================================================================
+                                      Opts                                      
+--------------------------------------------------------------------------------
+                             image_size: 128                                    
+                                   disc: dc                                     
+                                    gen: cycle                                  
+                             g_conv_dim: 32                                     
+                             d_conv_dim: 32                                     
+                                   norm: instance                               
+                              init_type: naive                                  
+                            train_iters: 50000                                  
+                             batch_size: 16                                     
+                            num_workers: 2                                      
+                                     lr: 0.0001                                 
+                                  beta1: 0.5                                    
+                                  beta2: 0.999                                  
+                           lambda_cycle: 10                                     
+                                      X: ..                                     
+                                    ext: *.png                                  
+                        data_preprocess: vanilla                                
+                        checkpoint_dir: checkpoints_pretrained_style_id         
+                    sample_dir: output/pretrained/.._10vanilla_instance_dc_cycle_naive
+                               log_step: 10                                     
+                           sample_every: 100                                    
+                       checkpoint_every: 1000                                   
+                                    gpu: 0                                      
+================================================================================
+Loaded 393345 samples from ../labels
+Models moved to GPU.
+                 MODEL                
+---------------------------------------
+ResNet(
+  (conv1): Conv2d(3, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
+  (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (relu): ReLU(inplace=True)
+  (maxpool): MaxPool2d(kernel_size=3, stride=2, padding=1, dilation=1, ceil_mode=False)
+  (layer1): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer2): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(64, 128, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer3): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(128, 256, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer4): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (avgpool): AdaptiveAvgPool2d(output_size=(1, 1))
+  (fc): Linear(in_features=512, out_features=31, bias=True)
+)
+---------------------------------------
+Loading checkpoint from checkpoints_pretrained_style_id/style_identifier_iter4000.pkl
+Iteration [ 4010/50000] | loss: 3.0161
+Iteration [ 4020/50000] | loss: 2.8988
+Iteration [ 4030/50000] | loss: 2.2397
+Iteration [ 4040/50000] | loss: 2.7876
+Iteration [ 4050/50000] | loss: 2.4272
+Iteration [ 4060/50000] | loss: 2.4359
+Iteration [ 4070/50000] | loss: 2.3537
+Iteration [ 4080/50000] | loss: 2.7952
+Iteration [ 4090/50000] | loss: 2.4419
+Iteration [ 4100/50000] | loss: 2.8823
+Iteration [ 4110/50000] | loss: 2.1688
+Iteration [ 4120/50000] | loss: 2.8437
+Iteration [ 4130/50000] | loss: 2.4777
+Iteration [ 4140/50000] | loss: 2.1193
+Iteration [ 4150/50000] | loss: 2.7189
+Iteration [ 4160/50000] | loss: 2.4980
+Iteration [ 4170/50000] | loss: 2.6675
+Iteration [ 4180/50000] | loss: 2.5285
+Iteration [ 4190/50000] | loss: 2.8613
+Iteration [ 4200/50000] | loss: 2.6474
+Iteration [ 4210/50000] | loss: 2.2969
+Iteration [ 4220/50000] | loss: 2.5505
+Iteration [ 4230/50000] | loss: 2.2531
+Iteration [ 4240/50000] | loss: 2.6678
+Iteration [ 4250/50000] | loss: 2.8720
+Iteration [ 4260/50000] | loss: 2.4196
+Iteration [ 4270/50000] | loss: 2.1580
+Iteration [ 4280/50000] | loss: 2.7677
+Iteration [ 4290/50000] | loss: 2.3619
+Iteration [ 4300/50000] | loss: 2.3501
+Iteration [ 4310/50000] | loss: 2.7435
+Iteration [ 4320/50000] | loss: 2.6407
+Iteration [ 4330/50000] | loss: 2.6677
+Iteration [ 4340/50000] | loss: 2.4768
+Iteration [ 4350/50000] | loss: 2.5470
+Iteration [ 4360/50000] | loss: 2.1065
+Iteration [ 4370/50000] | loss: 2.7647
+Iteration [ 4380/50000] | loss: 2.6610
+Iteration [ 4390/50000] | loss: 2.4595
+Iteration [ 4400/50000] | loss: 2.3434
+Iteration [ 4410/50000] | loss: 2.4817
+Iteration [ 4420/50000] | loss: 2.2807
+Iteration [ 4430/50000] | loss: 3.0008
+Iteration [ 4440/50000] | loss: 2.4693
+Iteration [ 4450/50000] | loss: 2.6292
+Iteration [ 4460/50000] | loss: 2.4303
+Iteration [ 4470/50000] | loss: 2.3224
+Iteration [ 4480/50000] | loss: 2.4158
+Iteration [ 4490/50000] | loss: 2.7514
+Iteration [ 4500/50000] | loss: 2.2072
+Iteration [ 4510/50000] | loss: 2.6484
+Iteration [ 4520/50000] | loss: 2.4444
+Iteration [ 4530/50000] | loss: 2.6156
+Iteration [ 4540/50000] | loss: 2.7649
+Iteration [ 4550/50000] | loss: 2.9323
+Iteration [ 4560/50000] | loss: 2.3274
+Iteration [ 4570/50000] | loss: 2.2460
+Iteration [ 4580/50000] | loss: 2.6085
+Iteration [ 4590/50000] | loss: 2.1512
+Iteration [ 4600/50000] | loss: 2.1152
+Iteration [ 4610/50000] | loss: 2.6689
+Iteration [ 4620/50000] | loss: 2.0242
+Iteration [ 4630/50000] | loss: 3.1558
+Iteration [ 4640/50000] | loss: 2.5362
+Iteration [ 4650/50000] | loss: 2.2841
+Iteration [ 4660/50000] | loss: 2.2267
+Iteration [ 4670/50000] | loss: 2.6540
+Iteration [ 4680/50000] | loss: 2.5436
+Iteration [ 4690/50000] | loss: 2.7849
+Iteration [ 4700/50000] | loss: 2.6183
+Iteration [ 4710/50000] | loss: 2.2971
+Iteration [ 4720/50000] | loss: 2.8036
+Iteration [ 4730/50000] | loss: 2.4361
+Iteration [ 4740/50000] | loss: 3.1103
+Iteration [ 4750/50000] | loss: 2.7868
+Iteration [ 4760/50000] | loss: 2.3071
+Iteration [ 4770/50000] | loss: 2.9151
+Iteration [ 4780/50000] | loss: 2.5041
+Iteration [ 4790/50000] | loss: 2.3021
+Iteration [ 4800/50000] | loss: 2.5573
+Iteration [ 4810/50000] | loss: 2.2837
+Iteration [ 4820/50000] | loss: 2.4575
+Iteration [ 4830/50000] | loss: 2.4324
+Iteration [ 4840/50000] | loss: 2.3728
+Iteration [ 4850/50000] | loss: 2.5603
+Iteration [ 4860/50000] | loss: 2.5665
+Iteration [ 4870/50000] | loss: 2.5602
+Iteration [ 4880/50000] | loss: 2.1826
+Iteration [ 4890/50000] | loss: 2.2274
+Iteration [ 4900/50000] | loss: 2.6770
+Iteration [ 4910/50000] | loss: 2.5747
+Iteration [ 4920/50000] | loss: 2.3645
+Iteration [ 4930/50000] | loss: 2.4502
+Iteration [ 4940/50000] | loss: 2.7131
+Iteration [ 4950/50000] | loss: 2.4008
+Iteration [ 4960/50000] | loss: 2.9088
+Iteration [ 4970/50000] | loss: 2.2223
+Iteration [ 4980/50000] | loss: 3.0785
+Iteration [ 4990/50000] | loss: 2.8327
+Iteration [ 5000/50000] | loss: 2.7169
+Validation | loss: 2.4476
+Iteration [ 5010/50000] | loss: 2.3737
+Iteration [ 5020/50000] | loss: 2.4188
+Iteration [ 5030/50000] | loss: 2.3010
+Iteration [ 5040/50000] | loss: 2.4224
+Iteration [ 5050/50000] | loss: 2.2495
+Iteration [ 5060/50000] | loss: 2.2374
+Iteration [ 5070/50000] | loss: 2.5362
+Iteration [ 5080/50000] | loss: 2.2521
+Iteration [ 5090/50000] | loss: 2.5408
+Iteration [ 5100/50000] | loss: 2.3167
+Iteration [ 5110/50000] | loss: 2.5973
+Iteration [ 5120/50000] | loss: 2.7928
+Iteration [ 5130/50000] | loss: 2.3283
+Iteration [ 5140/50000] | loss: 2.4750
+Iteration [ 5150/50000] | loss: 2.4889
+Iteration [ 5160/50000] | loss: 2.3017
+Iteration [ 5170/50000] | loss: 2.6289
+Iteration [ 5180/50000] | loss: 2.2756
+Iteration [ 5190/50000] | loss: 2.7102
+Iteration [ 5200/50000] | loss: 2.5674
+Iteration [ 5210/50000] | loss: 2.2320
+Iteration [ 5220/50000] | loss: 2.3766
+Iteration [ 5230/50000] | loss: 2.4981
+Iteration [ 5240/50000] | loss: 2.2945
+Iteration [ 5250/50000] | loss: 2.3900
+Iteration [ 5260/50000] | loss: 2.5887
+Iteration [ 5270/50000] | loss: 2.7866
+Iteration [ 5280/50000] | loss: 2.3779
+Iteration [ 5290/50000] | loss: 2.5326
+Iteration [ 5300/50000] | loss: 2.2933
+Iteration [ 5310/50000] | loss: 2.4612
+Iteration [ 5320/50000] | loss: 2.5669
+Iteration [ 5330/50000] | loss: 2.3158
+Iteration [ 5340/50000] | loss: 2.5030
+Iteration [ 5350/50000] | loss: 2.5359
+Iteration [ 5360/50000] | loss: 2.6569
+Iteration [ 5370/50000] | loss: 2.2686
+Iteration [ 5380/50000] | loss: 2.3544
+Iteration [ 5390/50000] | loss: 2.3786
+Iteration [ 5400/50000] | loss: 2.7385
+Iteration [ 5410/50000] | loss: 2.4081
+Iteration [ 5420/50000] | loss: 2.6715
+Iteration [ 5430/50000] | loss: 2.7970
+Iteration [ 5440/50000] | loss: 2.4651
+Iteration [ 5450/50000] | loss: 2.6924
+Iteration [ 5460/50000] | loss: 2.1766
+Iteration [ 5470/50000] | loss: 2.7755
+Iteration [ 5480/50000] | loss: 2.3462
+Iteration [ 5490/50000] | loss: 2.4907
+Iteration [ 5500/50000] | loss: 2.3986
+Iteration [ 5510/50000] | loss: 2.6594
+Iteration [ 5520/50000] | loss: 2.5169
+Iteration [ 5530/50000] | loss: 2.7034
+Iteration [ 5540/50000] | loss: 2.3282
+Iteration [ 5550/50000] | loss: 2.4979
+Iteration [ 5560/50000] | loss: 2.5272
+Iteration [ 5570/50000] | loss: 3.0252
+Iteration [ 5580/50000] | loss: 2.3344
+Iteration [ 5590/50000] | loss: 2.5973
+Iteration [ 5600/50000] | loss: 2.5362
+Iteration [ 5610/50000] | loss: 2.4071
+Iteration [ 5620/50000] | loss: 2.6104
+Iteration [ 5630/50000] | loss: 2.1413
+Iteration [ 5640/50000] | loss: 2.1698
+Iteration [ 5650/50000] | loss: 2.2778
+Iteration [ 5660/50000] | loss: 2.5668
+Iteration [ 5670/50000] | loss: 3.2844
+Iteration [ 5680/50000] | loss: 2.5583
+Iteration [ 5690/50000] | loss: 2.6749
+Iteration [ 5700/50000] | loss: 2.2988
+Iteration [ 5710/50000] | loss: 2.1691
+Iteration [ 5720/50000] | loss: 2.7404
+Iteration [ 5730/50000] | loss: 2.6556
+Iteration [ 5740/50000] | loss: 2.2281
+Iteration [ 5750/50000] | loss: 2.7229
+Iteration [ 5760/50000] | loss: 2.5289
+Iteration [ 5770/50000] | loss: 2.7069
+Iteration [ 5780/50000] | loss: 2.3101
+Iteration [ 5790/50000] | loss: 2.4044
+Iteration [ 5800/50000] | loss: 2.4177
+Iteration [ 5810/50000] | loss: 2.0087
+Iteration [ 5820/50000] | loss: 2.5109
+Iteration [ 5830/50000] | loss: 2.2851
+Iteration [ 5840/50000] | loss: 2.7580
+Iteration [ 5850/50000] | loss: 2.9761
+Iteration [ 5860/50000] | loss: 2.6279
+Iteration [ 5870/50000] | loss: 2.6560
+Iteration [ 5880/50000] | loss: 2.3958
+Iteration [ 5890/50000] | loss: 2.5545
+Iteration [ 5900/50000] | loss: 2.6464
+Iteration [ 5910/50000] | loss: 2.1614
+Iteration [ 5920/50000] | loss: 2.4277
+Iteration [ 5930/50000] | loss: 2.6105
+Iteration [ 5940/50000] | loss: 2.5561
+Iteration [ 5950/50000] | loss: 2.6856
+Iteration [ 5960/50000] | loss: 2.7184
+Iteration [ 5970/50000] | loss: 2.2380
+Iteration [ 5980/50000] | loss: 2.5070
+Iteration [ 5990/50000] | loss: 2.4465
+Iteration [ 6000/50000] | loss: 2.2619
+Validation | loss: 2.4140
+Iteration [ 6010/50000] | loss: 2.8695
+Iteration [ 6020/50000] | loss: 2.1804
+Iteration [ 6030/50000] | loss: 2.2183
+Iteration [ 6040/50000] | loss: 2.5466
+Iteration [ 6050/50000] | loss: 2.2044
+Iteration [ 6060/50000] | loss: 1.8163
+Iteration [ 6070/50000] | loss: 2.6419
+Iteration [ 6080/50000] | loss: 2.4445
+Iteration [ 6090/50000] | loss: 2.4801
+Iteration [ 6100/50000] | loss: 2.4156
+Iteration [ 6110/50000] | loss: 2.5962
+Iteration [ 6120/50000] | loss: 2.5703
+Iteration [ 6130/50000] | loss: 3.0344
+Iteration [ 6140/50000] | loss: 2.7457
+Iteration [ 6150/50000] | loss: 2.8526
+Iteration [ 6160/50000] | loss: 2.1331
+Iteration [ 6170/50000] | loss: 2.1893
+Iteration [ 6180/50000] | loss: 2.6919
+Iteration [ 6190/50000] | loss: 2.1775
+Iteration [ 6200/50000] | loss: 2.3959
+Iteration [ 6210/50000] | loss: 2.4786
+Iteration [ 6220/50000] | loss: 2.2077
+Iteration [ 6230/50000] | loss: 2.2298
+Iteration [ 6240/50000] | loss: 2.7262
+Iteration [ 6250/50000] | loss: 2.5641
+Iteration [ 6260/50000] | loss: 2.4286
+Iteration [ 6270/50000] | loss: 2.5536
+Iteration [ 6280/50000] | loss: 2.7219
+Iteration [ 6290/50000] | loss: 2.3653
+Iteration [ 6300/50000] | loss: 2.4159
+Iteration [ 6310/50000] | loss: 2.1034
+Iteration [ 6320/50000] | loss: 2.4769
+Iteration [ 6330/50000] | loss: 2.5235
+Iteration [ 6340/50000] | loss: 2.4273
+Iteration [ 6350/50000] | loss: 2.2635
+Iteration [ 6360/50000] | loss: 2.2226
+Iteration [ 6370/50000] | loss: 2.3311
+Iteration [ 6380/50000] | loss: 2.4318
+Iteration [ 6390/50000] | loss: 2.4559
+Iteration [ 6400/50000] | loss: 2.3814
+Iteration [ 6410/50000] | loss: 2.3059
+Iteration [ 6420/50000] | loss: 2.5692
+Iteration [ 6430/50000] | loss: 2.7372
+Iteration [ 6440/50000] | loss: 2.1916
+Iteration [ 6450/50000] | loss: 2.1837
+Iteration [ 6460/50000] | loss: 2.3636
+Iteration [ 6470/50000] | loss: 2.2833
+Iteration [ 6480/50000] | loss: 2.0469
+Iteration [ 6490/50000] | loss: 2.9743
+Iteration [ 6500/50000] | loss: 2.7133
+Iteration [ 6510/50000] | loss: 2.2830
+Iteration [ 6520/50000] | loss: 2.5588
+Iteration [ 6530/50000] | loss: 2.4040
+Iteration [ 6540/50000] | loss: 2.5324
+Iteration [ 6550/50000] | loss: 2.0890
+Iteration [ 6560/50000] | loss: 2.2331
+Iteration [ 6570/50000] | loss: 2.6379
+Iteration [ 6580/50000] | loss: 2.1092
+Iteration [ 6590/50000] | loss: 2.1507
+Iteration [ 6600/50000] | loss: 2.5817
+Iteration [ 6610/50000] | loss: 2.3187
+Iteration [ 6620/50000] | loss: 2.0532
+Iteration [ 6630/50000] | loss: 2.5247
+Iteration [ 6640/50000] | loss: 1.8993
+Iteration [ 6650/50000] | loss: 2.2969
+Iteration [ 6660/50000] | loss: 2.3695
+Iteration [ 6670/50000] | loss: 2.2233
+Iteration [ 6680/50000] | loss: 2.5677
+Iteration [ 6690/50000] | loss: 2.5952
+Iteration [ 6700/50000] | loss: 2.9290
+Iteration [ 6710/50000] | loss: 2.6424
+Iteration [ 6720/50000] | loss: 2.4914
+Iteration [ 6730/50000] | loss: 3.0257
+Iteration [ 6740/50000] | loss: 2.7729
+Iteration [ 6750/50000] | loss: 2.0767
+Iteration [ 6760/50000] | loss: 2.2970
+Iteration [ 6770/50000] | loss: 2.3981
+Iteration [ 6780/50000] | loss: 2.2875
+Iteration [ 6790/50000] | loss: 2.1641
+Iteration [ 6800/50000] | loss: 2.9104
+Iteration [ 6810/50000] | loss: 2.1478
+Iteration [ 6820/50000] | loss: 2.6376
+Iteration [ 6830/50000] | loss: 2.5687
+Iteration [ 6840/50000] | loss: 2.2980
+Iteration [ 6850/50000] | loss: 2.0503
+Iteration [ 6860/50000] | loss: 2.4677
+Iteration [ 6870/50000] | loss: 2.3456
+Iteration [ 6880/50000] | loss: 2.5407
+Iteration [ 6890/50000] | loss: 2.3729
+Iteration [ 6900/50000] | loss: 2.6497
+Iteration [ 6910/50000] | loss: 2.2377
+Iteration [ 6920/50000] | loss: 2.7604
+Iteration [ 6930/50000] | loss: 2.1411
+Iteration [ 6940/50000] | loss: 2.5374
+Iteration [ 6950/50000] | loss: 2.2205
+Iteration [ 6960/50000] | loss: 2.2078
+Iteration [ 6970/50000] | loss: 2.5212
+Iteration [ 6980/50000] | loss: 2.2007
+Iteration [ 6990/50000] | loss: 2.4226
+Iteration [ 7000/50000] | loss: 2.0020
+Validation | loss: 2.4279
+Iteration [ 7010/50000] | loss: 2.0705
+Iteration [ 7020/50000] | loss: 2.4976
+Iteration [ 7030/50000] | loss: 2.4423
+Iteration [ 7040/50000] | loss: 2.6100
+Iteration [ 7050/50000] | loss: 2.4861
+Iteration [ 7060/50000] | loss: 2.7530
+Iteration [ 7070/50000] | loss: 2.7273
+Iteration [ 7080/50000] | loss: 2.4458
+Iteration [ 7090/50000] | loss: 2.4728
+Iteration [ 7100/50000] | loss: 2.3688
+Iteration [ 7110/50000] | loss: 2.7022
+Iteration [ 7120/50000] | loss: 2.0310
+Iteration [ 7130/50000] | loss: 2.2819
+Iteration [ 7140/50000] | loss: 2.1827
+Iteration [ 7150/50000] | loss: 2.7486
+Iteration [ 7160/50000] | loss: 2.1971
+Iteration [ 7170/50000] | loss: 2.3445
+Iteration [ 7180/50000] | loss: 2.0652
+Iteration [ 7190/50000] | loss: 2.5120
+Iteration [ 7200/50000] | loss: 2.5740
+Iteration [ 7210/50000] | loss: 2.1659
+Iteration [ 7220/50000] | loss: 2.3738
+Iteration [ 7230/50000] | loss: 2.3109
+Iteration [ 7240/50000] | loss: 2.5290
+Iteration [ 7250/50000] | loss: 2.4262
+Iteration [ 7260/50000] | loss: 2.6300
+Iteration [ 7270/50000] | loss: 2.5226
+Iteration [ 7280/50000] | loss: 2.0933
+Iteration [ 7290/50000] | loss: 2.3658
+Iteration [ 7300/50000] | loss: 2.7241
+Iteration [ 7310/50000] | loss: 2.6132
+Iteration [ 7320/50000] | loss: 2.4134
+Iteration [ 7330/50000] | loss: 2.5947
+Iteration [ 7340/50000] | loss: 2.1693
+Iteration [ 7350/50000] | loss: 2.2525
+Iteration [ 7360/50000] | loss: 2.2074
+Iteration [ 7370/50000] | loss: 2.4255
+Iteration [ 7380/50000] | loss: 2.2742
+Iteration [ 7390/50000] | loss: 2.4912
+Iteration [ 7400/50000] | loss: 2.4710
+Iteration [ 7410/50000] | loss: 2.2327
+Iteration [ 7420/50000] | loss: 2.6568
+Iteration [ 7430/50000] | loss: 2.2867
+Iteration [ 7440/50000] | loss: 2.4223
+Iteration [ 7450/50000] | loss: 2.4393
+Iteration [ 7460/50000] | loss: 2.5008
+Iteration [ 7470/50000] | loss: 2.3034
+Iteration [ 7480/50000] | loss: 2.5028
+Iteration [ 7490/50000] | loss: 2.2540
+Iteration [ 7500/50000] | loss: 2.2398
+Iteration [ 7510/50000] | loss: 2.3520
+Iteration [ 7520/50000] | loss: 2.3200
+Iteration [ 7530/50000] | loss: 2.2808
+Iteration [ 7540/50000] | loss: 2.2080
+Iteration [ 7550/50000] | loss: 2.1495
+Iteration [ 7560/50000] | loss: 2.8568
+Iteration [ 7570/50000] | loss: 2.3855
+Iteration [ 7580/50000] | loss: 1.9105
+Iteration [ 7590/50000] | loss: 2.5641
+Iteration [ 7600/50000] | loss: 2.6681
+Iteration [ 7610/50000] | loss: 2.6660
+Iteration [ 7620/50000] | loss: 2.1973
+Iteration [ 7630/50000] | loss: 2.7585
+Iteration [ 7640/50000] | loss: 2.6956
+Iteration [ 7650/50000] | loss: 2.8846
+Iteration [ 7660/50000] | loss: 2.3847
+Iteration [ 7670/50000] | loss: 2.4514
+Iteration [ 7680/50000] | loss: 2.9838
+Iteration [ 7690/50000] | loss: 2.5180
+Iteration [ 7700/50000] | loss: 2.5581
+Iteration [ 7710/50000] | loss: 2.3024
+Iteration [ 7720/50000] | loss: 2.2451
+Iteration [ 7730/50000] | loss: 2.1629
+Iteration [ 7740/50000] | loss: 2.5198
+Iteration [ 7750/50000] | loss: 2.2295
+Iteration [ 7760/50000] | loss: 2.0069
+Iteration [ 7770/50000] | loss: 2.5900
+Iteration [ 7780/50000] | loss: 2.2602
+Iteration [ 7790/50000] | loss: 2.2736
+Iteration [ 7800/50000] | loss: 2.2674
+Iteration [ 7810/50000] | loss: 1.7768
+Iteration [ 7820/50000] | loss: 2.4848
+Iteration [ 7830/50000] | loss: 2.1691
+Iteration [ 7840/50000] | loss: 2.1859
+Iteration [ 7850/50000] | loss: 2.2740
+Iteration [ 7860/50000] | loss: 2.2961
+Iteration [ 7870/50000] | loss: 2.2238
+Iteration [ 7880/50000] | loss: 2.5067
+Iteration [ 7890/50000] | loss: 2.2289
+Iteration [ 7900/50000] | loss: 2.2326
+Iteration [ 7910/50000] | loss: 2.4279
+Iteration [ 7920/50000] | loss: 2.4941
+Iteration [ 7930/50000] | loss: 2.5122
+Iteration [ 7940/50000] | loss: 2.6277
+Iteration [ 7950/50000] | loss: 2.3657
+Iteration [ 7960/50000] | loss: 2.0306
+Iteration [ 7970/50000] | loss: 2.1062
+Iteration [ 7980/50000] | loss: 2.3404
+Iteration [ 7990/50000] | loss: 2.6695
+Iteration [ 8000/50000] | loss: 2.5436
+Validation | loss: 2.3795
+Iteration [ 8010/50000] | loss: 2.1155
+Iteration [ 8020/50000] | loss: 2.6068
+Iteration [ 8030/50000] | loss: 2.6615
+Iteration [ 8040/50000] | loss: 2.3488
+Iteration [ 8050/50000] | loss: 2.1294
+Iteration [ 8060/50000] | loss: 2.6214
+Iteration [ 8070/50000] | loss: 2.4096
+Iteration [ 8080/50000] | loss: 2.3702
+Iteration [ 8090/50000] | loss: 2.3466
+Iteration [ 8100/50000] | loss: 2.6498
+Iteration [ 8110/50000] | loss: 2.4823
+Iteration [ 8120/50000] | loss: 2.5037
+Iteration [ 8130/50000] | loss: 2.1723
+Iteration [ 8140/50000] | loss: 2.1686
+Iteration [ 8150/50000] | loss: 1.7345
+Iteration [ 8160/50000] | loss: 2.4364
+Iteration [ 8170/50000] | loss: 2.7100
+Iteration [ 8180/50000] | loss: 2.4657
+Iteration [ 8190/50000] | loss: 2.8656
+Iteration [ 8200/50000] | loss: 2.5224
+Iteration [ 8210/50000] | loss: 2.3386
+Iteration [ 8220/50000] | loss: 2.7978
+Iteration [ 8230/50000] | loss: 2.5832
+Iteration [ 8240/50000] | loss: 2.4420
+Iteration [ 8250/50000] | loss: 2.2982
+Iteration [ 8260/50000] | loss: 2.3924
+Iteration [ 8270/50000] | loss: 2.5660
+Iteration [ 8280/50000] | loss: 2.4126
+Iteration [ 8290/50000] | loss: 2.6454
+Iteration [ 8300/50000] | loss: 2.4865
+Iteration [ 8310/50000] | loss: 2.4502
+Iteration [ 8320/50000] | loss: 1.6869
+Iteration [ 8330/50000] | loss: 2.3776
+Iteration [ 8340/50000] | loss: 2.5022
+Iteration [ 8350/50000] | loss: 2.7385
+Iteration [ 8360/50000] | loss: 2.8016
+Iteration [ 8370/50000] | loss: 2.6163
+Iteration [ 8380/50000] | loss: 2.6606
+Iteration [ 8390/50000] | loss: 2.2219
+Iteration [ 8400/50000] | loss: 2.6683
+Iteration [ 8410/50000] | loss: 2.6198
+Iteration [ 8420/50000] | loss: 2.3810
+Iteration [ 8430/50000] | loss: 2.3262
+Iteration [ 8440/50000] | loss: 1.9333
+Iteration [ 8450/50000] | loss: 2.6007
+Iteration [ 8460/50000] | loss: 2.5651
+Iteration [ 8470/50000] | loss: 2.4408
+Iteration [ 8480/50000] | loss: 2.8903
+Iteration [ 8490/50000] | loss: 2.3681
+Iteration [ 8500/50000] | loss: 2.6012
+Iteration [ 8510/50000] | loss: 2.6364
+Iteration [ 8520/50000] | loss: 2.0676
+Iteration [ 8530/50000] | loss: 2.6849
+Iteration [ 8540/50000] | loss: 2.4614
+Iteration [ 8550/50000] | loss: 2.5831
+Iteration [ 8560/50000] | loss: 2.6643
+Iteration [ 8570/50000] | loss: 2.3357
+Iteration [ 8580/50000] | loss: 2.2721
+Iteration [ 8590/50000] | loss: 2.3737
+Iteration [ 8600/50000] | loss: 2.4652
+Iteration [ 8610/50000] | loss: 2.7109
+Iteration [ 8620/50000] | loss: 2.4403
+Iteration [ 8630/50000] | loss: 2.7961
+Iteration [ 8640/50000] | loss: 2.6542
+Iteration [ 8650/50000] | loss: 2.5096
+Iteration [ 8660/50000] | loss: 2.1767
+Iteration [ 8670/50000] | loss: 2.4835
+Iteration [ 8680/50000] | loss: 2.8646
+Iteration [ 8690/50000] | loss: 2.7387
+Iteration [ 8700/50000] | loss: 2.3473
+Iteration [ 8710/50000] | loss: 2.2646
+Iteration [ 8720/50000] | loss: 2.4617
+Iteration [ 8730/50000] | loss: 2.5743
+Iteration [ 8740/50000] | loss: 2.4075
+Iteration [ 8750/50000] | loss: 2.8755
+Iteration [ 8760/50000] | loss: 2.6275
+Iteration [ 8770/50000] | loss: 2.4590
+Iteration [ 8780/50000] | loss: 2.3745
+Iteration [ 8790/50000] | loss: 2.5449
+Iteration [ 8800/50000] | loss: 2.1600
+Iteration [ 8810/50000] | loss: 2.4553
+Iteration [ 8820/50000] | loss: 2.6161
+Iteration [ 8830/50000] | loss: 2.4239
+Iteration [ 8840/50000] | loss: 1.9692
+Iteration [ 8850/50000] | loss: 2.5022
+Iteration [ 8860/50000] | loss: 2.4096
+Iteration [ 8870/50000] | loss: 2.2379
+Iteration [ 8880/50000] | loss: 2.4052
+Iteration [ 8890/50000] | loss: 2.5651
+Iteration [ 8900/50000] | loss: 2.4807
+Iteration [ 8910/50000] | loss: 2.0480
+Iteration [ 8920/50000] | loss: 2.4719
+Iteration [ 8930/50000] | loss: 2.0038
+Iteration [ 8940/50000] | loss: 2.6739
+Iteration [ 8950/50000] | loss: 2.1333
+Iteration [ 8960/50000] | loss: 2.6657
+Iteration [ 8970/50000] | loss: 2.4380
+Iteration [ 8980/50000] | loss: 2.7589
+Iteration [ 8990/50000] | loss: 2.4741
+Iteration [ 9000/50000] | loss: 2.4977
+Validation | loss: 2.3387
+Iteration [ 9010/50000] | loss: 2.6506
+Iteration [ 9020/50000] | loss: 3.3764
+Iteration [ 9030/50000] | loss: 2.1072
+Iteration [ 9040/50000] | loss: 2.3973
+Iteration [ 9050/50000] | loss: 2.2395
+Iteration [ 9060/50000] | loss: 2.7126
+Iteration [ 9070/50000] | loss: 2.3439
+Iteration [ 9080/50000] | loss: 2.3320
+Iteration [ 9090/50000] | loss: 2.5491
+Iteration [ 9100/50000] | loss: 2.1978
+Iteration [ 9110/50000] | loss: 2.0913
+Iteration [ 9120/50000] | loss: 2.3121
+Iteration [ 9130/50000] | loss: 2.1422
+Iteration [ 9140/50000] | loss: 2.3707
+Iteration [ 9150/50000] | loss: 2.7153
+Iteration [ 9160/50000] | loss: 2.4709
+Iteration [ 9170/50000] | loss: 2.0203
+Iteration [ 9180/50000] | loss: 2.2272
+Iteration [ 9190/50000] | loss: 2.5263
+Iteration [ 9200/50000] | loss: 2.6406
+Iteration [ 9210/50000] | loss: 2.6219
+Iteration [ 9220/50000] | loss: 2.8351
+Iteration [ 9230/50000] | loss: 2.1673
+Iteration [ 9240/50000] | loss: 2.0884
+Iteration [ 9250/50000] | loss: 2.3074
+Iteration [ 9260/50000] | loss: 2.3657
+Iteration [ 9270/50000] | loss: 2.4256
+Iteration [ 9280/50000] | loss: 2.1187
+Iteration [ 9290/50000] | loss: 2.3691
+Iteration [ 9300/50000] | loss: 2.3922
+Iteration [ 9310/50000] | loss: 2.6783
+Iteration [ 9320/50000] | loss: 2.4326
+Iteration [ 9330/50000] | loss: 2.2602
+Iteration [ 9340/50000] | loss: 2.5202
+Iteration [ 9350/50000] | loss: 2.6433
+Iteration [ 9360/50000] | loss: 2.1427
+Iteration [ 9370/50000] | loss: 1.8814
+Iteration [ 9380/50000] | loss: 2.2586
+Iteration [ 9390/50000] | loss: 2.5967
+Iteration [ 9400/50000] | loss: 2.4890
+Iteration [ 9410/50000] | loss: 2.5387
+Iteration [ 9420/50000] | loss: 2.2311
+Iteration [ 9430/50000] | loss: 2.2559
+Iteration [ 9440/50000] | loss: 2.3116
+Iteration [ 9450/50000] | loss: 2.4138
+Iteration [ 9460/50000] | loss: 2.3741
+Iteration [ 9470/50000] | loss: 2.1163
+Iteration [ 9480/50000] | loss: 2.3158
+Iteration [ 9490/50000] | loss: 2.7432
+Iteration [ 9500/50000] | loss: 2.3471
+Iteration [ 9510/50000] | loss: 2.3779
+Iteration [ 9520/50000] | loss: 2.2399
+Iteration [ 9530/50000] | loss: 2.2174
+Iteration [ 9540/50000] | loss: 2.3605
+Iteration [ 9550/50000] | loss: 2.1789
+Iteration [ 9560/50000] | loss: 2.1667
+Iteration [ 9570/50000] | loss: 2.4139
+Iteration [ 9580/50000] | loss: 2.1564
+Iteration [ 9590/50000] | loss: 2.6317
+Iteration [ 9600/50000] | loss: 2.6173
+Iteration [ 9610/50000] | loss: 2.4852
+Iteration [ 9620/50000] | loss: 2.1508
+Iteration [ 9630/50000] | loss: 2.6741
+Iteration [ 9640/50000] | loss: 2.1839
+Iteration [ 9650/50000] | loss: 2.5842
+Iteration [ 9660/50000] | loss: 2.4554
+Iteration [ 9670/50000] | loss: 2.3200
+Iteration [ 9680/50000] | loss: 2.7660
+Iteration [ 9690/50000] | loss: 2.1575
+Iteration [ 9700/50000] | loss: 2.1137
+Iteration [ 9710/50000] | loss: 2.6390
+Iteration [ 9720/50000] | loss: 2.7494
+Iteration [ 9730/50000] | loss: 2.4557
+Iteration [ 9740/50000] | loss: 2.4135
+Iteration [ 9750/50000] | loss: 2.3843
+Iteration [ 9760/50000] | loss: 1.9826
+Iteration [ 9770/50000] | loss: 2.3281
+Iteration [ 9780/50000] | loss: 2.5090
+Iteration [ 9790/50000] | loss: 2.1224
+Iteration [ 9800/50000] | loss: 2.0757
+Iteration [ 9810/50000] | loss: 2.3805
+Iteration [ 9820/50000] | loss: 2.5280
+Iteration [ 9830/50000] | loss: 2.1787
+Iteration [ 9840/50000] | loss: 2.7021
+Iteration [ 9850/50000] | loss: 2.3599
+Iteration [ 9860/50000] | loss: 2.6061
+Iteration [ 9870/50000] | loss: 2.4358
+Iteration [ 9880/50000] | loss: 2.2204
+Iteration [ 9890/50000] | loss: 2.6383
+Iteration [ 9900/50000] | loss: 2.0933
+Iteration [ 9910/50000] | loss: 2.5825
+Iteration [ 9920/50000] | loss: 2.7591
+Iteration [ 9930/50000] | loss: 2.4671
+Iteration [ 9940/50000] | loss: 2.0452
+Iteration [ 9950/50000] | loss: 2.1222
+Iteration [ 9960/50000] | loss: 2.4344
+Iteration [ 9970/50000] | loss: 2.3716
+Iteration [ 9980/50000] | loss: 2.1299
+Iteration [ 9990/50000] | loss: 2.3440
+Iteration [10000/50000] | loss: 2.3107
+Validation | loss: 2.3885
+Iteration [10010/50000] | loss: 2.3998
+Iteration [10020/50000] | loss: 2.5630
+Iteration [10030/50000] | loss: 1.9430
+Iteration [10040/50000] | loss: 2.1847
+Iteration [10050/50000] | loss: 2.1854
+Iteration [10060/50000] | loss: 2.2051
+Iteration [10070/50000] | loss: 2.7611
+Iteration [10080/50000] | loss: 2.4405
+Iteration [10090/50000] | loss: 2.6513
+Iteration [10100/50000] | loss: 2.3902
+Iteration [10110/50000] | loss: 2.4535
+Iteration [10120/50000] | loss: 2.6471
+Iteration [10130/50000] | loss: 2.7851
+Iteration [10140/50000] | loss: 2.2981
+Iteration [10150/50000] | loss: 2.3925
+Iteration [10160/50000] | loss: 2.4546
+Iteration [10170/50000] | loss: 1.6645
+Iteration [10180/50000] | loss: 2.6825
+Iteration [10190/50000] | loss: 2.5572
+Iteration [10200/50000] | loss: 2.3056
+Iteration [10210/50000] | loss: 2.3990
+Iteration [10220/50000] | loss: 2.8336
+Iteration [10230/50000] | loss: 2.6283
+Iteration [10240/50000] | loss: 2.3316
+Iteration [10250/50000] | loss: 2.4786
+Iteration [10260/50000] | loss: 2.3449
+Iteration [10270/50000] | loss: 1.9316
+Iteration [10280/50000] | loss: 2.5214
+Iteration [10290/50000] | loss: 2.3132
+Iteration [10300/50000] | loss: 2.1472
+Iteration [10310/50000] | loss: 2.4716
+Iteration [10320/50000] | loss: 2.6659
+Iteration [10330/50000] | loss: 2.6824
+Iteration [10340/50000] | loss: 2.5787
+Iteration [10350/50000] | loss: 2.6147
+Iteration [10360/50000] | loss: 2.7289
+Iteration [10370/50000] | loss: 2.4146
+Iteration [10380/50000] | loss: 2.9451
+Iteration [10390/50000] | loss: 2.1867
+Iteration [10400/50000] | loss: 2.3552
+Iteration [10410/50000] | loss: 2.5146
+Iteration [10420/50000] | loss: 2.2112
+Iteration [10430/50000] | loss: 1.9461
+Iteration [10440/50000] | loss: 2.0760
+Iteration [10450/50000] | loss: 2.1093
+Iteration [10460/50000] | loss: 1.9762
+Iteration [10470/50000] | loss: 2.6861
+Iteration [10480/50000] | loss: 2.3070
+Iteration [10490/50000] | loss: 2.4076
+Iteration [10500/50000] | loss: 2.2525
+Iteration [10510/50000] | loss: 2.6909
+Iteration [10520/50000] | loss: 2.2656
+Iteration [10530/50000] | loss: 2.2749
+Iteration [10540/50000] | loss: 2.2984
+Iteration [10550/50000] | loss: 2.4432
+Iteration [10560/50000] | loss: 1.9292
+Iteration [10570/50000] | loss: 2.6945
+Iteration [10580/50000] | loss: 2.0881
+Iteration [10590/50000] | loss: 2.1233
+Iteration [10600/50000] | loss: 2.2328
+Iteration [10610/50000] | loss: 2.0321
+Iteration [10620/50000] | loss: 2.6043
+Iteration [10630/50000] | loss: 2.0484
+Iteration [10640/50000] | loss: 2.2903
+Iteration [10650/50000] | loss: 2.8485
+Iteration [10660/50000] | loss: 2.4913
+Iteration [10670/50000] | loss: 2.7891
+Iteration [10680/50000] | loss: 1.9479
+Iteration [10690/50000] | loss: 2.5936
+Iteration [10700/50000] | loss: 2.5015
+Iteration [10710/50000] | loss: 2.0284
+Iteration [10720/50000] | loss: 2.1879
+Iteration [10730/50000] | loss: 2.7212
+Iteration [10740/50000] | loss: 2.2790
+Iteration [10750/50000] | loss: 2.3696
+Iteration [10760/50000] | loss: 2.1701
+Iteration [10770/50000] | loss: 2.4903
+Iteration [10780/50000] | loss: 2.5917
+Iteration [10790/50000] | loss: 2.5027
+Iteration [10800/50000] | loss: 2.0457
+Iteration [10810/50000] | loss: 2.1095
+Iteration [10820/50000] | loss: 2.0017
+Iteration [10830/50000] | loss: 2.2528
+Iteration [10840/50000] | loss: 2.4964
+Iteration [10850/50000] | loss: 1.9064
+Iteration [10860/50000] | loss: 2.2495
+Iteration [10870/50000] | loss: 2.4136
+Iteration [10880/50000] | loss: 2.5862
+Iteration [10890/50000] | loss: 2.2914
+Iteration [10900/50000] | loss: 2.0465
+Iteration [10910/50000] | loss: 2.9774
+Iteration [10920/50000] | loss: 2.8507
+Iteration [10930/50000] | loss: 2.2067
+Iteration [10940/50000] | loss: 2.2472
+Iteration [10950/50000] | loss: 1.7992
+Iteration [10960/50000] | loss: 2.2640
+Iteration [10970/50000] | loss: 2.5381
+Iteration [10980/50000] | loss: 2.8576
+Iteration [10990/50000] | loss: 2.1790
+Iteration [11000/50000] | loss: 2.3361
+Validation | loss: 2.3025
+Iteration [11010/50000] | loss: 2.3341
+Iteration [11020/50000] | loss: 2.1177
+Iteration [11030/50000] | loss: 2.4943
+Iteration [11040/50000] | loss: 2.3902
+Iteration [11050/50000] | loss: 2.2439
+Iteration [11060/50000] | loss: 2.2963
+Iteration [11070/50000] | loss: 2.2789
+Iteration [11080/50000] | loss: 2.6665
+Iteration [11090/50000] | loss: 2.3789
+Iteration [11100/50000] | loss: 2.2851
+Iteration [11110/50000] | loss: 2.4900
+Iteration [11120/50000] | loss: 2.2201
+Iteration [11130/50000] | loss: 2.5282
+Iteration [11140/50000] | loss: 2.4245
+Iteration [11150/50000] | loss: 2.1482
+Iteration [11160/50000] | loss: 2.3038
+Iteration [11170/50000] | loss: 2.0636
+Iteration [11180/50000] | loss: 2.1028
+Iteration [11190/50000] | loss: 2.3378
+Iteration [11200/50000] | loss: 2.1532
+Iteration [11210/50000] | loss: 1.9409
+Iteration [11220/50000] | loss: 2.5995
+Iteration [11230/50000] | loss: 2.4293
+Iteration [11240/50000] | loss: 2.2947
+Iteration [11250/50000] | loss: 2.4316
+Iteration [11260/50000] | loss: 2.1491
+Iteration [11270/50000] | loss: 2.3752
+Iteration [11280/50000] | loss: 2.1551
+Iteration [11290/50000] | loss: 2.2848
+Iteration [11300/50000] | loss: 1.7855
+Iteration [11310/50000] | loss: 2.5810
+Iteration [11320/50000] | loss: 2.4237
+Iteration [11330/50000] | loss: 2.4285
+Iteration [11340/50000] | loss: 2.5378
+Iteration [11350/50000] | loss: 2.4160
+Iteration [11360/50000] | loss: 2.5583
+Iteration [11370/50000] | loss: 1.9947
+Iteration [11380/50000] | loss: 2.2352
+Iteration [11390/50000] | loss: 2.4498
+Iteration [11400/50000] | loss: 2.1274
+Iteration [11410/50000] | loss: 2.0611
+Iteration [11420/50000] | loss: 2.1102
+Iteration [11430/50000] | loss: 2.5912
+Iteration [11440/50000] | loss: 2.4067
+Iteration [11450/50000] | loss: 2.5832
+Iteration [11460/50000] | loss: 1.7274
+Iteration [11470/50000] | loss: 2.5191
+Iteration [11480/50000] | loss: 2.2053
+Iteration [11490/50000] | loss: 2.1600
+Iteration [11500/50000] | loss: 2.4823
+Iteration [11510/50000] | loss: 2.4502
+Iteration [11520/50000] | loss: 2.5290
+Iteration [11530/50000] | loss: 2.3877
+Iteration [11540/50000] | loss: 2.8372
+Iteration [11550/50000] | loss: 2.1166
+Iteration [11560/50000] | loss: 2.2598
+Iteration [11570/50000] | loss: 2.8348
+Iteration [11580/50000] | loss: 2.5887
+Iteration [11590/50000] | loss: 2.1846
+Iteration [11600/50000] | loss: 2.1053
+Iteration [11610/50000] | loss: 2.3816
+Iteration [11620/50000] | loss: 2.1003
+Iteration [11630/50000] | loss: 2.3923
+Iteration [11640/50000] | loss: 1.8895
+Iteration [11650/50000] | loss: 2.2891
+Iteration [11660/50000] | loss: 2.3416
+Iteration [11670/50000] | loss: 2.8591
+Iteration [11680/50000] | loss: 2.1502
+Iteration [11690/50000] | loss: 2.5900
+Iteration [11700/50000] | loss: 2.4531
+Iteration [11710/50000] | loss: 2.7292
+Iteration [11720/50000] | loss: 2.3398
+Iteration [11730/50000] | loss: 2.2178
+Iteration [11740/50000] | loss: 2.0633
+Iteration [11750/50000] | loss: 2.3950
+Iteration [11760/50000] | loss: 1.8668
+Iteration [11770/50000] | loss: 2.2120
+Iteration [11780/50000] | loss: 2.3160
+Iteration [11790/50000] | loss: 2.3854
+Iteration [11800/50000] | loss: 2.8698
+Iteration [11810/50000] | loss: 3.1630
+Iteration [11820/50000] | loss: 2.5955
+Iteration [11830/50000] | loss: 2.2355
+Iteration [11840/50000] | loss: 2.4098
+Iteration [11850/50000] | loss: 2.0289
+Iteration [11860/50000] | loss: 2.3797
+Iteration [11870/50000] | loss: 2.2638
+Iteration [11880/50000] | loss: 2.7238
+Iteration [11890/50000] | loss: 2.7943
+Iteration [11900/50000] | loss: 2.5677
+Iteration [11910/50000] | loss: 2.5627
+Iteration [11920/50000] | loss: 2.3842
+Iteration [11930/50000] | loss: 2.5073
+Iteration [11940/50000] | loss: 2.3933
+Iteration [11950/50000] | loss: 2.0441
+Iteration [11960/50000] | loss: 2.3970
+Iteration [11970/50000] | loss: 2.0949
+Iteration [11980/50000] | loss: 2.3105
+Iteration [11990/50000] | loss: 2.4581
+Iteration [12000/50000] | loss: 2.3542
+Validation | loss: 2.3210
+Iteration [12010/50000] | loss: 2.9243
+Iteration [12020/50000] | loss: 2.2525
+Iteration [12030/50000] | loss: 2.8973
+Iteration [12040/50000] | loss: 2.2847
+Iteration [12050/50000] | loss: 2.5930
+Iteration [12060/50000] | loss: 2.7247
+Iteration [12070/50000] | loss: 2.6326
+Iteration [12080/50000] | loss: 2.0680
+Iteration [12090/50000] | loss: 2.1593
+Iteration [12100/50000] | loss: 2.1832
+Iteration [12110/50000] | loss: 2.3567
+Iteration [12120/50000] | loss: 2.3347
+Iteration [12130/50000] | loss: 2.1811
+Iteration [12140/50000] | loss: 2.3781
+Iteration [12150/50000] | loss: 2.6378
+Iteration [12160/50000] | loss: 2.6985
+Iteration [12170/50000] | loss: 2.3567
+Iteration [12180/50000] | loss: 2.7454
+Iteration [12190/50000] | loss: 2.0637
+Iteration [12200/50000] | loss: 2.6741
+Iteration [12210/50000] | loss: 2.5386
+Iteration [12220/50000] | loss: 2.9417
+Iteration [12230/50000] | loss: 1.9000
+Iteration [12240/50000] | loss: 2.4332
+Iteration [12250/50000] | loss: 2.2853
+Iteration [12260/50000] | loss: 2.1953
+Iteration [12270/50000] | loss: 2.1954
+Iteration [12280/50000] | loss: 2.5237
+Iteration [12290/50000] | loss: 1.8340
+Iteration [12300/50000] | loss: 2.2656
+Iteration [12310/50000] | loss: 2.5098
+Iteration [12320/50000] | loss: 2.3085
+Iteration [12330/50000] | loss: 2.1569
+Iteration [12340/50000] | loss: 2.2663
+Iteration [12350/50000] | loss: 2.4039
+Iteration [12360/50000] | loss: 2.0805
+Iteration [12370/50000] | loss: 2.7439
+Iteration [12380/50000] | loss: 2.1335
+Iteration [12390/50000] | loss: 1.9368
+Iteration [12400/50000] | loss: 2.6575
+Iteration [12410/50000] | loss: 2.1831
+Iteration [12420/50000] | loss: 2.3574
+Iteration [12430/50000] | loss: 2.5181
+Iteration [12440/50000] | loss: 1.7343
+Iteration [12450/50000] | loss: 2.3421
+Iteration [12460/50000] | loss: 2.8051
+Iteration [12470/50000] | loss: 2.2270
+Iteration [12480/50000] | loss: 2.0894
+Iteration [12490/50000] | loss: 2.3222
+Iteration [12500/50000] | loss: 2.3068
+Iteration [12510/50000] | loss: 2.2804
+Iteration [12520/50000] | loss: 2.6116
+Iteration [12530/50000] | loss: 2.3522
+Iteration [12540/50000] | loss: 1.8077
+Iteration [12550/50000] | loss: 2.1747
+Iteration [12560/50000] | loss: 2.4152
+Iteration [12570/50000] | loss: 2.5058
+Iteration [12580/50000] | loss: 2.6699
+Iteration [12590/50000] | loss: 2.0251
+Iteration [12600/50000] | loss: 2.3136
+Iteration [12610/50000] | loss: 2.2513
+Iteration [12620/50000] | loss: 2.4195
+Iteration [12630/50000] | loss: 2.8606
+Iteration [12640/50000] | loss: 2.3619
+Iteration [12650/50000] | loss: 2.1088
+Iteration [12660/50000] | loss: 2.3131
+Iteration [12670/50000] | loss: 2.2821
+Iteration [12680/50000] | loss: 2.3627
+Iteration [12690/50000] | loss: 2.3363
+Iteration [12700/50000] | loss: 2.2819
+Iteration [12710/50000] | loss: 2.1655
+Iteration [12720/50000] | loss: 3.2401
+Iteration [12730/50000] | loss: 2.1137
+Iteration [12740/50000] | loss: 2.4141
+Iteration [12750/50000] | loss: 2.7886
+Iteration [12760/50000] | loss: 2.3676
+Iteration [12770/50000] | loss: 2.3501
+Iteration [12780/50000] | loss: 2.3845
+Iteration [12790/50000] | loss: 2.5654
+Iteration [12800/50000] | loss: 2.0710
+Iteration [12810/50000] | loss: 2.2762
+Iteration [12820/50000] | loss: 2.2852
+Iteration [12830/50000] | loss: 2.0288
+Iteration [12840/50000] | loss: 2.7865
+Iteration [12850/50000] | loss: 1.8307
+Iteration [12860/50000] | loss: 2.2778
+Iteration [12870/50000] | loss: 2.2878
+Iteration [12880/50000] | loss: 2.4959
+Iteration [12890/50000] | loss: 2.3565
+Iteration [12900/50000] | loss: 2.0583
+Iteration [12910/50000] | loss: 2.1518
+Iteration [12920/50000] | loss: 1.8277
+Iteration [12930/50000] | loss: 2.1933
+Iteration [12940/50000] | loss: 2.4596
+Iteration [12950/50000] | loss: 2.2626
+Iteration [12960/50000] | loss: 2.3135
+Iteration [12970/50000] | loss: 1.9566
+Iteration [12980/50000] | loss: 2.6547
+Iteration [12990/50000] | loss: 2.4182
+Iteration [13000/50000] | loss: 1.9090
+Validation | loss: 2.3025
+Iteration [13010/50000] | loss: 2.6539
+Iteration [13020/50000] | loss: 2.2813
+Iteration [13030/50000] | loss: 2.3463
+Iteration [13040/50000] | loss: 2.2360
+Iteration [13050/50000] | loss: 2.4540
+Iteration [13060/50000] | loss: 2.5976
+Iteration [13070/50000] | loss: 2.1734
+Iteration [13080/50000] | loss: 2.8469
+Iteration [13090/50000] | loss: 2.7682
+Iteration [13100/50000] | loss: 2.6213
+Iteration [13110/50000] | loss: 2.0832
+Iteration [13120/50000] | loss: 2.1696
+Iteration [13130/50000] | loss: 2.3688
+Iteration [13140/50000] | loss: 2.1385
+Iteration [13150/50000] | loss: 2.3703
+Iteration [13160/50000] | loss: 2.1125
+Iteration [13170/50000] | loss: 2.5435
+Iteration [13180/50000] | loss: 1.8396
+Iteration [13190/50000] | loss: 2.1376
+Iteration [13200/50000] | loss: 2.5485
+Iteration [13210/50000] | loss: 2.2284
+Iteration [13220/50000] | loss: 2.1131
+Iteration [13230/50000] | loss: 2.2144
+Iteration [13240/50000] | loss: 2.4641
+Iteration [13250/50000] | loss: 2.3889
+Iteration [13260/50000] | loss: 2.2503
+Iteration [13270/50000] | loss: 2.8719
+Iteration [13280/50000] | loss: 2.5074
+Iteration [13290/50000] | loss: 2.1739
+Iteration [13300/50000] | loss: 2.4945
+Iteration [13310/50000] | loss: 2.9590
+Iteration [13320/50000] | loss: 2.8191
+Iteration [13330/50000] | loss: 2.5202
+Iteration [13340/50000] | loss: 2.5196
+Iteration [13350/50000] | loss: 2.0036
+Iteration [13360/50000] | loss: 2.5971
+Iteration [13370/50000] | loss: 2.0778
+Iteration [13380/50000] | loss: 1.6460
+Iteration [13390/50000] | loss: 1.6240
+Iteration [13400/50000] | loss: 2.6709
+Iteration [13410/50000] | loss: 2.2461
+Iteration [13420/50000] | loss: 2.2765
+Iteration [13430/50000] | loss: 2.0779
+Iteration [13440/50000] | loss: 1.7498
+Iteration [13450/50000] | loss: 2.1798
+Iteration [13460/50000] | loss: 2.2064
+Iteration [13470/50000] | loss: 2.2217
+Iteration [13480/50000] | loss: 2.6337
+Iteration [13490/50000] | loss: 2.1926
+Iteration [13500/50000] | loss: 2.1726
+Iteration [13510/50000] | loss: 2.7772
+Iteration [13520/50000] | loss: 1.8024
+Iteration [13530/50000] | loss: 2.0747
+Iteration [13540/50000] | loss: 2.1144
+Iteration [13550/50000] | loss: 2.1309
+Iteration [13560/50000] | loss: 2.2509
+Iteration [13570/50000] | loss: 2.3648
+Iteration [13580/50000] | loss: 2.4667
+Iteration [13590/50000] | loss: 2.2958
+Iteration [13600/50000] | loss: 2.2500
+Iteration [13610/50000] | loss: 2.0766
+Iteration [13620/50000] | loss: 2.1463
+Iteration [13630/50000] | loss: 2.0548
+Iteration [13640/50000] | loss: 2.3657
+Iteration [13650/50000] | loss: 1.9608
+Iteration [13660/50000] | loss: 2.6235
+Iteration [13670/50000] | loss: 2.5145
+Iteration [13680/50000] | loss: 2.2342
+Iteration [13690/50000] | loss: 2.1495
+Iteration [13700/50000] | loss: 2.1862
+Iteration [13710/50000] | loss: 2.1957
+Iteration [13720/50000] | loss: 2.0874
+Iteration [13730/50000] | loss: 2.7444
+Iteration [13740/50000] | loss: 2.3760
+Iteration [13750/50000] | loss: 2.1830
+Iteration [13760/50000] | loss: 2.3931
+Iteration [13770/50000] | loss: 2.4285
+Iteration [13780/50000] | loss: 2.0990
+Iteration [13790/50000] | loss: 1.8994
+Iteration [13800/50000] | loss: 2.4871
+Iteration [13810/50000] | loss: 2.3766
+Iteration [13820/50000] | loss: 2.4717
+Iteration [13830/50000] | loss: 1.9969
+Iteration [13840/50000] | loss: 2.8250
+Iteration [13850/50000] | loss: 2.5281
+Iteration [13860/50000] | loss: 2.0947
+Iteration [13870/50000] | loss: 1.8159
+Iteration [13880/50000] | loss: 2.1110
+Iteration [13890/50000] | loss: 2.0937
+Iteration [13900/50000] | loss: 1.9004
+Iteration [13910/50000] | loss: 2.5327
+Iteration [13920/50000] | loss: 2.5736
+Iteration [13930/50000] | loss: 2.5162
+Iteration [13940/50000] | loss: 2.2132
+Iteration [13950/50000] | loss: 2.4270
+Iteration [13960/50000] | loss: 2.5552
+Iteration [13970/50000] | loss: 2.5633
+Iteration [13980/50000] | loss: 2.9574
+Iteration [13990/50000] | loss: 2.2936
+Iteration [14000/50000] | loss: 2.2653
+Validation | loss: 2.3072
+Iteration [14010/50000] | loss: 2.4056
+Iteration [14020/50000] | loss: 3.0560
+Iteration [14030/50000] | loss: 2.0727
+Iteration [14040/50000] | loss: 2.5931
+Iteration [14050/50000] | loss: 2.1041
+Iteration [14060/50000] | loss: 2.5992
+Iteration [14070/50000] | loss: 2.0550
+Iteration [14080/50000] | loss: 1.9231
+Iteration [14090/50000] | loss: 2.0025
+Iteration [14100/50000] | loss: 2.4236
+Iteration [14110/50000] | loss: 2.4056
+Iteration [14120/50000] | loss: 2.3251
+Iteration [14130/50000] | loss: 2.0252
+Iteration [14140/50000] | loss: 2.2510
+Iteration [14150/50000] | loss: 2.5442
+Iteration [14160/50000] | loss: 2.2191
+Iteration [14170/50000] | loss: 1.9089
+Iteration [14180/50000] | loss: 2.4568
+Iteration [14190/50000] | loss: 2.5285
+Iteration [14200/50000] | loss: 2.4789
+Iteration [14210/50000] | loss: 2.2860
+Iteration [14220/50000] | loss: 2.8996
+Iteration [14230/50000] | loss: 2.5448
+Iteration [14240/50000] | loss: 2.5748
+Iteration [14250/50000] | loss: 1.7629
+Iteration [14260/50000] | loss: 2.1856
+Iteration [14270/50000] | loss: 2.8898
+Iteration [14280/50000] | loss: 2.2844
+Iteration [14290/50000] | loss: 2.5495
+Iteration [14300/50000] | loss: 2.5154
+Iteration [14310/50000] | loss: 2.2910
+Iteration [14320/50000] | loss: 2.0710
+Iteration [14330/50000] | loss: 2.0333
+Iteration [14340/50000] | loss: 1.9292
+Iteration [14350/50000] | loss: 2.0744
+Iteration [14360/50000] | loss: 2.3513
+Iteration [14370/50000] | loss: 2.3792
+Iteration [14380/50000] | loss: 2.5511
+Iteration [14390/50000] | loss: 2.3868
+Iteration [14400/50000] | loss: 2.4323
+Iteration [14410/50000] | loss: 2.4638
+Iteration [14420/50000] | loss: 2.2699
+Iteration [14430/50000] | loss: 2.3173
+Iteration [14440/50000] | loss: 2.5484
+Iteration [14450/50000] | loss: 2.4579
+Iteration [14460/50000] | loss: 2.2142
+Iteration [14470/50000] | loss: 2.2287
+Iteration [14480/50000] | loss: 1.7588
+Iteration [14490/50000] | loss: 2.1470
+Iteration [14500/50000] | loss: 2.5113
+Iteration [14510/50000] | loss: 2.6719
+Iteration [14520/50000] | loss: 2.3463
+Iteration [14530/50000] | loss: 2.5430
+Iteration [14540/50000] | loss: 1.9638
+Iteration [14550/50000] | loss: 2.6896
+Iteration [14560/50000] | loss: 2.3179
+Iteration [14570/50000] | loss: 2.1729
+Iteration [14580/50000] | loss: 2.0683
+Iteration [14590/50000] | loss: 2.1379
+Iteration [14600/50000] | loss: 2.3257
+Iteration [14610/50000] | loss: 2.3598
+Iteration [14620/50000] | loss: 2.2708
+Iteration [14630/50000] | loss: 2.3828
+Iteration [14640/50000] | loss: 2.5956
+Iteration [14650/50000] | loss: 2.1259
+Iteration [14660/50000] | loss: 2.1426
+Iteration [14670/50000] | loss: 2.4814
+Iteration [14680/50000] | loss: 2.4198
+Iteration [14690/50000] | loss: 2.2039
+Iteration [14700/50000] | loss: 2.5156
+Iteration [14710/50000] | loss: 2.2083
+Iteration [14720/50000] | loss: 2.7131
+Iteration [14730/50000] | loss: 2.1888
+Iteration [14740/50000] | loss: 1.8976
+Iteration [14750/50000] | loss: 2.4716
+Iteration [14760/50000] | loss: 1.5576
+Iteration [14770/50000] | loss: 2.1534
+Iteration [14780/50000] | loss: 2.4536
+Iteration [14790/50000] | loss: 2.6496
+Iteration [14800/50000] | loss: 2.5646
+Iteration [14810/50000] | loss: 2.2191
+Iteration [14820/50000] | loss: 2.1058
+Iteration [14830/50000] | loss: 2.1726
+Iteration [14840/50000] | loss: 1.9026
+Iteration [14850/50000] | loss: 2.4016
+Iteration [14860/50000] | loss: 2.6639
+Iteration [14870/50000] | loss: 2.4234
+Iteration [14880/50000] | loss: 2.3119
+Iteration [14890/50000] | loss: 1.9260
+Iteration [14900/50000] | loss: 2.7367
+Iteration [14910/50000] | loss: 2.1567
+Iteration [14920/50000] | loss: 2.3847
+Iteration [14930/50000] | loss: 2.7604
+Iteration [14940/50000] | loss: 2.0624
+Iteration [14950/50000] | loss: 2.4409
+Iteration [14960/50000] | loss: 1.8960
+Iteration [14970/50000] | loss: 2.5777
+Iteration [14980/50000] | loss: 2.3387
+Iteration [14990/50000] | loss: 2.8963
+Iteration [15000/50000] | loss: 2.6414
+Validation | loss: 2.2762
+Iteration [15010/50000] | loss: 2.6440
+Iteration [15020/50000] | loss: 2.0974
+Iteration [15030/50000] | loss: 2.3464
+Iteration [15040/50000] | loss: 2.7757
+Iteration [15050/50000] | loss: 2.1749
+Iteration [15060/50000] | loss: 2.4744
+Iteration [15070/50000] | loss: 2.2172
+Iteration [15080/50000] | loss: 1.9498
+Iteration [15090/50000] | loss: 2.2954
+Iteration [15100/50000] | loss: 2.3540
+Iteration [15110/50000] | loss: 2.1963
+Iteration [15120/50000] | loss: 2.6307
+Iteration [15130/50000] | loss: 2.4535
+Iteration [15140/50000] | loss: 1.7181
+Iteration [15150/50000] | loss: 2.3095
+Iteration [15160/50000] | loss: 2.5211
+Iteration [15170/50000] | loss: 2.4030
+Iteration [15180/50000] | loss: 2.4007
+Iteration [15190/50000] | loss: 2.3973
+Iteration [15200/50000] | loss: 2.2016
+Iteration [15210/50000] | loss: 2.2044
+Iteration [15220/50000] | loss: 2.2814
+Iteration [15230/50000] | loss: 2.1245
+Iteration [15240/50000] | loss: 1.9670
+Iteration [15250/50000] | loss: 2.2602
+Iteration [15260/50000] | loss: 3.1580
+Iteration [15270/50000] | loss: 2.5678
+Iteration [15280/50000] | loss: 2.6669
+Iteration [15290/50000] | loss: 2.0494
+Iteration [15300/50000] | loss: 2.1626
+Iteration [15310/50000] | loss: 2.0075
+Iteration [15320/50000] | loss: 2.3158
+Iteration [15330/50000] | loss: 2.1319
+Iteration [15340/50000] | loss: 2.3574
+Iteration [15350/50000] | loss: 2.3743
+Iteration [15360/50000] | loss: 2.4234
+Iteration [15370/50000] | loss: 2.5404
+Iteration [15380/50000] | loss: 2.4326
+Iteration [15390/50000] | loss: 2.1759
+Iteration [15400/50000] | loss: 2.3398
+Iteration [15410/50000] | loss: 2.1790
+Iteration [15420/50000] | loss: 2.2245
+Iteration [15430/50000] | loss: 2.2856
+Iteration [15440/50000] | loss: 2.0873
+Iteration [15450/50000] | loss: 2.7185
+Iteration [15460/50000] | loss: 2.1213
+Iteration [15470/50000] | loss: 2.2290
+Iteration [15480/50000] | loss: 1.7434
+Iteration [15490/50000] | loss: 1.9939
+Iteration [15500/50000] | loss: 2.2240
+Iteration [15510/50000] | loss: 2.4348
+Iteration [15520/50000] | loss: 2.2940
+Iteration [15530/50000] | loss: 2.5029
+Iteration [15540/50000] | loss: 2.4656
+Iteration [15550/50000] | loss: 2.3586
+Iteration [15560/50000] | loss: 2.5723
+Iteration [15570/50000] | loss: 1.8565
+Iteration [15580/50000] | loss: 2.2051
+Iteration [15590/50000] | loss: 1.9727
+Iteration [15600/50000] | loss: 2.4154
+Iteration [15610/50000] | loss: 2.0333
+Iteration [15620/50000] | loss: 2.6173
+Iteration [15630/50000] | loss: 1.9514
+Iteration [15640/50000] | loss: 2.2523
+Iteration [15650/50000] | loss: 2.2639
+Iteration [15660/50000] | loss: 2.2782
+Iteration [15670/50000] | loss: 2.0667
+Iteration [15680/50000] | loss: 2.4553
+Iteration [15690/50000] | loss: 2.2261
+Iteration [15700/50000] | loss: 2.0112
+Iteration [15710/50000] | loss: 2.4670
+Iteration [15720/50000] | loss: 2.2115
+Iteration [15730/50000] | loss: 2.3802
+Iteration [15740/50000] | loss: 1.9940
+Iteration [15750/50000] | loss: 1.9662
+Iteration [15760/50000] | loss: 1.6288
+Iteration [15770/50000] | loss: 2.2149
+Iteration [15780/50000] | loss: 2.2090
+Iteration [15790/50000] | loss: 2.5419
+Iteration [15800/50000] | loss: 2.2434
+Iteration [15810/50000] | loss: 1.8371
+Iteration [15820/50000] | loss: 2.5526
+Iteration [15830/50000] | loss: 2.0228
+Iteration [15840/50000] | loss: 2.5095
+Iteration [15850/50000] | loss: 2.4646
+Iteration [15860/50000] | loss: 2.1022
+Iteration [15870/50000] | loss: 2.4753
+Iteration [15880/50000] | loss: 2.3159
+Iteration [15890/50000] | loss: 1.6794
+Iteration [15900/50000] | loss: 2.0302
+Iteration [15910/50000] | loss: 2.1402
+Iteration [15920/50000] | loss: 2.6941
+Iteration [15930/50000] | loss: 2.5017
+Iteration [15940/50000] | loss: 2.6747
+Iteration [15950/50000] | loss: 1.9505
+Iteration [15960/50000] | loss: 2.4361
+Iteration [15970/50000] | loss: 2.4105
+Iteration [15980/50000] | loss: 2.3565
+Iteration [15990/50000] | loss: 2.0548
+Iteration [16000/50000] | loss: 2.1136
+Validation | loss: 2.2570
+Iteration [16010/50000] | loss: 2.3086
+Iteration [16020/50000] | loss: 2.0027
+Iteration [16030/50000] | loss: 2.4322
+Iteration [16040/50000] | loss: 2.4115
+Iteration [16050/50000] | loss: 1.9794
+Iteration [16060/50000] | loss: 1.8811
+Iteration [16070/50000] | loss: 2.5203
+Iteration [16080/50000] | loss: 2.3211
+Iteration [16090/50000] | loss: 2.3951
+Iteration [16100/50000] | loss: 1.8161
+Iteration [16110/50000] | loss: 2.4772
+Iteration [16120/50000] | loss: 2.2787
+Iteration [16130/50000] | loss: 2.2408
+Iteration [16140/50000] | loss: 2.2686
+Iteration [16150/50000] | loss: 2.6066
+Iteration [16160/50000] | loss: 2.3447
+Iteration [16170/50000] | loss: 2.0401
+Iteration [16180/50000] | loss: 1.9002
+Iteration [16190/50000] | loss: 2.1039
+Iteration [16200/50000] | loss: 2.1895
+Iteration [16210/50000] | loss: 2.6512
+Iteration [16220/50000] | loss: 2.7419
+Iteration [16230/50000] | loss: 2.1211
+Iteration [16240/50000] | loss: 2.7086
+Iteration [16250/50000] | loss: 2.8294
+Iteration [16260/50000] | loss: 2.3764
+Iteration [16270/50000] | loss: 1.8606
+Iteration [16280/50000] | loss: 2.5167
+Iteration [16290/50000] | loss: 2.5718
+Iteration [16300/50000] | loss: 2.7634
+Iteration [16310/50000] | loss: 2.1645
+Iteration [16320/50000] | loss: 2.1630
+Iteration [16330/50000] | loss: 2.1822
+Iteration [16340/50000] | loss: 2.4273
+Iteration [16350/50000] | loss: 2.3840
+Iteration [16360/50000] | loss: 2.2494
+Iteration [16370/50000] | loss: 1.9714
+Iteration [16380/50000] | loss: 2.4736
+Iteration [16390/50000] | loss: 2.2895
+Iteration [16400/50000] | loss: 2.0849
+Iteration [16410/50000] | loss: 2.3594
+Iteration [16420/50000] | loss: 2.4971
+Iteration [16430/50000] | loss: 2.3876
+Iteration [16440/50000] | loss: 2.6054
+Iteration [16450/50000] | loss: 1.7106
+Iteration [16460/50000] | loss: 2.1070
+Iteration [16470/50000] | loss: 2.1591
+Iteration [16480/50000] | loss: 2.1732
+Iteration [16490/50000] | loss: 2.0310
+Iteration [16500/50000] | loss: 2.0390
+Iteration [16510/50000] | loss: 2.2783
+Iteration [16520/50000] | loss: 2.0763
+Iteration [16530/50000] | loss: 2.1984
+Iteration [16540/50000] | loss: 2.6904
+Iteration [16550/50000] | loss: 2.0078
+Iteration [16560/50000] | loss: 2.1684
+Iteration [16570/50000] | loss: 2.0973
+Iteration [16580/50000] | loss: 2.8087
+Iteration [16590/50000] | loss: 2.2989
+Iteration [16600/50000] | loss: 2.1652
+Iteration [16610/50000] | loss: 2.5926
+Iteration [16620/50000] | loss: 2.3449
+Iteration [16630/50000] | loss: 2.4193
+Iteration [16640/50000] | loss: 2.5307
+Iteration [16650/50000] | loss: 1.8840
+Iteration [16660/50000] | loss: 2.5035
+Iteration [16670/50000] | loss: 2.4048
+Iteration [16680/50000] | loss: 2.4090
+Iteration [16690/50000] | loss: 2.3319
+Iteration [16700/50000] | loss: 2.1190
+Iteration [16710/50000] | loss: 2.1884
+Iteration [16720/50000] | loss: 2.3644
+Iteration [16730/50000] | loss: 2.2852
+Iteration [16740/50000] | loss: 2.7963
+Iteration [16750/50000] | loss: 2.2653
+Iteration [16760/50000] | loss: 2.3805
+Iteration [16770/50000] | loss: 2.0511
+Iteration [16780/50000] | loss: 2.0846
+Iteration [16790/50000] | loss: 2.3434
+Iteration [16800/50000] | loss: 2.4062
+Iteration [16810/50000] | loss: 1.9754
+Iteration [16820/50000] | loss: 2.0950
+Iteration [16830/50000] | loss: 2.2845
+Iteration [16840/50000] | loss: 2.5491
+Iteration [16850/50000] | loss: 2.2360
+Iteration [16860/50000] | loss: 2.3710
+Iteration [16870/50000] | loss: 1.6966
+Iteration [16880/50000] | loss: 1.8377
+Iteration [16890/50000] | loss: 2.4998
+Iteration [16900/50000] | loss: 2.2526
+Iteration [16910/50000] | loss: 2.3551
+Iteration [16920/50000] | loss: 2.2767
+Iteration [16930/50000] | loss: 2.5088
+Iteration [16940/50000] | loss: 1.9776
+Iteration [16950/50000] | loss: 2.4415
+Iteration [16960/50000] | loss: 2.3692
+Iteration [16970/50000] | loss: 2.5531
+Iteration [16980/50000] | loss: 2.5968
+Iteration [16990/50000] | loss: 3.0895
+Iteration [17000/50000] | loss: 2.6871
+Validation | loss: 2.3184
+Iteration [17010/50000] | loss: 2.3225
+Iteration [17020/50000] | loss: 2.2211
+Iteration [17030/50000] | loss: 2.1510
+Iteration [17040/50000] | loss: 1.8819
+Iteration [17050/50000] | loss: 2.3078
+Iteration [17060/50000] | loss: 1.9125
+Iteration [17070/50000] | loss: 2.5356
+Iteration [17080/50000] | loss: 2.4652
+Iteration [17090/50000] | loss: 2.5814
+Iteration [17100/50000] | loss: 2.6443
+Iteration [17110/50000] | loss: 2.0744
+Iteration [17120/50000] | loss: 2.0409
+Iteration [17130/50000] | loss: 2.6867
+Iteration [17140/50000] | loss: 2.3222
+Iteration [17150/50000] | loss: 1.9752
+Iteration [17160/50000] | loss: 2.0369
+Iteration [17170/50000] | loss: 2.3026
+Iteration [17180/50000] | loss: 2.2420
+Iteration [17190/50000] | loss: 2.4148
+Iteration [17200/50000] | loss: 2.3271
+Iteration [17210/50000] | loss: 2.1450
+Iteration [17220/50000] | loss: 2.4317
+Iteration [17230/50000] | loss: 1.9593
+Iteration [17240/50000] | loss: 2.5109
+Iteration [17250/50000] | loss: 2.4867
+Iteration [17260/50000] | loss: 2.3651
+Iteration [17270/50000] | loss: 2.4823
+Iteration [17280/50000] | loss: 2.8061
+Iteration [17290/50000] | loss: 2.5149
+Iteration [17300/50000] | loss: 2.0710
+Iteration [17310/50000] | loss: 2.6144
+Iteration [17320/50000] | loss: 2.8118
+Iteration [17330/50000] | loss: 2.3658
+Iteration [17340/50000] | loss: 2.1761
+Iteration [17350/50000] | loss: 2.2219
+Iteration [17360/50000] | loss: 2.5083
+Iteration [17370/50000] | loss: 1.9815
+Iteration [17380/50000] | loss: 2.2691
+Iteration [17390/50000] | loss: 2.5392
+Iteration [17400/50000] | loss: 2.2407
+Iteration [17410/50000] | loss: 2.4573
+Iteration [17420/50000] | loss: 1.9721
+Iteration [17430/50000] | loss: 2.4734
+Iteration [17440/50000] | loss: 2.2228
+Iteration [17450/50000] | loss: 1.9773
+Iteration [17460/50000] | loss: 2.6839
+Iteration [17470/50000] | loss: 2.0885
+Iteration [17480/50000] | loss: 2.4197
+Iteration [17490/50000] | loss: 2.5909
+Iteration [17500/50000] | loss: 1.9243
+Iteration [17510/50000] | loss: 1.8579
+Iteration [17520/50000] | loss: 2.2544
+Iteration [17530/50000] | loss: 1.8894
+Iteration [17540/50000] | loss: 2.0192
+Iteration [17550/50000] | loss: 2.2237
+Iteration [17560/50000] | loss: 2.1557
+Iteration [17570/50000] | loss: 2.3685
+Iteration [17580/50000] | loss: 2.4609
+Iteration [17590/50000] | loss: 2.4783
+Iteration [17600/50000] | loss: 2.4792
+Iteration [17610/50000] | loss: 2.3609
+Iteration [17620/50000] | loss: 2.5965
+Iteration [17630/50000] | loss: 2.8808
+Iteration [17640/50000] | loss: 2.3875
+Iteration [17650/50000] | loss: 1.7915
+Iteration [17660/50000] | loss: 2.3043
+Iteration [17670/50000] | loss: 2.0969
+Iteration [17680/50000] | loss: 2.1737
+Iteration [17690/50000] | loss: 2.1446
+Iteration [17700/50000] | loss: 2.6157
+Iteration [17710/50000] | loss: 2.4048
+Iteration [17720/50000] | loss: 2.5243
+Iteration [17730/50000] | loss: 2.1145
+Iteration [17740/50000] | loss: 1.9927
+Iteration [17750/50000] | loss: 2.6198
+Iteration [17760/50000] | loss: 2.5645
+Iteration [17770/50000] | loss: 2.4063
+Iteration [17780/50000] | loss: 1.9144
+Iteration [17790/50000] | loss: 2.1071
+Iteration [17800/50000] | loss: 2.1782
+Iteration [17810/50000] | loss: 2.1856
+Iteration [17820/50000] | loss: 2.1027
+Iteration [17830/50000] | loss: 2.5097
+Iteration [17840/50000] | loss: 2.0929
+Iteration [17850/50000] | loss: 2.3765
+Iteration [17860/50000] | loss: 2.1471
+Iteration [17870/50000] | loss: 2.4546
+Iteration [17880/50000] | loss: 1.9806
+Iteration [17890/50000] | loss: 2.0204
+Iteration [17900/50000] | loss: 2.9457
+Iteration [17910/50000] | loss: 2.1555
+Iteration [17920/50000] | loss: 1.9662
+Iteration [17930/50000] | loss: 2.4587
+Iteration [17940/50000] | loss: 2.0703
+Iteration [17950/50000] | loss: 1.9398
+Iteration [17960/50000] | loss: 2.2542
+Iteration [17970/50000] | loss: 2.3317
+Iteration [17980/50000] | loss: 1.8215
+Iteration [17990/50000] | loss: 2.4754
+Iteration [18000/50000] | loss: 2.3656

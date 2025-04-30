@@ -309,7 +309,7 @@ def create_parser():
     parser.add_argument("--sample_dir", type=str, default="pretrained")
     parser.add_argument("--log_step", type=int, default=10)
     parser.add_argument("--sample_every", type=int, default=100)
-    parser.add_argument("--checkpoint_every", type=int, default=800)
+    parser.add_argument("--checkpoint_every", type=int, default=1000)
 
     parser.add_argument("--gpu", type=str, default="0")
 
