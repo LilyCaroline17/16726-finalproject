@@ -458,7 +458,7 @@ def create_parser():
     parser.add_argument("--lr", type=float, default=0.0003)
     parser.add_argument("--beta1", type=float, default=0.5)
     parser.add_argument("--beta2", type=float, default=0.999)
-    parser.add_argument("--lambda_cycle", type=float, default=10)
+    parser.add_argument("--lambda_cycle", type=float, default=3)
     parser.add_argument("--lambda_style", type=float, default=10)
 
     # Data sources
