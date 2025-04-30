@@ -11,7 +11,6 @@ from torch.utils.data import random_split
 # Sample usage:
 # get_data_loader(data_path, opts)
 
-# Define and freeze the style classes
 STYLE_CLASSES = sorted(set( [
     "가르마",
     "기타남자스타일",
@@ -49,7 +48,6 @@ STYLE_TO_IDX = {style: i for i, style in enumerate(STYLE_CLASSES)}
 
 
 class StyleImageDataset(Dataset):
-    """Loads images and 1-hot encoded 'basestyle' vectors from JSONs"""
 
     def __init__(self, root_dir, ext='*.jpg', transform=None):
         self.label_dir = os.path.join(root_dir, "labels")
@@ -74,7 +72,6 @@ class StyleImageDataset(Dataset):
             if style not in STYLE_TO_IDX:
                 continue
 
-            # Reconstruct the relative path to image
             json_rel_path = os.path.relpath(json_path, self.label_dir)
             folder1, folder2, filename = json_rel_path.split(os.sep)
             image_filename = os.path.splitext(filename)[0].replace("_", "-") + ".jpg"
@@ -103,7 +100,6 @@ class StyleImageDataset(Dataset):
 
 
 def get_data_loader(data_path, opts):
-    """Creates DataLoader with image + style vector"""
     if opts.data_preprocess == 'resize_only':
         transform = transforms.Compose([
             transforms.Resize((opts.image_size, opts.image_size), Image.BICUBIC),
@@ -139,7 +135,6 @@ def get_data_loader(data_path, opts):
     return train_loader, val_loader
 
 def get_all_data_loader(data_path, opts):
-    """Creates DataLoader with image + style vector"""
     if opts.data_preprocess == 'resize_only':
         transform = transforms.Compose([
             transforms.Resize((opts.image_size, opts.image_size), Image.BICUBIC),
