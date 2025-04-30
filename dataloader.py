@@ -170,7 +170,7 @@ def get_all_data_loader(data_path, opts):
     sampler = _make_balanced_sampler(full_dataset.targets)
     
     full_loader = DataLoader(
-        dataset=full_dataset, batch_size=opts.batch_size, sampler = sampler
+        dataset=full_dataset, batch_size=opts.batch_size, sampler = sampler,
         shuffle=True, num_workers=opts.num_workers
     )
 

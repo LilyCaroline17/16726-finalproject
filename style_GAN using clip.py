@@ -381,7 +381,7 @@ def training_loop(dataloader_X, opts):
                     criterion = torch.nn.CrossEntropyLoss()
                     target_classes = torch.argmax(orig_labels, dim=1)
                     style_loss = criterion(
-                        torch.sigmoid(style_iden(fake_images)), target_classes
+                        (style_iden(fake_images)).softmax(dim=-1), target_classes
                     )
 
             g_loss += opts.lambda_style * style_loss
