@@ -70,6 +70,10 @@ class StyleImageDataset(Dataset):
                     data = json.load(f)
             except json.JSONDecodeError:
                 continue
+            
+            horizontal_angle = data.get("horizontal", None)
+            if horizontal_angle is None or not (0 <= horizontal_angle <= 45 or 315 <= horizontal_angle <= 360):
+                continue
 
             style = data.get("basestyle")
             if style not in STYLE_TO_IDX:
