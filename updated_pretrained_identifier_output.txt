@@ -1,0 +1,736 @@
+/home/ubuntu/anaconda3/lib/python3.9/site-packages/torchvision/transforms/transforms.py:329: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
+  warnings.warn(
+================================================================================
+                                      Opts                                      
+--------------------------------------------------------------------------------
+                             image_size: 128                                    
+                                   disc: dc                                     
+                                    gen: cycle                                  
+                                   iden: pretrained                             
+                             g_conv_dim: 32                                     
+                             d_conv_dim: 32                                     
+                                   norm: instance                               
+                              init_type: naive                                  
+                            train_iters: 10000                                  
+                             batch_size: 16                                     
+                            num_workers: 2                                      
+                                     lr: 0.0003                                 
+                                  beta1: 0.5                                    
+                                  beta2: 0.999                                  
+                           lambda_cycle: 10                                     
+                           lambda_style: 10                                     
+                                      X: ..                                     
+                                    ext: *.png                                  
+                        data_preprocess: vanilla                                
+                         checkpoint_dir: checkpoints_stylegan                   
+                   iden_checkpoint_dir: checkpoints_pretrained_style_id         
+                    sample_dir: output/cyclegan/.._10pretrained_instance_dc_cycle_naive
+                               log_step: 10                                     
+                           sample_every: 100                                    
+                       checkpoint_every: 1000                                   
+                                    gpu: 0                                      
+================================================================================
+Traceback (most recent call last):
+  File "/mnt/hw5/final_proj/16726-finalproject/style_GAN using clip.py", line 514, in <module>
+    main(opts)
+  File "/mnt/hw5/final_proj/16726-finalproject/style_GAN using clip.py", line 416, in main
+    dataloader_X = get_all_data_loader(opts.X, opts=opts)
+  File "/mnt/hw5/final_proj/16726-finalproject/dataloader.py", line 194, in get_all_data_loader
+    full_dataset = StyleImageDataset(data_path, opts.ext, transform)
+  File "/mnt/hw5/final_proj/16726-finalproject/dataloader.py", line 62, in __init__
+    self._load_dataset(ext)
+  File "/mnt/hw5/final_proj/16726-finalproject/dataloader.py", line 72, in _load_dataset
+    data = json.load(f)
+  File "/home/ubuntu/anaconda3/lib/python3.9/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+  File "/home/ubuntu/anaconda3/lib/python3.9/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+  File "/home/ubuntu/anaconda3/lib/python3.9/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/home/ubuntu/anaconda3/lib/python3.9/json/decoder.py", line 353, in raw_decode
+    obj, end = self.scan_once(s, idx)
+KeyboardInterrupt
+/home/ubuntu/anaconda3/lib/python3.9/site-packages/torchvision/transforms/transforms.py:329: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
+  warnings.warn(
+/home/ubuntu/anaconda3/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/ubuntu/anaconda3/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+================================================================================
+                                      Opts                                      
+--------------------------------------------------------------------------------
+                             image_size: 128                                    
+                                   disc: dc                                     
+                                    gen: cycle                                  
+                             g_conv_dim: 32                                     
+                             d_conv_dim: 32                                     
+                                   norm: instance                               
+                              init_type: naive                                  
+                            train_iters: 50000                                  
+                             batch_size: 16                                     
+                            num_workers: 2                                      
+                                     lr: 0.0001                                 
+                                  beta1: 0.5                                    
+                                  beta2: 0.999                                  
+                           lambda_cycle: 10                                     
+                                      X: ..                                     
+                                    ext: *.png                                  
+                        data_preprocess: vanilla                                
+                        checkpoint_dir: checkpoints_pretrained_style_id         
+                    sample_dir: output/pretrained/.._10vanilla_instance_dc_cycle_naive
+                               log_step: 10                                     
+                           sample_every: 100                                    
+                       checkpoint_every: 800                                    
+                                    gpu: 0                                      
+================================================================================
+Loaded 393345 samples from ../labels
+Models moved to GPU.
+                 MODEL                
+---------------------------------------
+ResNet(
+  (conv1): Conv2d(3, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
+  (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (relu): ReLU(inplace=True)
+  (maxpool): MaxPool2d(kernel_size=3, stride=2, padding=1, dilation=1, ceil_mode=False)
+  (layer1): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer2): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(64, 128, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer3): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(128, 256, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer4): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (avgpool): AdaptiveAvgPool2d(output_size=(1, 1))
+  (fc): Linear(in_features=512, out_features=31, bias=True)
+)
+---------------------------------------
+Checkpoints not found. Starting from scratch.
+Iteration [   10/50000] | loss: 3.5868
+Iteration [   20/50000] | loss: 3.7574
+Iteration [   30/50000] | loss: 3.6703
+Iteration [   40/50000] | loss: 3.3518
+Iteration [   50/50000] | loss: 3.5675
+Iteration [   60/50000] | loss: 3.3741
+Iteration [   70/50000] | loss: 3.6042
+Iteration [   80/50000] | loss: 3.6836
+Iteration [   90/50000] | loss: 3.5750
+Iteration [  100/50000] | loss: 3.5345
+Iteration [  110/50000] | loss: 3.4628
+Iteration [  120/50000] | loss: 3.2565
+Iteration [  130/50000] | loss: 3.3221
+Iteration [  140/50000] | loss: 3.2332
+Iteration [  150/50000] | loss: 3.5467
+Iteration [  160/50000] | loss: 3.5204
+Iteration [  170/50000] | loss: 3.5117
+Iteration [  180/50000] | loss: 3.4442
+Iteration [  190/50000] | loss: 3.4586
+Iteration [  200/50000] | loss: 3.5157
+Iteration [  210/50000] | loss: 3.2720
+Iteration [  220/50000] | loss: 3.2620
+Iteration [  230/50000] | loss: 3.2669
+Iteration [  240/50000] | loss: 3.3713
+Iteration [  250/50000] | loss: 3.3522
+Iteration [  260/50000] | loss: 3.1126
+Iteration [  270/50000] | loss: 2.9652
+Iteration [  280/50000] | loss: 3.4476
+Iteration [  290/50000] | loss: 3.2257
+Iteration [  300/50000] | loss: 3.2598
+Iteration [  310/50000] | loss: 3.2571
+Iteration [  320/50000] | loss: 3.1770
+Iteration [  330/50000] | loss: 3.4464
+Iteration [  340/50000] | loss: 3.0607
+Iteration [  350/50000] | loss: 3.4342
+Iteration [  360/50000] | loss: 3.1252
+Iteration [  370/50000] | loss: 3.3672
+Iteration [  380/50000] | loss: 3.2254
+Iteration [  390/50000] | loss: 3.4593
+Iteration [  400/50000] | loss: 3.0572
+Iteration [  410/50000] | loss: 3.2436
+Iteration [  420/50000] | loss: 3.0691
+Iteration [  430/50000] | loss: 3.4663
+Iteration [  440/50000] | loss: 3.2554
+Iteration [  450/50000] | loss: 3.3969
+Iteration [  460/50000] | loss: 3.1688
+Iteration [  470/50000] | loss: 2.9665
+Iteration [  480/50000] | loss: 3.1712
+Iteration [  490/50000] | loss: 3.2343
+Iteration [  500/50000] | loss: 3.2801
+Iteration [  510/50000] | loss: 3.1828
+Iteration [  520/50000] | loss: 3.2175
+Iteration [  530/50000] | loss: 3.4553
+Iteration [  540/50000] | loss: 3.2321
+Iteration [  550/50000] | loss: 3.4179
+Iteration [  560/50000] | loss: 3.0439
+Iteration [  570/50000] | loss: 3.1367
+Iteration [  580/50000] | loss: 3.2730
+Iteration [  590/50000] | loss: 2.8661
+Iteration [  600/50000] | loss: 3.0945
+Iteration [  610/50000] | loss: 3.1721
+Iteration [  620/50000] | loss: 2.8295
+Iteration [  630/50000] | loss: 3.3989
+Iteration [  640/50000] | loss: 3.0133
+Iteration [  650/50000] | loss: 3.1472
+Iteration [  660/50000] | loss: 3.0453
+Iteration [  670/50000] | loss: 3.2202
+Iteration [  680/50000] | loss: 3.1142
+Iteration [  690/50000] | loss: 3.3075
+Iteration [  700/50000] | loss: 3.1784
+Iteration [  710/50000] | loss: 3.0058
+Iteration [  720/50000] | loss: 3.4070
+Iteration [  730/50000] | loss: 3.0743
+Iteration [  740/50000] | loss: 3.4450
+Iteration [  750/50000] | loss: 3.3127
+Iteration [  760/50000] | loss: 3.0778
+Iteration [  770/50000] | loss: 3.1248
+Iteration [  780/50000] | loss: 3.0857
+Iteration [  790/50000] | loss: 3.0712
+Iteration [  800/50000] | loss: 3.1639
+Validation | loss: 3.0248
+Iteration [  810/50000] | loss: 2.9854
+Iteration [  820/50000] | loss: 3.0312
+Iteration [  830/50000] | loss: 3.1510
+Iteration [  840/50000] | loss: 3.0066
+Iteration [  850/50000] | loss: 2.9986
+Iteration [  860/50000] | loss: 3.0475
+Iteration [  870/50000] | loss: 3.1938
+Iteration [  880/50000] | loss: 2.6418
+Iteration [  890/50000] | loss: 2.8267
+Iteration [  900/50000] | loss: 3.1605
+Iteration [  910/50000] | loss: 3.1353
+Iteration [  920/50000] | loss: 2.7691
+Iteration [  930/50000] | loss: 2.8867
+Iteration [  940/50000] | loss: 3.2067
+Iteration [  950/50000] | loss: 2.9622
+Iteration [  960/50000] | loss: 3.1452
+Iteration [  970/50000] | loss: 2.9431
+Iteration [  980/50000] | loss: 3.5358
+Iteration [  990/50000] | loss: 3.0953
+Iteration [ 1000/50000] | loss: 3.0809
+Iteration [ 1010/50000] | loss: 2.9393
+Iteration [ 1020/50000] | loss: 2.7406
+Iteration [ 1030/50000] | loss: 2.8926
+Iteration [ 1040/50000] | loss: 2.9989
+Iteration [ 1050/50000] | loss: 2.9822
+Iteration [ 1060/50000] | loss: 2.7936
+Iteration [ 1070/50000] | loss: 3.0308
+Iteration [ 1080/50000] | loss: 2.9820
+Iteration [ 1090/50000] | loss: 2.9493
+Iteration [ 1100/50000] | loss: 2.8682
+Iteration [ 1110/50000] | loss: 2.9621
+Iteration [ 1120/50000] | loss: 3.0973
+Iteration [ 1130/50000] | loss: 2.8697
+Iteration [ 1140/50000] | loss: 2.9971
+Iteration [ 1150/50000] | loss: 2.9372
+Iteration [ 1160/50000] | loss: 2.8179
+Iteration [ 1170/50000] | loss: 3.1551
+Iteration [ 1180/50000] | loss: 2.9637
+Iteration [ 1190/50000] | loss: 3.1272
+Iteration [ 1200/50000] | loss: 3.0042
+Iteration [ 1210/50000] | loss: 2.7210
+Iteration [ 1220/50000] | loss: 2.9617
+Iteration [ 1230/50000] | loss: 2.8729
+Iteration [ 1240/50000] | loss: 2.8248
+Iteration [ 1250/50000] | loss: 2.8861
+Iteration [ 1260/50000] | loss: 3.1132
+Iteration [ 1270/50000] | loss: 3.0794
+Iteration [ 1280/50000] | loss: 3.0186
+Iteration [ 1290/50000] | loss: 3.0232
+Iteration [ 1300/50000] | loss: 2.6463
+Iteration [ 1310/50000] | loss: 2.9033
+Iteration [ 1320/50000] | loss: 2.8738
+Iteration [ 1330/50000] | loss: 2.7644
+Iteration [ 1340/50000] | loss: 2.7288
+Iteration [ 1350/50000] | loss: 2.8896
+Iteration [ 1360/50000] | loss: 3.1254
+Iteration [ 1370/50000] | loss: 2.7033
+Iteration [ 1380/50000] | loss: 2.8059
+Iteration [ 1390/50000] | loss: 2.7181
+Iteration [ 1400/50000] | loss: 3.1149
+Iteration [ 1410/50000] | loss: 2.8071
+Iteration [ 1420/50000] | loss: 2.9280
+Iteration [ 1430/50000] | loss: 2.9486
+Iteration [ 1440/50000] | loss: 2.9364
+Iteration [ 1450/50000] | loss: 3.0527
+Iteration [ 1460/50000] | loss: 2.6556
+Iteration [ 1470/50000] | loss: 3.0817
+Iteration [ 1480/50000] | loss: 2.8660
+Iteration [ 1490/50000] | loss: 2.7929
+Iteration [ 1500/50000] | loss: 2.8434
+Iteration [ 1510/50000] | loss: 2.9304
+Iteration [ 1520/50000] | loss: 2.9731
+Iteration [ 1530/50000] | loss: 2.9807
+Iteration [ 1540/50000] | loss: 2.7907
+Iteration [ 1550/50000] | loss: 2.9205
+Iteration [ 1560/50000] | loss: 2.8380
+Iteration [ 1570/50000] | loss: 3.0227
+Iteration [ 1580/50000] | loss: 2.7462
+Iteration [ 1590/50000] | loss: 2.9135
+Iteration [ 1600/50000] | loss: 2.9874
+Validation | loss: 2.7677
+Iteration [ 1610/50000] | loss: 2.7593
+Iteration [ 1620/50000] | loss: 2.8577
+Iteration [ 1630/50000] | loss: 2.5884
+Iteration [ 1640/50000] | loss: 2.6110
+Iteration [ 1650/50000] | loss: 2.5809
+Iteration [ 1660/50000] | loss: 2.9489
+Iteration [ 1670/50000] | loss: 3.3459
+Iteration [ 1680/50000] | loss: 2.9477
+Iteration [ 1690/50000] | loss: 2.9570
+Iteration [ 1700/50000] | loss: 2.8145
+Iteration [ 1710/50000] | loss: 2.5864
+Iteration [ 1720/50000] | loss: 3.0139
+Iteration [ 1730/50000] | loss: 2.9422
+Iteration [ 1740/50000] | loss: 2.6967
+Iteration [ 1750/50000] | loss: 3.0542
+Iteration [ 1760/50000] | loss: 2.7938
+Iteration [ 1770/50000] | loss: 2.9996
+Iteration [ 1780/50000] | loss: 2.6432
+Iteration [ 1790/50000] | loss: 2.7768
+Iteration [ 1800/50000] | loss: 2.8306
+Iteration [ 1810/50000] | loss: 2.5170
+Iteration [ 1820/50000] | loss: 2.8848
+Iteration [ 1830/50000] | loss: 2.7489
+Iteration [ 1840/50000] | loss: 3.0803
+Iteration [ 1850/50000] | loss: 3.1732
+Iteration [ 1860/50000] | loss: 2.8705
+Iteration [ 1870/50000] | loss: 2.8845
+Iteration [ 1880/50000] | loss: 2.7142
+Iteration [ 1890/50000] | loss: 2.8359
+Iteration [ 1900/50000] | loss: 2.9662
+Iteration [ 1910/50000] | loss: 2.4986
+Iteration [ 1920/50000] | loss: 2.7672
+Iteration [ 1930/50000] | loss: 2.8045
+Iteration [ 1940/50000] | loss: 2.8291
+Iteration [ 1950/50000] | loss: 2.8900
+Iteration [ 1960/50000] | loss: 2.9840
+Iteration [ 1970/50000] | loss: 2.7399
+Iteration [ 1980/50000] | loss: 2.7188
+Iteration [ 1990/50000] | loss: 2.6823
+Iteration [ 2000/50000] | loss: 2.6869
+Iteration [ 2010/50000] | loss: 3.0241
+Iteration [ 2020/50000] | loss: 2.5274
+Iteration [ 2030/50000] | loss: 2.5422
+Iteration [ 2040/50000] | loss: 2.8563
+Iteration [ 2050/50000] | loss: 2.6430
+Iteration [ 2060/50000] | loss: 2.4108
+Iteration [ 2070/50000] | loss: 2.8747
+Iteration [ 2080/50000] | loss: 2.7386
+Iteration [ 2090/50000] | loss: 2.7177
+Iteration [ 2100/50000] | loss: 2.6726
+Iteration [ 2110/50000] | loss: 2.8701
+Iteration [ 2120/50000] | loss: 2.8389
+Iteration [ 2130/50000] | loss: 3.2277
+Iteration [ 2140/50000] | loss: 2.9965
+Iteration [ 2150/50000] | loss: 3.0048
+Iteration [ 2160/50000] | loss: 2.5789
+Iteration [ 2170/50000] | loss: 2.5206
+Iteration [ 2180/50000] | loss: 2.8865
+Iteration [ 2190/50000] | loss: 2.6006
+Iteration [ 2200/50000] | loss: 2.6869
+Iteration [ 2210/50000] | loss: 2.8466
+Iteration [ 2220/50000] | loss: 2.5224
+Iteration [ 2230/50000] | loss: 2.4749
+Iteration [ 2240/50000] | loss: 3.0252
+Iteration [ 2250/50000] | loss: 2.8287
+Iteration [ 2260/50000] | loss: 2.6944
+Iteration [ 2270/50000] | loss: 2.9375
+Iteration [ 2280/50000] | loss: 2.8683
+Iteration [ 2290/50000] | loss: 2.5570
+Iteration [ 2300/50000] | loss: 2.7252
+Iteration [ 2310/50000] | loss: 2.5702
+Iteration [ 2320/50000] | loss: 2.7121
+Iteration [ 2330/50000] | loss: 2.7884
+Iteration [ 2340/50000] | loss: 2.7698
+Iteration [ 2350/50000] | loss: 2.6690
+Iteration [ 2360/50000] | loss: 2.6220
+Iteration [ 2370/50000] | loss: 2.6420
+Iteration [ 2380/50000] | loss: 2.6780
+Iteration [ 2390/50000] | loss: 2.7643
+Iteration [ 2400/50000] | loss: 2.7408
+Validation | loss: 2.6342
+Iteration [ 2410/50000] | loss: 2.5569
+Iteration [ 2420/50000] | loss: 2.9241
+Iteration [ 2430/50000] | loss: 2.9969
+Iteration [ 2440/50000] | loss: 2.5838
+Iteration [ 2450/50000] | loss: 2.4412
+Iteration [ 2460/50000] | loss: 2.7123
+Iteration [ 2470/50000] | loss: 2.5261
+Iteration [ 2480/50000] | loss: 2.4276
+Iteration [ 2490/50000] | loss: 3.0625
+Iteration [ 2500/50000] | loss: 3.0260
+Iteration [ 2510/50000] | loss: 2.5437
+Iteration [ 2520/50000] | loss: 2.7949
+Iteration [ 2530/50000] | loss: 2.6715
+Iteration [ 2540/50000] | loss: 2.8968
+Iteration [ 2550/50000] | loss: 2.4049
+Iteration [ 2560/50000] | loss: 2.5781
+Iteration [ 2570/50000] | loss: 2.7465
+Iteration [ 2580/50000] | loss: 2.4332
+Iteration [ 2590/50000] | loss: 2.4117
+Iteration [ 2600/50000] | loss: 2.7876
+Iteration [ 2610/50000] | loss: 2.6474
+Iteration [ 2620/50000] | loss: 2.4069
+Iteration [ 2630/50000] | loss: 2.7115
+Iteration [ 2640/50000] | loss: 2.1778
+Iteration [ 2650/50000] | loss: 2.5404
+Iteration [ 2660/50000] | loss: 2.6398
+Iteration [ 2670/50000] | loss: 2.4729
+Iteration [ 2680/50000] | loss: 2.8440
+Iteration [ 2690/50000] | loss: 2.7705
+Iteration [ 2700/50000] | loss: 3.0682
+Iteration [ 2710/50000] | loss: 2.7691
+Iteration [ 2720/50000] | loss: 2.7315
+Iteration [ 2730/50000] | loss: 3.1810
+Iteration [ 2740/50000] | loss: 3.0258
+Iteration [ 2750/50000] | loss: 2.3560
+Iteration [ 2760/50000] | loss: 2.7262
+Iteration [ 2770/50000] | loss: 2.7289
+Iteration [ 2780/50000] | loss: 2.5785
+Iteration [ 2790/50000] | loss: 2.4632
+Iteration [ 2800/50000] | loss: 3.0336
+Iteration [ 2810/50000] | loss: 2.3393
+Iteration [ 2820/50000] | loss: 2.8732
+Iteration [ 2830/50000] | loss: 2.8151
+Iteration [ 2840/50000] | loss: 2.5565
+Iteration [ 2850/50000] | loss: 2.5217
+Iteration [ 2860/50000] | loss: 2.6560
+Iteration [ 2870/50000] | loss: 2.6264
+Iteration [ 2880/50000] | loss: 2.7800
+Iteration [ 2890/50000] | loss: 2.6614
+Iteration [ 2900/50000] | loss: 2.8302
+Iteration [ 2910/50000] | loss: 2.4724
+Iteration [ 2920/50000] | loss: 2.9111
+Iteration [ 2930/50000] | loss: 2.4795
+Iteration [ 2940/50000] | loss: 2.7986
+Iteration [ 2950/50000] | loss: 2.4355
+Iteration [ 2960/50000] | loss: 2.5072
+Iteration [ 2970/50000] | loss: 2.6917
+Iteration [ 2980/50000] | loss: 2.4132
+Iteration [ 2990/50000] | loss: 2.7264
+Iteration [ 3000/50000] | loss: 2.2802
+Iteration [ 3010/50000] | loss: 2.2889
+Iteration [ 3020/50000] | loss: 2.6204
+Iteration [ 3030/50000] | loss: 2.7588
+Iteration [ 3040/50000] | loss: 2.6491
+Iteration [ 3050/50000] | loss: 2.7029
+Iteration [ 3060/50000] | loss: 3.0101
+Iteration [ 3070/50000] | loss: 2.8044
+Iteration [ 3080/50000] | loss: 2.7039
+Iteration [ 3090/50000] | loss: 2.7747
+Iteration [ 3100/50000] | loss: 2.6038
+Iteration [ 3110/50000] | loss: 2.8860
+Iteration [ 3120/50000] | loss: 2.3534
+Iteration [ 3130/50000] | loss: 2.5208
+Iteration [ 3140/50000] | loss: 2.4187
+Iteration [ 3150/50000] | loss: 2.8770
+Iteration [ 3160/50000] | loss: 2.4503
+Iteration [ 3170/50000] | loss: 2.6471
+Iteration [ 3180/50000] | loss: 2.3581
+Iteration [ 3190/50000] | loss: 2.6497
+Iteration [ 3200/50000] | loss: 2.7151
+Validation | loss: 2.5593
+Iteration [ 3210/50000] | loss: 2.5085
+Iteration [ 3220/50000] | loss: 2.5480
+Iteration [ 3230/50000] | loss: 2.4554
+Iteration [ 3240/50000] | loss: 2.7873
+Iteration [ 3250/50000] | loss: 2.7049
+Iteration [ 3260/50000] | loss: 2.7768
+Iteration [ 3270/50000] | loss: 2.7697
+Iteration [ 3280/50000] | loss: 2.4153
+Iteration [ 3290/50000] | loss: 2.6758
+Iteration [ 3300/50000] | loss: 2.9115
+Iteration [ 3310/50000] | loss: 2.7808
+Iteration [ 3320/50000] | loss: 2.6416
+Iteration [ 3330/50000] | loss: 2.7968
+Iteration [ 3340/50000] | loss: 2.3248
+Iteration [ 3350/50000] | loss: 2.4636
+Iteration [ 3360/50000] | loss: 2.4956
+Iteration [ 3370/50000] | loss: 2.5493
+Iteration [ 3380/50000] | loss: 2.4621
+Iteration [ 3390/50000] | loss: 2.7823
+Iteration [ 3400/50000] | loss: 2.6747
+Iteration [ 3410/50000] | loss: 2.4953
+Iteration [ 3420/50000] | loss: 2.8202
+Iteration [ 3430/50000] | loss: 2.5799
+Iteration [ 3440/50000] | loss: 2.6223
+Iteration [ 3450/50000] | loss: 2.6574
+Iteration [ 3460/50000] | loss: 2.6734
+Iteration [ 3470/50000] | loss: 2.5231
+Iteration [ 3480/50000] | loss: 2.7498
+Iteration [ 3490/50000] | loss: 2.4987
+Iteration [ 3500/50000] | loss: 2.4043
+Iteration [ 3510/50000] | loss: 2.5711
+Iteration [ 3520/50000] | loss: 2.5663
+Iteration [ 3530/50000] | loss: 2.5029
+Iteration [ 3540/50000] | loss: 2.4244
+Iteration [ 3550/50000] | loss: 2.3345
+Iteration [ 3560/50000] | loss: 2.9385
+Iteration [ 3570/50000] | loss: 2.5361
+Iteration [ 3580/50000] | loss: 2.1082
+Iteration [ 3590/50000] | loss: 2.7812
+Iteration [ 3600/50000] | loss: 2.8260
+Iteration [ 3610/50000] | loss: 2.7771
+Iteration [ 3620/50000] | loss: 2.4418
+Iteration [ 3630/50000] | loss: 2.9529
+Iteration [ 3640/50000] | loss: 2.7917
+Iteration [ 3650/50000] | loss: 3.0493
+Iteration [ 3660/50000] | loss: 2.6593
+Iteration [ 3670/50000] | loss: 2.5990
+Iteration [ 3680/50000] | loss: 3.1185
+Iteration [ 3690/50000] | loss: 2.7318
+Iteration [ 3700/50000] | loss: 2.6866
+Iteration [ 3710/50000] | loss: 2.5027
+Iteration [ 3720/50000] | loss: 2.3545
+Iteration [ 3730/50000] | loss: 2.4039
+Iteration [ 3740/50000] | loss: 2.7581
+Iteration [ 3750/50000] | loss: 2.4267
+Iteration [ 3760/50000] | loss: 2.2435
+Iteration [ 3770/50000] | loss: 2.7557
+Iteration [ 3780/50000] | loss: 2.4404
+Iteration [ 3790/50000] | loss: 2.4336
+Iteration [ 3800/50000] | loss: 2.4071
+Iteration [ 3810/50000] | loss: 1.9370
+Iteration [ 3820/50000] | loss: 2.6337
+Iteration [ 3830/50000] | loss: 2.3877
+Iteration [ 3840/50000] | loss: 2.3574
+Iteration [ 3850/50000] | loss: 2.5056
+Iteration [ 3860/50000] | loss: 2.4676
+Iteration [ 3870/50000] | loss: 2.3984
+Iteration [ 3880/50000] | loss: 2.6866
+Iteration [ 3890/50000] | loss: 2.4431
+Iteration [ 3900/50000] | loss: 2.3245
+Iteration [ 3910/50000] | loss: 2.5442
+Iteration [ 3920/50000] | loss: 2.6641
+Iteration [ 3930/50000] | loss: 2.7021
+Iteration [ 3940/50000] | loss: 2.7709
+Iteration [ 3950/50000] | loss: 2.6724
+Iteration [ 3960/50000] | loss: 2.2235
+Iteration [ 3970/50000] | loss: 2.3090
+Iteration [ 3980/50000] | loss: 2.4957
+Iteration [ 3990/50000] | loss: 2.7672
+Iteration [ 4000/50000] | loss: 2.7403
+Validation | loss: 2.5161
+Iteration [ 4010/50000] | loss: 2.4323
+Iteration [ 4020/50000] | loss: 2.7371
+Iteration [ 4030/50000] | loss: 2.8083
+Iteration [ 4040/50000] | loss: 2.4826
+Iteration [ 4050/50000] | loss: 2.3167
+Iteration [ 4060/50000] | loss: 2.7434
+Iteration [ 4070/50000] | loss: 2.5768
+Iteration [ 4080/50000] | loss: 2.5683
+Iteration [ 4090/50000] | loss: 2.5433
+Iteration [ 4100/50000] | loss: 2.7861
+Iteration [ 4110/50000] | loss: 2.6948
+Iteration [ 4120/50000] | loss: 2.6893
+Iteration [ 4130/50000] | loss: 2.3233
+Iteration [ 4140/50000] | loss: 2.3854
+Iteration [ 4150/50000] | loss: 1.9987
+Iteration [ 4160/50000] | loss: 2.6062
+Iteration [ 4170/50000] | loss: 2.8310
+Iteration [ 4180/50000] | loss: 2.6530
+Iteration [ 4190/50000] | loss: 2.8890
+Iteration [ 4200/50000] | loss: 2.7394
+Iteration [ 4210/50000] | loss: 2.4936
+Iteration [ 4220/50000] | loss: 2.8516
+Iteration [ 4230/50000] | loss: 2.7601
+Iteration [ 4240/50000] | loss: 2.5650
+Iteration [ 4250/50000] | loss: 2.4447
+Iteration [ 4260/50000] | loss: 2.4746
+Iteration [ 4270/50000] | loss: 2.7425
+Iteration [ 4280/50000] | loss: 2.5328
+Iteration/home/ubuntu/anaconda3/lib/python3.9/site-packages/torchvision/transforms/transforms.py:329: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
+  warnings.warn(
+/home/ubuntu/anaconda3/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/ubuntu/anaconda3/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+================================================================================
+                                      Opts                                      
+--------------------------------------------------------------------------------
+                             image_size: 128                                    
+                                   disc: dc                                     
+                                    gen: cycle                                  
+                             g_conv_dim: 32                                     
+                             d_conv_dim: 32                                     
+                                   norm: instance                               
+                              init_type: naive                                  
+                            train_iters: 50000                                  
+                             batch_size: 16                                     
+                            num_workers: 2                                      
+                                     lr: 0.0001                                 
+                                  beta1: 0.5                                    
+                                  beta2: 0.999                                  
+                           lambda_cycle: 10                                     
+                                      X: ..                                     
+                                    ext: *.png                                  
+                        data_preprocess: vanilla                                
+                        checkpoint_dir: checkpoints_pretrained_style_id         
+                    sample_dir: output/pretrained/.._10vanilla_instance_dc_cycle_naive
+                               log_step: 10                                     
+                           sample_every: 100                                    
+                       checkpoint_every: 800                                    
+                                    gpu: 0                                      
+================================================================================
+Loaded 393345 samples from ../labels
+Models moved to GPU.
+                 MODEL                
+---------------------------------------
+ResNet(
+  (conv1): Conv2d(3, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
+  (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (relu): ReLU(inplace=True)
+  (maxpool): MaxPool2d(kernel_size=3, stride=2, padding=1, dilation=1, ceil_mode=False)
+  (layer1): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer2): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(64, 128, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer3): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(128, 256, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (layer4): Sequential(
+    (0): BasicBlock(
+      (conv1): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (downsample): Sequential(
+        (0): Conv2d(256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False)
+        (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      )
+    )
+    (1): BasicBlock(
+      (conv1): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+  )
+  (avgpool): AdaptiveAvgPool2d(output_size=(1, 1))
+  (fc): Linear(in_features=512, out_features=31, bias=True)
+)
+---------------------------------------
+Loading checkpoint from checkpoints_pretrained_style_id/style_identifier_iter4000.pkl
+Iteration [ 4010/50000] | loss: 3.0161
+Iteration [ 4020/50000] | loss: 2.8988
+Iteration [ 4030/50000] | loss: 2.2397
+Iteration [ 4040/50000] | loss: 2.7876
+Iteration [ 4050/50000] | loss: 2.42

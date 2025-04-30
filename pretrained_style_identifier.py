@@ -196,12 +196,10 @@ def training_loop(dataloader_X, validation_loader, opts):
 
         # TRAIN THE DISCRIMINATORS
         # 1. Compute the discriminator losses on real images
-        out = model(images_X)
-        # loss_fn = nn.BCEWithLogitsLoss()
+        out = model(images_X) 
         loss_fn = nn.CrossEntropyLoss()
         l = labels.argmax(dim=1)  # convert one-hot to class indices
-        loss = loss_fn(out, l.long())
-        # loss = torch.mean((model(images_X) - labels) ** 2)
+        loss = loss_fn(out, l.long()) 
 
         # sum up the losses and update D_X and
         optimizer.zero_grad()
@@ -219,7 +217,7 @@ def training_loop(dataloader_X, validation_loader, opts):
                     opts.train_iters,
                     loss.item(),
                 )
-            )
+            ) 
         # Save the model parameters
         if iteration % opts.checkpoint_every == 0:
             checkpoint(iteration, model, optimizer, opts)
@@ -233,10 +231,10 @@ def training_loop(dataloader_X, validation_loader, opts):
                     val_images = utils.to_var(val_images)
                     val_labels = utils.to_var(val_labels)
 
-                    val_outputs = model(val_images)
-                    # loss_fn = nn.BCEWithLogitsLoss()
+                    val_outputs = model(val_images) 
                     loss_fn = nn.CrossEntropyLoss() 
                     l = val_labels.argmax(dim=1)  # convert one-hot to class indices
+ 
                     val_loss = loss_fn(val_outputs, l.long()) 
 
                     val_loss_total += val_loss.item()

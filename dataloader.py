@@ -60,10 +60,11 @@ class StyleImageDataset(Dataset):
         self.samples = []
 
         self._load_dataset(ext)
+        self.targets = [label for _, label in self.samples] 
         print(f"Loaded {len(self.samples)} samples from {self.label_dir}")
 
     def _load_dataset(self, ext):
-        i = 0 
+        # i = 0 
         json_files = glob.glob(os.path.join(self.label_dir, "*", "*", "*.json")) 
         for json_path in json_files:
             try:
@@ -86,8 +87,8 @@ class StyleImageDataset(Dataset):
                 continue
 
             self.samples.append((image_path, STYLE_TO_IDX[style]))
-            i+=1
-            if i>15: break 
+            # i+=1
+            # if i>15: break 
 
     def __len__(self):
         return len(self.samples)
@@ -127,6 +128,17 @@ def get_data_loader(data_path, opts):
             transforms.ToTensor(),
             transforms.Normalize((0.5,) * 3, (0.5,) * 3),
         ])
+    elif opts.data_preprocess == 'clip':
+        # based on clip github's preprocessing
+        transform = transforms.Compose([
+            transforms.Resize(224, interpolation=Image.BICUBIC),
+            transforms.CenterCrop(224),
+            transforms.ToTensor(),
+            transforms.Normalize(
+                mean=(0.48145466, 0.4578275, 0.40821073),
+                std=(0.26862954, 0.26130258, 0.27577711)
+            ),
+        ]) 
     else:
         raise ValueError(f"Unknown data_preprocess type: {opts.data_preprocess}")
 
@@ -134,13 +146,15 @@ def get_data_loader(data_path, opts):
 
     val_split = int(len(full_dataset) * 0.002)
     train_dataset, val_dataset = random_split(full_dataset, [len(full_dataset) - val_split, val_split])
-    sampler = _make_balanced_sampler(full_dataset.targets) # not sure if it should differ?? probably not
+    
+    train_targets = [full_dataset.targets[i] for i in train_dataset.indices]
+    train_sampler = _make_balanced_sampler(train_targets) 
     train_loader = DataLoader(
-        dataset=train_dataset, batch_size=opts.batch_size, sampler = sampler,
-        shuffle=True, num_workers=opts.num_workers
+        dataset=train_dataset, batch_size=opts.batch_size, sampler = train_sampler,
+        shuffle=False, num_workers=opts.num_workers
     ) 
     val_loader = DataLoader(
-        dataset=val_dataset, batch_size=opts.batch_size, sampler = sampler,
+        dataset=val_dataset, batch_size=opts.batch_size, 
         shuffle=False, num_workers=opts.num_workers
     )
 
@@ -167,8 +181,7 @@ def get_all_data_loader(data_path, opts):
         # based on clip github's preprocessing
         transform = transforms.Compose([
             transforms.Resize(224, interpolation=Image.BICUBIC),
-            transforms.CenterCrop(224),
-            transforms.Lambda(lambda img: img.convert("RGB")),
+            transforms.CenterCrop(224), 
             transforms.ToTensor(),
             transforms.Normalize(
                 mean=(0.48145466, 0.4578275, 0.40821073),
@@ -183,7 +196,7 @@ def get_all_data_loader(data_path, opts):
     
     full_loader = DataLoader(
         dataset=full_dataset, batch_size=opts.batch_size, sampler = sampler,
-        shuffle=True, num_workers=opts.num_workers
+        shuffle=False, num_workers=opts.num_workers
     )
 
     return full_loader

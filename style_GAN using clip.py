@@ -6,15 +6,13 @@
 #
 # Usage:
 # ======
-#    To train with the default hyperparamters:
-#       python cycle_gan.py
-#
-#    To train with cycle consistency loss:
-#       python cycle_gan.py --use_cycle_consistency_loss
-
+#   make sure to have this run first to have a trained style identifier:
+#   python pretrained_style_identifier.py
 #   To train with pertrained:
-#   python style_GAN.py --iden_checkpoint_dir checkpoints_pretrained_style_id --iden "pretrained"
+#   python 'style_GAN using clip.py' --iden_checkpoint_dir checkpoints_pretrained_style_id --iden pretrained
 #
+#   To train with clip:
+#   python 'style_GAN using clip.py' --iden clip --checkpoint_dir checkpoints_stylegan_clip
 #
 #    For optional experimentation:
 #    -----------------------------
@@ -105,20 +103,14 @@ def create_model(opts):
     if opts.iden == "clip":
         style_iden, _ = clip.load("ViT-B/32") # no preprocessing, will have the dataset do that ahead of time -- hopefully this doesn't interfere too much with gan input/output
 
-        # if torch.cuda.is_available():
-        #     G.cuda()
-        #     D.cuda()
-        #     model.cuda()
-        #     preprocess.cuda()
-        #     print("Models moved to GPU.")
+        if torch.cuda.is_available():
+            G.cuda()
+            D.cuda()
+            style_iden.cuda() 
+            print("Models moved to GPU.")
 
-        # style_iden = (model, preprocess)
-
-        # # image = preprocess(Image.open("CLIP.png")).unsqueeze(0).to(device)
-        # # text = clip.tokenize(["a diagram", "a dog", "a cat"]).to(device)
-
-        # print_models(G, D, style_iden)
-        # return G, D, style_iden, g_optimizer, d_optimizer
+        print_models(G, D, style_iden)
+        return G, D, style_iden, g_optimizer, d_optimizer
 
     elif opts.iden == "ours":
         style_iden = StyleIdentifier(conv_dim=opts.d_conv_dim, norm=opts.norm)
@@ -282,13 +274,14 @@ def training_loop(dataloader_X, opts):
     # Create generators and discriminators
     G, D, style_iden, g_optimizer, d_optimizer = create_model(opts)
     # preprocess = None
-    text_features = None
+    # text_features = None
+    text_tokens = None
 
     # if isinstance(style_iden, tuple):
     #     style_iden, preprocess = style_iden
     if opts.iden == "clip":
         text_tokens = utils.to_var(clip.tokenize(STYLE_CLASSES))
-        text_features = style_iden.encode_text(text_tokens)
+        # text_features = style_iden.encode_text(text_tokens)
 
     iter_X = iter(dataloader_X)
     iter_per_epoch = len(dataloader_X)
@@ -308,11 +301,15 @@ def training_loop(dataloader_X, opts):
         images, labels = (utils.to_var(images[0]), utils.to_var(images[1]))
         # image, label = (utils.to_var(fixed_X[0])[0].unsqueeze(0), utils.to_var(fixed_X[1])[0].unsqueeze(0))
 
-        if iteration == 1:
-            print(
-                torch.sigmoid(style_iden(images[0].unsqueeze(0))),
-                labels[0].unsqueeze(0),
-            )
+        if iteration == 1 and opts.iden == "clip": 
+            # image_features = style_iden.encode_image(images)
+            logits_per_image, logits_per_text = style_iden(
+                images, text_tokens)
+            
+            target_labels = torch.argmax(labels, dim=1) 
+            predicted_labels = (logits_per_image).argmax(dim=1) 
+            print(labels[:3], logits_per_image[:3])
+            print("Should predict",target_labels,"Predicted",predicted_labels )
 
         # TRAIN THE DISCRIMINATORS
         # 1. Compute the discriminator losses on real images
@@ -468,7 +465,7 @@ def create_parser():
     parser.add_argument("--X", type=str, default="..")
     parser.add_argument("--ext", type=str, default="*.png")
     parser.add_argument("--use_diffaug", action="store_true")
-    parser.add_argument("--data_preprocess", type=str, default="vanilla")
+    parser.add_argument("--data_preprocess", type=str, default="vanilla") 
 
     # Saving directories and checkpoint/sample iterations
     parser.add_argument("--checkpoint_dir", default="checkpoints_stylegan")
@@ -490,10 +487,13 @@ if __name__ == "__main__":
     opts.sample_dir = os.path.join(
         "output/", opts.sample_dir, "%s_%g" % (opts.X.split("/")[0], opts.lambda_cycle)
     )
-    if opts.style_iden == "clip":
-        opts.preprocess = "clip"
+    if opts.iden == "clip":
+        print("Using CLIP preprocessing + changing image size to 224")
+        opts.data_preprocess = "clip"
+        opts.image_size = 224
+        opts.batch_size = 8
     opts.sample_dir += "%s_%s_%s_%s_%s" % (
-        opts.style_iden,
+        opts.iden,
         opts.norm,
         opts.disc,
         opts.gen,
