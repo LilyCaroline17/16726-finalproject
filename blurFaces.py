@@ -89,7 +89,7 @@ if __name__ == "__main__":
     class Opts:
         g_conv_dim = 64
         norm = 'instance'
-        checkpoint_dir = 'checkpoints_stylegan_cycle10_style1/10000itr/'
+        checkpoint_dir = 'checkpoints_stylegan/10000itr/'
 
     opts = Opts()
     generator = load_generator(opts.checkpoint_dir, opts)
