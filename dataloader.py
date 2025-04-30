@@ -4,9 +4,11 @@ import json
 
 from PIL import Image
 from torch.utils.data import Dataset, DataLoader
+from torch.utils.data.sampler import WeightedRandomSampler
 from torchvision import transforms
 import torch
 from torch.utils.data import random_split
+import numpy as np
 
 # Sample usage:
 # get_data_loader(data_path, opts)
@@ -101,6 +103,12 @@ class StyleImageDataset(Dataset):
 
         return image, label
 
+# from stargan
+def _make_balanced_sampler(labels):
+    class_counts = np.bincount(labels)
+    class_weights = 1. / class_counts
+    weights = class_weights[labels]
+    return WeightedRandomSampler(weights, len(weights))
 
 def get_data_loader(data_path, opts):
     """Creates DataLoader with image + style vector"""
@@ -126,13 +134,13 @@ def get_data_loader(data_path, opts):
 
     val_split = int(len(full_dataset) * 0.002)
     train_dataset, val_dataset = random_split(full_dataset, [len(full_dataset) - val_split, val_split])
-    
+    sampler = _make_balanced_sampler(full_dataset.targets) # not sure if it should differ?? probably not
     train_loader = DataLoader(
-        dataset=train_dataset, batch_size=opts.batch_size,
+        dataset=train_dataset, batch_size=opts.batch_size, sampler = sampler,
         shuffle=True, num_workers=opts.num_workers
-    )
+    ) 
     val_loader = DataLoader(
-        dataset=val_dataset, batch_size=opts.batch_size,
+        dataset=val_dataset, batch_size=opts.batch_size, sampler = sampler,
         shuffle=False, num_workers=opts.num_workers
     )
 
@@ -159,9 +167,10 @@ def get_all_data_loader(data_path, opts):
         raise ValueError(f"Unknown data_preprocess type: {opts.data_preprocess}")
 
     full_dataset = StyleImageDataset(data_path, opts.ext, transform)
+    sampler = _make_balanced_sampler(full_dataset.targets)
     
     full_loader = DataLoader(
-        dataset=full_dataset, batch_size=opts.batch_size,
+        dataset=full_dataset, batch_size=opts.batch_size, sampler = sampler
         shuffle=True, num_workers=opts.num_workers
     )
 
