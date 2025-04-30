@@ -1,22 +1,19 @@
 /home/ubuntu/anaconda3/lib/python3.9/site-packages/torchvision/transforms/transforms.py:329: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
   warnings.warn(
-/home/ubuntu/anaconda3/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
-  warnings.warn(
-/home/ubuntu/anaconda3/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
-  warnings.warn(msg)
+Using CLIP preprocessing + changing image size to 224
 ================================================================================
                                       Opts                                      
 --------------------------------------------------------------------------------
-                             image_size: 128                                    
+                             image_size: 224                                    
                                    disc: dc                                     
                                     gen: cycle                                  
-                                   iden: pretrained                             
+                                   iden: clip                                   
                              g_conv_dim: 32                                     
                              d_conv_dim: 32                                     
                                    norm: instance                               
                               init_type: naive                                  
                             train_iters: 10000                                  
-                             batch_size: 16                                     
+                             batch_size: 8                                      
                             num_workers: 2                                      
                                      lr: 0.0003                                 
                                   beta1: 0.5                                    
@@ -25,19 +22,18 @@
                            lambda_style: 10                                     
                                       X: ..                                     
                                     ext: *.png                                  
-                        data_preprocess: vanilla                                
-                         checkpoint_dir: checkpoints_stylegan                   
-                   iden_checkpoint_dir: checkpoints_pretrained_style_id         
-                    sample_dir: output/cyclegan/.._10vanilla_instance_dc_cycle_naive
+                        data_preprocess: clip                                   
+                         checkpoint_dir: checkpoints_stylegan_clip              
+                    iden_checkpoint_dir: checkpoints_cyclegan                   
+                    sample_dir: output/cyclegan/.._10clip_instance_dc_cycle_naive
                                log_step: 10                                     
-                           sample_every: 100                                    
+                           sample_every: 500                                    
                        checkpoint_every: 1000                                   
                                     gpu: 0                                      
 ================================================================================
 Loaded 393345 samples from ../labels
+No checkpoint found, initializing new models.
 Models moved to GPU.
-Loading Style Identifier from checkpoints_pretrained_style_id/style_identifier_iter49600.pkl
-No checkpoint found, initializing new models.
                  G                
 ---------------------------------------
 Generator(
@@ -133,596 +129,595 @@ Discriminator(
 ---------------------------------------
                   style_identifier                  
 ---------------------------------------
-ResNet(
-  (conv1): Conv2d(3, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
-  (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-  (relu): ReLU(inplace=True)
-  (maxpool): MaxPool2d(kernel_size=3, stride=2, padding=1, dilation=1, ceil_mode=False)
-  (layer1): Sequential(
-    (0): BasicBlock(
-      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-    )
-    (1): BasicBlock(
-      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-    )
-  )
-  (layer2): Sequential(
-    (0): BasicBlock(
-      (conv1): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (downsample): Sequential(
-        (0): Conv2d(64, 128, kernel_size=(1, 1), stride=(2, 2), bias=False)
-        (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+CLIP(
+  (visual): VisionTransformer(
+    (conv1): Conv2d(3, 768, kernel_size=(32, 32), stride=(32, 32), bias=False)
+    (ln_pre): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+    (transformer): Transformer(
+      (resblocks): Sequential(
+        (0): ResidualAttentionBlock(
+          (attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+          )
+          (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          (mlp): Sequential(
+            (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+            (gelu): QuickGELU()
+            (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+          )
+          (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        )
+        (1): ResidualAttentionBlock(
+          (attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+          )
+          (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          (mlp): Sequential(
+            (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+            (gelu): QuickGELU()
+            (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+          )
+          (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        )
+        (2): ResidualAttentionBlock(
+          (attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+          )
+          (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          (mlp): Sequential(
+            (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+            (gelu): QuickGELU()
+            (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+          )
+          (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        )
+        (3): ResidualAttentionBlock(
+          (attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+          )
+          (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          (mlp): Sequential(
+            (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+            (gelu): QuickGELU()
+            (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+          )
+          (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        )
+        (4): ResidualAttentionBlock(
+          (attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+          )
+          (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          (mlp): Sequential(
+            (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+            (gelu): QuickGELU()
+            (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+          )
+          (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        )
+        (5): ResidualAttentionBlock(
+          (attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+          )
+          (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          (mlp): Sequential(
+            (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+            (gelu): QuickGELU()
+            (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+          )
+          (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        )
+        (6): ResidualAttentionBlock(
+          (attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+          )
+          (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          (mlp): Sequential(
+            (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+            (gelu): QuickGELU()
+            (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+          )
+          (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        )
+        (7): ResidualAttentionBlock(
+          (attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+          )
+          (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          (mlp): Sequential(
+            (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+            (gelu): QuickGELU()
+            (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+          )
+          (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        )
+        (8): ResidualAttentionBlock(
+          (attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+          )
+          (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          (mlp): Sequential(
+            (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+            (gelu): QuickGELU()
+            (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+          )
+          (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        )
+        (9): ResidualAttentionBlock(
+          (attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+          )
+          (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          (mlp): Sequential(
+            (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+            (gelu): QuickGELU()
+            (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+          )
+          (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        )
+        (10): ResidualAttentionBlock(
+          (attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+          )
+          (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          (mlp): Sequential(
+            (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+            (gelu): QuickGELU()
+            (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+          )
+          (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        )
+        (11): ResidualAttentionBlock(
+          (attn): MultiheadAttention(
+            (out_proj): NonDynamicallyQuantizableLinear(in_features=768, out_features=768, bias=True)
+          )
+          (ln_1): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+          (mlp): Sequential(
+            (c_fc): Linear(in_features=768, out_features=3072, bias=True)
+            (gelu): QuickGELU()
+            (c_proj): Linear(in_features=3072, out_features=768, bias=True)
+          )
+          (ln_2): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
+        )
       )
     )
-    (1): BasicBlock(
-      (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-    )
+    (ln_post): LayerNorm((768,), eps=1e-05, elementwise_affine=True)
   )
-  (layer3): Sequential(
-    (0): BasicBlock(
-      (conv1): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (downsample): Sequential(
-        (0): Conv2d(128, 256, kernel_size=(1, 1), stride=(2, 2), bias=False)
-        (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (transformer): Transformer(
+    (resblocks): Sequential(
+      (0): ResidualAttentionBlock(
+        (attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=512, out_features=512, bias=True)
+        )
+        (ln_1): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (mlp): Sequential(
+          (c_fc): Linear(in_features=512, out_features=2048, bias=True)
+          (gelu): QuickGELU()
+          (c_proj): Linear(in_features=2048, out_features=512, bias=True)
+        )
+        (ln_2): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+      )
+      (1): ResidualAttentionBlock(
+        (attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=512, out_features=512, bias=True)
+        )
+        (ln_1): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (mlp): Sequential(
+          (c_fc): Linear(in_features=512, out_features=2048, bias=True)
+          (gelu): QuickGELU()
+          (c_proj): Linear(in_features=2048, out_features=512, bias=True)
+        )
+        (ln_2): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+      )
+      (2): ResidualAttentionBlock(
+        (attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=512, out_features=512, bias=True)
+        )
+        (ln_1): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (mlp): Sequential(
+          (c_fc): Linear(in_features=512, out_features=2048, bias=True)
+          (gelu): QuickGELU()
+          (c_proj): Linear(in_features=2048, out_features=512, bias=True)
+        )
+        (ln_2): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+      )
+      (3): ResidualAttentionBlock(
+        (attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=512, out_features=512, bias=True)
+        )
+        (ln_1): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (mlp): Sequential(
+          (c_fc): Linear(in_features=512, out_features=2048, bias=True)
+          (gelu): QuickGELU()
+          (c_proj): Linear(in_features=2048, out_features=512, bias=True)
+        )
+        (ln_2): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+      )
+      (4): ResidualAttentionBlock(
+        (attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=512, out_features=512, bias=True)
+        )
+        (ln_1): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (mlp): Sequential(
+          (c_fc): Linear(in_features=512, out_features=2048, bias=True)
+          (gelu): QuickGELU()
+          (c_proj): Linear(in_features=2048, out_features=512, bias=True)
+        )
+        (ln_2): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+      )
+      (5): ResidualAttentionBlock(
+        (attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=512, out_features=512, bias=True)
+        )
+        (ln_1): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (mlp): Sequential(
+          (c_fc): Linear(in_features=512, out_features=2048, bias=True)
+          (gelu): QuickGELU()
+          (c_proj): Linear(in_features=2048, out_features=512, bias=True)
+        )
+        (ln_2): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+      )
+      (6): ResidualAttentionBlock(
+        (attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=512, out_features=512, bias=True)
+        )
+        (ln_1): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (mlp): Sequential(
+          (c_fc): Linear(in_features=512, out_features=2048, bias=True)
+          (gelu): QuickGELU()
+          (c_proj): Linear(in_features=2048, out_features=512, bias=True)
+        )
+        (ln_2): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+      )
+      (7): ResidualAttentionBlock(
+        (attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=512, out_features=512, bias=True)
+        )
+        (ln_1): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (mlp): Sequential(
+          (c_fc): Linear(in_features=512, out_features=2048, bias=True)
+          (gelu): QuickGELU()
+          (c_proj): Linear(in_features=2048, out_features=512, bias=True)
+        )
+        (ln_2): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+      )
+      (8): ResidualAttentionBlock(
+        (attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=512, out_features=512, bias=True)
+        )
+        (ln_1): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (mlp): Sequential(
+          (c_fc): Linear(in_features=512, out_features=2048, bias=True)
+          (gelu): QuickGELU()
+          (c_proj): Linear(in_features=2048, out_features=512, bias=True)
+        )
+        (ln_2): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+      )
+      (9): ResidualAttentionBlock(
+        (attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=512, out_features=512, bias=True)
+        )
+        (ln_1): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (mlp): Sequential(
+          (c_fc): Linear(in_features=512, out_features=2048, bias=True)
+          (gelu): QuickGELU()
+          (c_proj): Linear(in_features=2048, out_features=512, bias=True)
+        )
+        (ln_2): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+      )
+      (10): ResidualAttentionBlock(
+        (attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=512, out_features=512, bias=True)
+        )
+        (ln_1): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (mlp): Sequential(
+          (c_fc): Linear(in_features=512, out_features=2048, bias=True)
+          (gelu): QuickGELU()
+          (c_proj): Linear(in_features=2048, out_features=512, bias=True)
+        )
+        (ln_2): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+      )
+      (11): ResidualAttentionBlock(
+        (attn): MultiheadAttention(
+          (out_proj): NonDynamicallyQuantizableLinear(in_features=512, out_features=512, bias=True)
+        )
+        (ln_1): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
+        (mlp): Sequential(
+          (c_fc): Linear(in_features=512, out_features=2048, bias=True)
+          (gelu): QuickGELU()
+          (c_proj): Linear(in_features=2048, out_features=512, bias=True)
+        )
+        (ln_2): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
       )
     )
-    (1): BasicBlock(
-      (conv1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-    )
   )
-  (layer4): Sequential(
-    (0): BasicBlock(
-      (conv1): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (downsample): Sequential(
-        (0): Conv2d(256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False)
-        (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      )
-    )
-    (1): BasicBlock(
-      (conv1): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-    )
-  )
-  (avgpool): AdaptiveAvgPool2d(output_size=(1, 1))
-  (fc): Linear(in_features=512, out_features=31, bias=True)
+  (token_embedding): Embedding(49408, 512)
+  (ln_final): LayerNorm((512,), eps=1e-05, elementwise_affine=True)
 )
 ---------------------------------------
-Iteration [    0/10000] | d_real_loss: 1.0706 | d_fake_loss: 0.1285 | d_total_loss: 1.1991 |  g_loss: 0.1654
-Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-000000.png
-Iteration [   10/10000] | d_real_loss: 0.1852 | d_fake_loss: 0.2549 | d_total_loss: 0.4401 |  g_loss: 1.0031
-Iteration [   20/10000] | d_real_loss: 0.4024 | d_fake_loss: 0.1532 | d_total_loss: 0.5556 |  g_loss: 0.4394
-Iteration [   30/10000] | d_real_loss: 0.2287 | d_fake_loss: 0.2935 | d_total_loss: 0.5221 |  g_loss: 0.4632
-Iteration [   40/10000] | d_real_loss: 0.3136 | d_fake_loss: 0.2009 | d_total_loss: 0.5145 |  g_loss: 0.4203
-Iteration [   50/10000] | d_real_loss: 0.3610 | d_fake_loss: 0.1800 | d_total_loss: 0.5410 |  g_loss: 0.3780
-Iteration [   60/10000] | d_real_loss: 0.1535 | d_fake_loss: 0.3931 | d_total_loss: 0.5466 |  g_loss: 0.5694
-Iteration [   70/10000] | d_real_loss: 0.3784 | d_fake_loss: 0.1674 | d_total_loss: 0.5458 |  g_loss: 0.2698
-Iteration [   80/10000] | d_real_loss: 0.3017 | d_fake_loss: 0.1721 | d_total_loss: 0.4738 |  g_loss: 0.3401
-Iteration [   90/10000] | d_real_loss: 0.2127 | d_fake_loss: 0.2580 | d_total_loss: 0.4707 |  g_loss: 0.3945
-Iteration [  100/10000] | d_real_loss: 0.2702 | d_fake_loss: 0.2109 | d_total_loss: 0.4811 |  g_loss: 0.3721
-Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-000100.png
-Iteration [  110/10000] | d_real_loss: 0.1871 | d_fake_loss: 0.3001 | d_total_loss: 0.4873 |  g_loss: 0.5270
-Iteration [  120/10000] | d_real_loss: 0.2253 | d_fake_loss: 0.2434 | d_total_loss: 0.4687 |  g_loss: 0.3607
-Iteration [  130/10000] | d_real_loss: 0.2412 | d_fake_loss: 0.2345 | d_total_loss: 0.4757 |  g_loss: 0.3836
-Iteration [  140/10000] | d_real_loss: 0.2471 | d_fake_loss: 0.1976 | d_total_loss: 0.4447 |  g_loss: 0.3080
-Iteration [  150/10000] | d_real_loss: 0.1721 | d_fake_loss: 0.2869 | d_total_loss: 0.4590 |  g_loss: 0.5362
-Iteration [  160/10000] | d_real_loss: 0.1035 | d_fake_loss: 0.3671 | d_total_loss: 0.4706 |  g_loss: 0.8992
-Iteration [  170/10000] | d_real_loss: 0.1773 | d_fake_loss: 0.2253 | d_total_loss: 0.4026 |  g_loss: 0.3580
-Iteration [  180/10000] | d_real_loss: 0.5160 | d_fake_loss: 0.0831 | d_total_loss: 0.5991 |  g_loss: 0.1430
-Iteration [  190/10000] | d_real_loss: 0.2302 | d_fake_loss: 0.1743 | d_total_loss: 0.4046 |  g_loss: 0.4363
-Iteration [  200/10000] | d_real_loss: 0.1683 | d_fake_loss: 0.2512 | d_total_loss: 0.4195 |  g_loss: 0.3916
-Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-000200.png
-Iteration [  210/10000] | d_real_loss: 0.1254 | d_fake_loss: 0.3345 | d_total_loss: 0.4599 |  g_loss: 0.6694
-Iteration [  220/10000] | d_real_loss: 0.1437 | d_fake_loss: 0.3308 | d_total_loss: 0.4744 |  g_loss: 0.6383
-Iteration [  230/10000] | d_real_loss: 0.3607 | d_fake_loss: 0.0693 | d_total_loss: 0.4300 |  g_loss: 0.2335
-Iteration [  240/10000] | d_real_loss: 0.1202 | d_fake_loss: 0.2938 | d_total_loss: 0.4139 |  g_loss: 0.8347
-Iteration [  250/10000] | d_real_loss: 0.1750 | d_fake_loss: 0.2433 | d_total_loss: 0.4183 |  g_loss: 0.3596
-Iteration [  260/10000] | d_real_loss: 0.4128 | d_fake_loss: 0.0606 | d_total_loss: 0.4734 |  g_loss: 0.1451
-Iteration [  270/10000] | d_real_loss: 0.2554 | d_fake_loss: 0.1573 | d_total_loss: 0.4127 |  g_loss: 0.3546
-Iteration [  280/10000] | d_real_loss: 0.1987 | d_fake_loss: 0.2607 | d_total_loss: 0.4594 |  g_loss: 0.4418
-Iteration [  290/10000] | d_real_loss: 0.2496 | d_fake_loss: 0.2290 | d_total_loss: 0.4786 |  g_loss: 0.4461
-Iteration [  300/10000] | d_real_loss: 0.2354 | d_fake_loss: 0.2086 | d_total_loss: 0.4439 |  g_loss: 0.4271
-Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-000300.png
-Iteration [  310/10000] | d_real_loss: 0.3562 | d_fake_loss: 0.0826 | d_total_loss: 0.4388 |  g_loss: 0.2372
-Iteration [  320/10000] | d_real_loss: 0.3941 | d_fake_loss: 0.0890 | d_total_loss: 0.4831 |  g_loss: 0.2009
-Iteration [  330/10000] | d_real_loss: 0.1038 | d_fake_loss: 0.4306 | d_total_loss: 0.5344 |  g_loss: 0.6221
-Iteration [  340/10000] | d_real_loss: 0.4663 | d_fake_loss: 0.0576 | d_total_loss: 0.5239 |  g_loss: 0.1785
-Iteration [  350/10000] | d_real_loss: 0.2299 | d_fake_loss: 0.2007 | d_total_loss: 0.4306 |  g_loss: 0.5025
-Iteration [  360/10000] | d_real_loss: 0.1272 | d_fake_loss: 0.3590 | d_total_loss: 0.4862 |  g_loss: 0.7259
-Iteration [  370/10000] | d_real_loss: 0.0681 | d_fake_loss: 0.3965 | d_total_loss: 0.4646 |  g_loss: 0.8016
-Iteration [  380/10000] | d_real_loss: 0.2371 | d_fake_loss: 0.1124 | d_total_loss: 0.3495 |  g_loss: 0.4316
-Iteration [  390/10000] | d_real_loss: 0.3160 | d_fake_loss: 0.0972 | d_total_loss: 0.4132 |  g_loss: 0.3489
-Iteration [  400/10000] | d_real_loss: 0.3818 | d_fake_loss: 0.1838 | d_total_loss: 0.5656 |  g_loss: 0.3442
-Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-000400.png
-Iteration [  410/10000] | d_real_loss: 0.3864 | d_fake_loss: 0.0978 | d_total_loss: 0.4841 |  g_loss: 0.2708
-Iteration [  420/10000] | d_real_loss: 0.1315 | d_fake_loss: 0.3167 | d_total_loss: 0.4482 |  g_loss: 0.6094
-Iteration [  430/10000] | d_real_loss: 0.0813 | d_fake_loss: 0.4741 | d_total_loss: 0.5555 |  g_loss: 0.9434
-Iteration [  440/10000] | d_real_loss: 0.2413 | d_fake_loss: 0.1968 | d_total_loss: 0.4381 |  g_loss: 0.4102
-Iteration [  450/10000] | d_real_loss: 0.3314 | d_fake_loss: 0.1881 | d_total_loss: 0.5195 |  g_loss: 0.2944
-Iteration [  460/10000] | d_real_loss: 0.1869 | d_fake_loss: 0.2405 | d_total_loss: 0.4274 |  g_loss: 0.5875
-Iteration [  470/10000] | d_real_loss: 0.1543 | d_fake_loss: 0.2633 | d_total_loss: 0.4177 |  g_loss: 0.6181
-Iteration [  480/10000] | d_real_loss: 0.2410 | d_fake_loss: 0.1798 | d_total_loss: 0.4208 |  g_loss: 0.3251
-Iteration [  490/10000] | d_real_loss: 0.1736 | d_fake_loss: 0.2417 | d_total_loss: 0.4153 |  g_loss: 0.5932
-Iteration [  500/10000] | d_real_loss: 0.3559 | d_fake_loss: 0.1001 | d_total_loss: 0.4560 |  g_loss: 0.2443
-Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-000500.png
-Iteration [  510/10000] | d_real_loss: 0.3400 | d_fake_loss: 0.1184 | d_total_loss: 0.4584 |  g_loss: 0.2598
-Iteration [  520/10000] | d_real_loss: 0.4025 | d_fake_loss: 0.1033 | d_total_loss: 0.5058 |  g_loss: 0.3061
-Iteration [  530/10000] | d_real_loss: 0.2837 | d_fake_loss: 0.2068 | d_total_loss: 0.4905 |  g_loss: 0.3788
-Iteration [  540/10000] | d_real_loss: 0.3724 | d_fake_loss: 0.1211 | d_total_loss: 0.4934 |  g_loss: 0.3908
-Iteration [  550/10000] | d_real_loss: 0.3558 | d_fake_loss: 0.0944 | d_total_loss: 0.4502 |  g_loss: 0.2950
-Iteration [  560/10000] | d_real_loss: 0.3798 | d_fake_loss: 0.0847 | d_total_loss: 0.4645 |  g_loss: 0.1630
-Iteration [  570/10000] | d_real_loss: 0.3080 | d_fake_loss: 0.1262 | d_total_loss: 0.4343 |  g_loss: 0.3019
-Iteration [  580/10000] | d_real_loss: 0.2637 | d_fake_loss: 0.1597 | d_total_loss: 0.4234 |  g_loss: 0.3050
-Iteration [  590/10000] | d_real_loss: 0.2916 | d_fake_loss: 0.1247 | d_total_loss: 0.4163 |  g_loss: 0.3082
-Iteration [  600/10000] | d_real_loss: 0.2388 | d_fake_loss: 0.2050 | d_total_loss: 0.4438 |  g_loss: 0.4108
-Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-000600.png
-Iteration [  610/10000] | d_real_loss: 0.1946 | d_fake_loss: 0.1771 | d_total_loss: 0.3717 |  g_loss: 0.4769
-Iteration [  620/10000] | d_real_loss: 0.2290 | d_fake_loss: 0.1593 | d_total_loss: 0.3883 |  g_loss: 0.2994
-Iteration [  630/10000] | d_real_loss: 0.0425 | d_fake_loss: 0.6642 | d_total_loss: 0.7067 |  g_loss: 1.1380
-Iteration [  640/10000] | d_real_loss: 0.2306 | d_fake_loss: 0.1773 | d_total_loss: 0.4079 |  g_loss: 0.4443
-Iteration [  650/10000] | d_real_loss: 0.3160 | d_fake_loss: 0.1170 | d_total_loss: 0.4330 |  g_loss: 0.2081
-Iteration [  660/10000] | d_real_loss: 0.1881 | d_fake_loss: 0.1946 | d_total_loss: 0.3827 |  g_loss: 0.5253
-Iteration [  670/10000] | d_real_loss: 0.0680 | d_fake_loss: 0.3388 | d_total_loss: 0.4069 |  g_loss: 0.6686
-Iteration [  680/10000] | d_real_loss: 0.1325 | d_fake_loss: 0.2772 | d_total_loss: 0.4097 |  g_loss: 0.5766
-Iteration [  690/10000] | d_real_loss: 0.3365 | d_fake_loss: 0.1943 | d_total_loss: 0.5308 |  g_loss: 0.3913
-Iteration [  700/10000] | d_real_loss: 0.1369 | d_fake_loss: 0.2405 | d_total_loss: 0.3775 |  g_loss: 0.4395
-Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-000700.png
-Iteration [  710/10000] | d_real_loss: 0.1937 | d_fake_loss: 0.1763 | d_total_loss: 0.3700 |  g_loss: 0.4797
-Iteration [  720/10000] | d_real_loss: 0.3086 | d_fake_loss: 0.0919 | d_total_loss: 0.4004 |  g_loss: 0.3539
-Iteration [  730/10000] | d_real_loss: 0.2543 | d_fake_loss: 0.1398 | d_total_loss: 0.3941 |  g_loss: 0.3168
-Iteration [  740/10000] | d_real_loss: 0.3072 | d_fake_loss: 0.1165 | d_total_loss: 0.4238 |  g_loss: 0.2788
-Iteration [  750/10000] | d_real_loss: 0.3118 | d_fake_loss: 0.1623 | d_total_loss: 0.4741 |  g_loss: 0.3835
-Iteration [  760/10000] | d_real_loss: 0.1543 | d_fake_loss: 0.2448 | d_total_loss: 0.3991 |  g_loss: 0.5248
-Iteration [  770/10000] | d_real_loss: 0.3136 | d_fake_loss: 0.1451 | d_total_loss: 0.4587 |  g_loss: 0.3234
-Iteration [  780/10000] | d_real_loss: 0.2535 | d_fake_loss: 0.1449 | d_total_loss: 0.3984 |  g_loss: 0.3913
-Iteration [  790/10000] | d_real_loss: 0.0999 | d_fake_loss: 0.2904 | d_total_loss: 0.3903 |  g_loss: 0.6726
-Iteration [  800/10000] | d_real_loss: 0.4868 | d_fake_loss: 0.0565 | d_total_loss: 0.5433 |  g_loss: 0.2636
-Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-000800.png
-Iteration [  810/10000] | d_real_loss: 0.1746 | d_fake_loss: 0.3333 | d_total_loss: 0.5078 |  g_loss: 0.4970
-Iteration [  820/10000] | d_real_loss: 0.1207 | d_fake_loss: 0.2814 | d_total_loss: 0.4021 |  g_loss: 0.7877
-Iteration [  830/10000] | d_real_loss: 0.1121 | d_fake_loss: 0.3270 | d_total_loss: 0.4391 |  g_loss: 0.7139
-Iteration [  840/10000] | d_real_loss: 0.3111 | d_fake_loss: 0.1221 | d_total_loss: 0.4332 |  g_loss: 0.2926
-Iteration [  850/10000] | d_real_loss: 0.3140 | d_fake_loss: 0.0969 | d_total_loss: 0.4109 |  g_loss: 0.3620
-Iteration [  860/10000] | d_real_loss: 0.4879 | d_fake_loss: 0.0972 | d_total_loss: 0.5851 |  g_loss: 0.1483
-Iteration [  870/10000] | d_real_loss: 0.1617 | d_fake_loss: 0.2367 | d_total_loss: 0.3983 |  g_loss: 0.5052
-Iteration [  880/10000] | d_real_loss: 0.1383 | d_fake_loss: 0.3344 | d_total_loss: 0.4727 |  g_loss: 0.8225
-Iteration [  890/10000] | d_real_loss: 0.2417 | d_fake_loss: 0.1526 | d_total_loss: 0.3943 |  g_loss: 0.3349
-Iteration [  900/10000] | d_real_loss: 0.1668 | d_fake_loss: 0.2253 | d_total_loss: 0.3920 |  g_loss: 0.5298
-Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-000900.png
-Iteration [  910/10000] | d_real_loss: 0.2489 | d_fake_loss: 0.1562 | d_total_loss: 0.4051 |  g_loss: 0.3886
-Iteration [  920/10000] | d_real_loss: 0.3985 | d_fake_loss: 0.0716 | d_total_loss: 0.4702 |  g_loss: 0.2063
-Iteration [  930/10000] | d_real_loss: 0.2515 | d_fake_loss: 0.1482 | d_total_loss: 0.3997 |  g_loss: 0.4049
-Iteration [  940/10000] | d_real_loss: 0.2528 | d_fake_loss: 0.1752 | d_total_loss: 0.4281 |  g_loss: 0.3912
-Iteration [  950/10000] | d_real_loss: 0.5089 | d_fake_loss: 0.0780 | d_total_loss: 0.5869 |  g_loss: 0.2570
-Iteration [  960/10000] | d_real_loss: 0.1304 | d_fake_loss: 0.2231 | d_total_loss: 0.3535 |  g_loss: 0.6677
-Iteration [  970/10000] | d_real_loss: 0.1830 | d_fake_loss: 0.2088 | d_total_loss: 0.3917 |  g_loss: 0.4329
-Iteration [  980/10000] | d_real_loss: 0.1771 | d_fake_loss: 0.2060 | d_total_loss: 0.3831 |  g_loss: 0.5738
-Iteration [  990/10000] | d_real_loss: 0.2474 | d_fake_loss: 0.2302 | d_total_loss: 0.4776 |  g_loss: 0.4680
-Iteration [ 1000/10000] | d_real_loss: 0.3308 | d_fake_loss: 0.0791 | d_total_loss: 0.4099 |  g_loss: 0.2521
-Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-001000.png
-Iteration [ 1010/10000] | d_real_loss: 0.5363 | d_fake_loss: 0.0594 | d_total_loss: 0.5957 |  g_loss: 0.1759
-Iteration [ 1020/10000] | d_real_loss: 0.2988 | d_fake_loss: 0.1347 | d_total_loss: 0.4336 |  g_loss: 0.3952
-Iteration [ 1030/10000] | d_real_loss: 0.0947 | d_fake_loss: 0.3139 | d_total_loss: 0.4087 |  g_loss: 0.7595
-Iteration [ 1040/10000] | d_real_loss: 0.1325 | d_fake_loss: 0.2814 | d_total_loss: 0.4139 |  g_loss: 0.5520
-Iteration [ 1050/10000] | d_real_loss: 0.3125 | d_fake_loss: 0.1208 | d_total_loss: 0.4333 |  g_loss: 0.4109
-Iteration [ 1060/10000] | d_real_loss: 0.1523 | d_fake_loss: 0.2748 | d_total_loss: 0.4271 |  g_loss: 0.5330
-Iteration [ 1070/10000] | d_real_loss: 0.1380 | d_fake_loss: 0.2606 | d_total_loss: 0.3986 |  g_loss: 0.7524
-Iteration [ 1080/10000] | d_real_loss: 0.5872 | d_fake_loss: 0.0604 | d_total_loss: 0.6476 |  g_loss: 0.1816
-Iteration [ 1090/10000] | d_real_loss: 0.1891 | d_fake_loss: 0.1745 | d_total_loss: 0.3636 |  g_loss: 0.5717
-Iteration [ 1100/10000] | d_real_loss: 0.1545 | d_fake_loss: 0.2968 | d_total_loss: 0.4513 |  g_loss: 0.6779
-Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-001100.png
-Iteration [ 1110/10000] | d_real_loss: 0.1750 | d_fake_loss: 0.2781 | d_total_loss: 0.4531 |  g_loss: 0.4329
-Iteration [ 1120/10000] | d_real_loss: 0.2795 | d_fake_loss: 0.1405 | d_total_loss: 0.4200 |  g_loss: 0.3230
-Iteration [ 1130/10000] | d_real_loss: 0.2037 | d_fake_loss: 0.1495 | d_total_loss: 0.3532 |  g_loss: 0.6035
-Iteration [ 1140/10000] | d_real_loss: 0.2492 | d_fake_loss: 0.1483 | d_total_loss: 0.3974 |  g_loss: 0.3633
-Iteration [ 1150/10000] | d_real_loss: 0.0870 | d_fake_loss: 0.2657 | d_total_loss: 0.3527 |  g_loss: 0.9215
-Iteration [ 1160/10000] | d_real_loss: 0.4124 | d_fake_loss: 0.0978 | d_total_loss: 0.5102 |  g_loss: 0.3442
-Iteration [ 1170/10000] | d_real_loss: 0.1830 | d_fake_loss: 0.1857 | d_total_loss: 0.3687 |  g_loss: 0.4912
-Iteration [ 1180/10000] | d_real_loss: 0.3643 | d_fake_loss: 0.0696 | d_total_loss: 0.4340 |  g_loss: 0.2142
-Iteration [ 1190/10000] | d_real_loss: 0.1459 | d_fake_loss: 0.2975 | d_total_loss: 0.4435 |  g_loss: 0.5999
-Iteration [ 1200/10000] | d_real_loss: 0.2616 | d_fake_loss: 0.0969 | d_total_loss: 0.3585 |  g_loss: 0.3869
-Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-001200.png
-Iteration [ 1210/10000] | d_real_loss: 0.1221 | d_fake_loss: 0.2853 | d_total_loss: 0.4074 |  g_loss: 0.5912
-Iteration [ 1220/10000] | d_real_loss: 0.3451 | d_fake_loss: 0.0801 | d_total_loss: 0.4252 |  g_loss: 0.2788
-Iteration [ 1230/10000] | d_real_loss: 0.2055 | d_fake_loss: 0.2050 | d_total_loss: 0.4105 |  g_loss: 0.4111
-Iteration [ 1240/10000] | d_real_loss: 0.2617 | d_fake_loss: 0.0784 | d_total_loss: 0.3401 |  g_loss: 0.4018
-Iteration [ 1250/10000] | d_real_loss: 0.1288 | d_fake_loss: 0.2923 | d_total_loss: 0.4211 |  g_loss: 0.7073
-Iteration [ 1260/10000] | d_real_loss: 0.1130 | d_fake_loss: 0.3062 | d_total_loss: 0.4192 |  g_loss: 0.7685
-Iteration [ 1270/10000] | d_real_loss: 0.1504 | d_fake_loss: 0.2503 | d_total_loss: 0.4007 |  g_loss: 0.5540
-Iteration [ 1280/10000] | d_real_loss: 0.2142 | d_fake_loss: 0.1717 | d_total_loss: 0.3859 |  g_loss: 0.4742
-Iteration [ 1290/10000] | d_real_loss: 0.1037 | d_fake_loss: 0.2838 | d_total_loss: 0.3875 |  g_loss: 0.5973
-Iteration [ 1300/10000] | d_real_loss: 0.2698 | d_fake_loss: 0.1110 | d_total_loss: 0.3808 |  g_loss: 0.3151
-Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-001300.png
-Iteration [ 1310/10000] | d_real_loss: 0.1749 | d_fake_loss: 0.2177 | d_total_loss: 0.3926 |  g_loss: 0.5366
-Iteration [ 1320/10000] | d_real_loss: 0.1480 | d_fake_loss: 0.3930 | d_total_loss: 0.5410 |  g_loss: 0.5583
-Iteration [ 1330/10000] | d_real_loss: 0.4725 | d_fake_loss: 0.0753 | d_total_loss: 0.5477 |  g_loss: 0.2490
-Iteration [ 1340/10000] | d_real_loss: 0.1972 | d_fake_loss: 0.2167 | d_total_loss: 0.4139 |  g_loss: 0.5164
-Iteration [ 1350/10000] | d_real_loss: 0.1059 | d_fake_loss: 0.3292 | d_total_loss: 0.4350 |  g_loss: 0.9989
-Iteration [ 1360/10000] | d_real_loss: 0.3232 | d_fake_loss: 0.1058 | d_total_loss: 0.4290 |  g_loss: 0.3694
-Iteration [ 1370/10000] | d_real_loss: 0.1982 | d_fake_loss: 0.1169 | d_total_loss: 0.3151 |  g_loss: 0.4809
-Iteration [ 1380/10000] | d_real_loss: 0.1437 | d_fake_loss: 0.2706 | d_total_loss: 0.4142 |  g_loss: 0.5464
-Iteration [ 1390/10000] | d_real_loss: 0.1717 | d_fake_loss: 0.2168 | d_total_loss: 0.3886 |  g_loss: 0.5861
-Iteration [ 1400/10000] | d_real_loss: 0.2594 | d_fake_loss: 0.1080 | d_total_loss: 0.3674 |  g_loss: 0.3119
-Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-001400.png
-Iteration [ 1410/10000] | d_real_loss: 0.1112 | d_fake_loss: 0.4718 | d_total_loss: 0.5830 |  g_loss: 0.6271
-Iteration [ 1420/10000] | d_real_loss: 0.1501 | d_fake_loss: 0.3024 | d_total_loss: 0.4525 |  g_loss: 0.4491
-Iteration [ 1430/10000] | d_real_loss: 0.2681 | d_fake_loss: 0.1381 | d_total_loss: 0.4062 |  g_loss: 0.3999
-Iteration [ 1440/10000] | d_real_loss: 0.4758 | d_fake_loss: 0.0402 | d_total_loss: 0.5161 |  g_loss: 0.2048
-Iteration [ 1450/10000] | d_real_loss: 0.1328 | d_fake_loss: 0.2493 | d_total_loss: 0.3821 |  g_loss: 0.6848
-Iteration [ 1460/10000] | d_real_loss: 0.1880 | d_fake_loss: 0.2077 | d_total_loss: 0.3957 |  g_loss: 0.5406
-Iteration [ 1470/10000] | d_real_loss: 0.3124 | d_fake_loss: 0.1172 | d_total_loss: 0.4296 |  g_loss: 0.2282
-Iteration [ 1480/10000] | d_real_loss: 0.3682 | d_fake_loss: 0.0713 | d_total_loss: 0.4396 |  g_loss: 0.2319
-Iteration [ 1490/10000] | d_real_loss: 0.2027 | d_fake_loss: 0.2417 | d_total_loss: 0.4443 |  g_loss: 0.6522
-Iteration [ 1500/10000] | d_real_loss: 0.1594 | d_fake_loss: 0.2047 | d_total_loss: 0.3641 |  g_loss: 0.4893
-Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-001500.png
-Iteration [ 1510/10000] | d_real_loss: 0.1873 | d_fake_loss: 0.2072 | d_total_loss: 0.3946 |  g_loss: 0.6597
-Iteration [ 1520/10000] | d_real_loss: 0.1662 | d_fake_loss: 0.1764 | d_total_loss: 0.3426 |  g_loss: 0.6567
-Iteration [ 1530/10000] | d_real_loss: 0.1331 | d_fake_loss: 0.2351 | d_total_loss: 0.3683 |  g_loss: 0.6917
-Iteration [ 1540/10000] | d_real_loss: 0.3226 | d_fake_loss: 0.0816 | d_total_loss: 0.4041 |  g_loss: 0.2314
-Iteration [ 1550/10000] | d_real_loss: 0.0669 | d_fake_loss: 0.4022 | d_total_loss: 0.4691 |  g_loss: 0.9032
-Iteration [ 1560/10000] | d_real_loss: 0.4160 | d_fake_loss: 0.0567 | d_total_loss: 0.4727 |  g_loss: 0.3051
-Iteration [ 1570/10000] | d_real_loss: 0.2179 | d_fake_loss: 0.1454 | d_total_loss: 0.3633 |  g_loss: 0.3530
-Iteration [ 1580/10000] | d_real_loss: 0.1678 | d_fake_loss: 0.2193 | d_total_loss: 0.3871 |  g_loss: 0.4775
-Iteration [ 1590/10000] | d_real_loss: 0.3048 | d_fake_loss: 0.1338 | d_total_loss: 0.4386 |  g_loss: 0.3583
-Iteration [ 1600/10000] | d_real_loss: 0.1581 | d_fake_loss: 0.2763 | d_total_loss: 0.4345 |  g_loss: 0.5387
-Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-001600.png
-Iteration [ 1610/10000] | d_real_loss: 0.0583 | d_fake_loss: 0.5395 | d_total_loss: 0.5978 |  g_loss: 0.5838
-Iteration [ 1620/10000] | d_real_loss: 0.1761 | d_fake_loss: 0.1745 | d_total_loss: 0.3507 |  g_loss: 0.4819
-Iteration [ 1630/10000] | d_real_loss: 0.3918 | d_fake_loss: 0.0915 | d_total_loss: 0.4833 |  g_loss: 0.2410
-Iteration [ 1640/10000] | d_real_loss: 0.2582 | d_fake_loss: 0.1159 | d_total_loss: 0.3741 |  g_loss: 0.5097
-Iteration [ 1650/10000] | d_real_loss: 0.1902 | d_fake_loss: 0.1595 | d_total_loss: 0.3498 |  g_loss: 0.4732
-Iteration [ 1660/10000] | d_real_loss: 0.2549 | d_fake_loss: 0.1411 | d_total_loss: 0.3960 |  g_loss: 0.4884
-Iteration [ 1670/10000] | d_real_loss: 0.1127 | d_fake_loss: 0.2801 | d_total_loss: 0.3929 |  g_loss: 0.7139
-Iteration [ 1680/10000] | d_real_loss: 0.1035 | d_fake_loss: 0.1987 | d_total_loss: 0.3022 |  g_loss: 0.7155
-Iteration [ 1690/10000] | d_real_loss: 0.1949 | d_fake_loss: 0.1908 | d_total_loss: 0.3856 |  g_loss: 0.5708
-Iteration [ 1700/10000] | d_real_loss: 0.2270 | d_fake_loss: 0.1285 | d_total_loss: 0.3554 |  g_loss: 0.4483
-Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-001700.png
-Iteration [ 1710/10000] | d_real_loss: 0.2194 | d_fake_loss: 0.1341 | d_total_loss: 0.3535 |  g_loss: 0.4193
-Iteration [ 1720/10000] | d_real_loss: 0.1310 | d_fake_loss: 0.1978 | d_total_loss: 0.3288 |  g_loss: 0.5721
-Iteration [ 1730/10000] | d_real_loss: 0.0610 | d_fake_loss: 0.3919 | d_total_loss: 0.4529 |  g_loss: 0.7571
-Iteration [ 1740/10000] | d_real_loss: 0.0840 | d_fake_loss: 0.2646 | d_total_loss: 0.3486 |  g_loss: 0.8094
-Iteration [ 1750/10000] | d_real_loss: 0.2513 | d_fake_loss: 0.1311 | d_total_loss: 0.3824 |  g_loss: 0.5069
-Iteration [ 1760/10000] | d_real_loss: 0.3304 | d_fake_loss: 0.0637 | d_total_loss: 0.3941 |  g_loss: 0.3786
-Iteration [ 1770/10000] | d_real_loss: 0.1956 | d_fake_loss: 0.1073 | d_total_loss: 0.3029 |  g_loss: 0.4825
-Iteration [ 1780/10000] | d_real_loss: 0.2528 | d_fake_loss: 0.1159 | d_total_loss: 0.3687 |  g_loss: 0.4031
-Iteration [ 1790/10000] | d_real_loss: 0.0639 | d_fake_loss: 0.4214 | d_total_loss: 0.4853 |  g_loss: 0.8608
-Iteration [ 1800/10000] | d_real_loss: 0.1933 | d_fake_loss: 0.2025 | d_total_loss: 0.3958 |  g_loss: 0.4972
-Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-001800.png
-Iteration [ 1810/10000] | d_real_loss: 0.2611 | d_fake_loss: 0.1344 | d_total_loss: 0.3955 |  g_loss: 0.4197
-Iteration [ 1820/10000] | d_real_loss: 0.2659 | d_fake_loss: 0.0576 | d_total_loss: 0.3236 |  g_loss: 0.2571
-Iteration [ 1830/10000] | d_real_loss: 0.2422 | d_fake_loss: 0.1445 | d_total_loss: 0.3867 |  g_loss: 0.4183
-Iteration [ 1840/10000] | d_real_loss: 0.2757 | d_fake_loss: 0.1215 | d_total_loss: 0.3972 |  g_loss: 0.3035
-Iteration [ 1850/10000] | d_real_loss: 0.2819 | d_fake_loss: 0.1224 | d_total_loss: 0.4043 |  g_loss: 0.3258
-Iteration [ 1860/10000] | d_real_loss: 0.2370 | d_fake_loss: 0.1047 | d_total_loss: 0.3417 |  g_loss: 0.5552
-Iteration [ 1870/10000] | d_real_loss: 0.2347 | d_fake_loss: 0.0944 | d_total_loss: 0.3291 |  g_loss: 0.5418
-Iteration [ 1880/10000] | d_real_loss: 0.0945 | d_fake_loss: 0.2532 | d_total_loss: 0.3477 |  g_loss: 0.7906
-Iteration [ 1890/10000] | d_real_loss: 0.0891 | d_fake_loss: 0.2913 | d_total_loss: 0.3804 |  g_loss: 0.8788
-Iteration [ 1900/10000] | d_real_loss: 0.1064 | d_fake_loss: 0.2620 | d_total_loss: 0.3684 |  g_loss: 0.7391
-Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-001900.png
-Iteration [ 1910/10000] | d_real_loss: 0.0934 | d_fake_loss: 0.5197 | d_total_loss: 0.6131 |  g_loss: 1.0463
-Iteration [ 1920/10000] | d_real_loss: 0.2580 | d_fake_loss: 0.1254 | d_total_loss: 0.3833 |  g_loss: 0.4153
-Iteration [ 1930/10000] | d_real_loss: 0.2210 | d_fake_loss: 0.1286 | d_total_loss: 0.3496 |  g_loss: 0.3939
-Iteration [ 1940/10000] | d_real_loss: 0.3254 | d_fake_loss: 0.0868 | d_total_loss: 0.4121 |  g_loss: 0.2636
-Iteration [ 1950/10000] | d_real_loss: 0.2946 | d_fake_loss: 0.0921 | d_total_loss: 0.3867 |  g_loss: 0.3333
-Iteration [ 1960/10000] | d_real_loss: 0.2801 | d_fake_loss: 0.0848 | d_total_loss: 0.3648 |  g_loss: 0.2666
-Iteration [ 1970/10000] | d_real_loss: 0.3972 | d_fake_loss: 0.0502 | d_total_loss: 0.4475 |  g_loss: 0.2649
-Iteration [ 1980/10000] | d_real_loss: 0.1508 | d_fake_loss: 0.1972 | d_total_loss: 0.3480 |  g_loss: 0.6097
-Iteration [ 1990/10000] | d_real_loss: 0.2276 | d_fake_loss: 0.1586 | d_total_loss: 0.3862 |  g_loss: 0.3785
-Iteration [ 2000/10000] | d_real_loss: 0.1292 | d_fake_loss: 0.2584 | d_total_loss: 0.3876 |  g_loss: 0.5397
-Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-002000.png
-Iteration [ 2010/10000] | d_real_loss: 0.2080 | d_fake_loss: 0.1879 | d_total_loss: 0.3958 |  g_loss: 0.4798
-Iteration [ 2020/10000] | d_real_loss: 0.2081 | d_fake_loss: 0.1748 | d_total_loss: 0.3830 |  g_loss: 0.4635
-Iteration [ 2030/10000] | d_real_loss: 0.1702 | d_fake_loss: 0.2232 | d_total_loss: 0.3934 |  g_loss: 0.5360
-Iteration [ 2040/10000] | d_real_loss: 0.1642 | d_fake_loss: 0.2570 | d_total_loss: 0.4212 |  g_loss: 0.6395
-Iteration [ 2050/10000] | d_real_loss: 0.3302 | d_fake_loss: 0.0664 | d_total_loss: 0.3965 |  g_loss: 0.2807
-Iteration [ 2060/10000] | d_real_loss: 0.0569 | d_fake_loss: 0.4076 | d_total_loss: 0.4645 |  g_loss: 1.1707
-Iteration [ 2070/10000] | d_real_loss: 0.0952 | d_fake_loss: 0.3203 | d_total_loss: 0.4154 |  g_loss: 0.6738
-Iteration [ 2080/10000] | d_real_loss: 0.1371 | d_fake_loss: 0.2322 | d_total_loss: 0.3693 |  g_loss: 0.5560
-Iteration [ 2090/10000] | d_real_loss: 0.2667 | d_fake_loss: 0.1278 | d_total_loss: 0.3945 |  g_loss: 0.3731
-Iteration [ 2100/10000] | d_real_loss: 0.2252 | d_fake_loss: 0.1028 | d_total_loss: 0.3280 |  g_loss: 0.4439
-Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-002100.png
-Iteration [ 2110/10000] | d_real_loss: 0.0809 | d_fake_loss: 0.3536 | d_total_loss: 0.4346 |  g_loss: 1.3088
-Iteration [ 2120/10000] | d_real_loss: 0.4504 | d_fake_loss: 0.0439 | d_total_loss: 0.4942 |  g_loss: 0.1421
-Iteration [ 2130/10000] | d_real_loss: 0.1394 | d_fake_loss: 0.1884 | d_total_loss: 0.3278 |  g_loss: 0.6355
-Iteration [ 2140/10000] | d_real_loss: 0.2616 | d_fake_loss: 0.1078 | d_total_loss: 0.3694 |  g_loss: 0.5878
-Iteration [ 2150/10000] | d_real_loss: 0.3096 | d_fake_loss: 0.0832 | d_total_loss: 0.3928 |  g_loss: 0.3716
-Iteration [ 2160/10000] | d_real_loss: 0.1386 | d_fake_loss: 0.2047 | d_total_loss: 0.3432 |  g_loss: 0.5436
-Iteration [ 2170/10000] | d_real_loss: 0.0594 | d_fake_loss: 0.3893 | d_total_loss: 0.4487 |  g_loss: 0.9461
-Iteration [ 2180/10000] | d_real_loss: 0.1803 | d_fake_loss: 0.1649 | d_total_loss: 0.3451 |  g_loss: 0.6036
-Iteration [ 2190/10000] | d_real_loss: 0.0708 | d_fake_loss: 0.3310 | d_total_loss: 0.4018 |  g_loss: 0.8972
-Iteration [ 2200/10000] | d_real_loss: 0.4693 | d_fake_loss: 0.0311 | d_total_loss: 0.5004 |  g_loss: 0.1857
-Saved output/cyclegan/.._10vanilla_instance_dc_cycle_naive/sample-002200.png
-Iteration [ 2210/10000] | d_real_loss: 0.2855 | d_fake_loss: 0.1211 | d_total_loss: 0.4066 |  g_loss: 0.3487
-Iteration [ 2220/10000] | d_real_loss: 0.2987 | d_fake_loss: 0.0594 | d_total_loss: 0.3581 |  g_loss: 0.4268
-Iteration [ 2230/10000] | d_real_loss: 0.0726 | d_fake_loss: 0.2304 | d_total_loss: 0.3031 |  g_loss: 1.1826
-Iteration [ 2240/10000] | d_real_loss: 0.1132 | d_fake_loss: 0.2797 | d_total_loss: 0.3928 |  g_loss: 0.7508
-Iteration [ 2250/10000] | d_real_loss: 0.2118 | d_fake_loss: 0.1882 | d_total_loss: 0.4000 |  g_loss: 0.2943
-Iteration [ 2260/10000] | d_real_loss: 0.2736 | d_fake_loss: 0.1497 | d_total_loss: 0.4233 |  g_loss: 0.3978
+tensor([[0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+         0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+        [0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+         0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
+        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+         0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0.]], device='cuda:0') tensor([[25.9844, 24.6250, 24.8906, 23.9375, 25.3125, 26.3906, 26.0938, 25.0156,
+         23.7031, 24.1719, 24.6562, 24.7500, 24.9062, 25.5625, 26.5781, 25.5938,
+         21.9219, 24.1719, 25.7188, 25.7656, 26.1875, 24.6406, 24.8906, 25.7656,
+         25.2812, 25.9688, 24.6094, 25.4219, 25.8750, 25.7656, 25.5781],
+        [26.0156, 25.5000, 25.6562, 25.3125, 26.1719, 26.7031, 26.4062, 25.1875,
+         25.1406, 26.3438, 24.5938, 25.6094, 25.4062, 26.3125, 27.0469, 26.7188,
+         25.0312, 25.0781, 26.6250, 26.2812, 26.7188, 25.7812, 26.9375, 26.0781,
+         25.6875, 26.5000, 26.5156, 25.6406, 26.9688, 26.8750, 27.2812],
+        [25.0625, 23.5625, 24.7969, 23.0938, 24.9219, 25.8906, 25.6406, 24.5156,
+         24.4062, 24.5469, 24.5938, 25.0625, 25.0156, 24.8125, 25.3594, 24.9688,
+         19.2969, 22.3281, 25.6406, 25.5000, 25.4688, 24.6562, 25.6094, 25.2656,
+         24.2812, 25.2188, 24.0938, 24.6406, 25.9531, 25.5625, 25.4375]],
+       device='cuda:0', dtype=torch.float16, grad_fn=<SliceBackward0>)
+Should predict tensor([ 5,  6, 29, 23, 15,  5, 15, 13], device='cuda:0') Predicted tensor([14, 30, 28, 20, 14, 17, 14,  6], device='cuda:0')
+Iteration [   10/10000] | d_real_loss: 0.4817 | d_fake_loss: 0.2459 | d_total_loss: 0.7277 |  g_loss: 0.4634
+Iteration [   20/10000] | d_real_loss: 0.2806 | d_fake_loss: 0.2386 | d_total_loss: 0.5192 |  g_loss: 0.3863
+Iteration [   30/10000] | d_real_loss: 0.2211 | d_fake_loss: 0.2518 | d_total_loss: 0.4729 |  g_loss: 0.4071
+Iteration [   40/10000] | d_real_loss: 0.2698 | d_fake_loss: 0.2381 | d_total_loss: 0.5080 |  g_loss: 0.3727
+Iteration [   50/10000] | d_real_loss: 0.1980 | d_fake_loss: 0.4835 | d_total_loss: 0.6815 |  g_loss: 0.6834
+Iteration [   60/10000] | d_real_loss: 0.2645 | d_fake_loss: 0.2531 | d_total_loss: 0.5176 |  g_loss: 0.3589
+Iteration [   70/10000] | d_real_loss: 0.2485 | d_fake_loss: 0.2530 | d_total_loss: 0.5016 |  g_loss: 0.2841
+Iteration [   80/10000] | d_real_loss: 0.3760 | d_fake_loss: 0.1649 | d_total_loss: 0.5409 |  g_loss: 0.2412
+Iteration [   90/10000] | d_real_loss: 0.2310 | d_fake_loss: 0.2490 | d_total_loss: 0.4800 |  g_loss: 0.3296
+Iteration [  100/10000] | d_real_loss: 0.2576 | d_fake_loss: 0.2427 | d_total_loss: 0.5002 |  g_loss: 0.2969
+Iteration [  110/10000] | d_real_loss: 0.0965 | d_fake_loss: 0.4907 | d_total_loss: 0.5872 |  g_loss: 0.3988
+Iteration [  120/10000] | d_real_loss: 0.2122 | d_fake_loss: 0.2752 | d_total_loss: 0.4874 |  g_loss: 0.3872
+Iteration [  130/10000] | d_real_loss: 0.2147 | d_fake_loss: 0.2533 | d_total_loss: 0.4680 |  g_loss: 0.3519
+Iteration [  140/10000] | d_real_loss: 0.1802 | d_fake_loss: 0.3185 | d_total_loss: 0.4987 |  g_loss: 0.3811
+Iteration [  150/10000] | d_real_loss: 0.1148 | d_fake_loss: 0.4493 | d_total_loss: 0.5641 |  g_loss: 0.5023
+Iteration [  160/10000] | d_real_loss: 0.2421 | d_fake_loss: 0.2129 | d_total_loss: 0.4549 |  g_loss: 0.3407
+Iteration [  170/10000] | d_real_loss: 0.1935 | d_fake_loss: 0.2712 | d_total_loss: 0.4647 |  g_loss: 0.4555
+Iteration [  180/10000] | d_real_loss: 0.1607 | d_fake_loss: 0.3824 | d_total_loss: 0.5431 |  g_loss: 0.3506
+Iteration [  190/10000] | d_real_loss: 0.1969 | d_fake_loss: 0.2964 | d_total_loss: 0.4933 |  g_loss: 0.4009
+Iteration [  200/10000] | d_real_loss: 0.1970 | d_fake_loss: 0.2647 | d_total_loss: 0.4617 |  g_loss: 0.3146
+Iteration [  210/10000] | d_real_loss: 0.1279 | d_fake_loss: 0.4615 | d_total_loss: 0.5894 |  g_loss: 0.4789
+Iteration [  220/10000] | d_real_loss: 0.2552 | d_fake_loss: 0.2194 | d_total_loss: 0.4747 |  g_loss: 0.4057
+Iteration [  230/10000] | d_real_loss: 0.1552 | d_fake_loss: 0.3128 | d_total_loss: 0.4680 |  g_loss: 0.4028
+Iteration [  240/10000] | d_real_loss: 0.2762 | d_fake_loss: 0.1844 | d_total_loss: 0.4605 |  g_loss: 0.3022
+Iteration [  250/10000] | d_real_loss: 0.3312 | d_fake_loss: 0.1328 | d_total_loss: 0.4640 |  g_loss: 0.2434
+Iteration [  260/10000] | d_real_loss: 0.2887 | d_fake_loss: 0.1876 | d_total_loss: 0.4763 |  g_loss: 0.2941
+Iteration [  270/10000] | d_real_loss: 0.2057 | d_fake_loss: 0.2528 | d_total_loss: 0.4586 |  g_loss: 0.3373
+Iteration [  280/10000] | d_real_loss: 0.1156 | d_fake_loss: 0.3801 | d_total_loss: 0.4958 |  g_loss: 0.5655
+Iteration [  290/10000] | d_real_loss: 0.1997 | d_fake_loss: 0.2411 | d_total_loss: 0.4409 |  g_loss: 0.5116
+Iteration [  300/10000] | d_real_loss: 0.1942 | d_fake_loss: 0.2516 | d_total_loss: 0.4458 |  g_loss: 0.5370
+Iteration [  310/10000] | d_real_loss: 0.1946 | d_fake_loss: 0.2379 | d_total_loss: 0.4325 |  g_loss: 0.3919
+Iteration [  320/10000] | d_real_loss: 0.6789 | d_fake_loss: 0.0665 | d_total_loss: 0.7454 |  g_loss: 0.0799
+Iteration [  330/10000] | d_real_loss: 0.1995 | d_fake_loss: 0.2675 | d_total_loss: 0.4670 |  g_loss: 0.4275
+Iteration [  340/10000] | d_real_loss: 0.1237 | d_fake_loss: 0.3043 | d_total_loss: 0.4280 |  g_loss: 0.4986
+Iteration [  350/10000] | d_real_loss: 0.1600 | d_fake_loss: 0.3139 | d_total_loss: 0.4739 |  g_loss: 0.4300
+Iteration [  360/10000] | d_real_loss: 0.2102 | d_fake_loss: 0.2264 | d_total_loss: 0.4367 |  g_loss: 0.4144
+Iteration [  370/10000] | d_real_loss: 0.2236 | d_fake_loss: 0.1772 | d_total_loss: 0.4008 |  g_loss: 0.5219
+Iteration [  380/10000] | d_real_loss: 0.2486 | d_fake_loss: 0.2044 | d_total_loss: 0.4530 |  g_loss: 0.4456
+Iteration [  390/10000] | d_real_loss: 0.3858 | d_fake_loss: 0.1253 | d_total_loss: 0.5112 |  g_loss: 0.1581
+Iteration [  400/10000] | d_real_loss: 0.1460 | d_fake_loss: 0.3298 | d_total_loss: 0.4758 |  g_loss: 0.5064
+Iteration [  410/10000] | d_real_loss: 0.3227 | d_fake_loss: 0.1460 | d_total_loss: 0.4687 |  g_loss: 0.2926
+Iteration [  420/10000] | d_real_loss: 0.2398 | d_fake_loss: 0.1948 | d_total_loss: 0.4346 |  g_loss: 0.3900
+Iteration [  430/10000] | d_real_loss: 0.2186 | d_fake_loss: 0.1805 | d_total_loss: 0.3992 |  g_loss: 0.3989
+Iteration [  440/10000] | d_real_loss: 0.2401 | d_fake_loss: 0.3315 | d_total_loss: 0.5716 |  g_loss: 0.3701
+Iteration [  450/10000] | d_real_loss: 0.1566 | d_fake_loss: 0.2922 | d_total_loss: 0.4488 |  g_loss: 0.5127
+Iteration [  460/10000] | d_real_loss: 0.2658 | d_fake_loss: 0.2540 | d_total_loss: 0.5198 |  g_loss: 0.4898
+Iteration [  470/10000] | d_real_loss: 0.4420 | d_fake_loss: 0.0785 | d_total_loss: 0.5205 |  g_loss: 0.1974
+Iteration [  480/10000] | d_real_loss: 0.3607 | d_fake_loss: 0.1449 | d_total_loss: 0.5056 |  g_loss: 0.2294
+Iteration [  490/10000] | d_real_loss: 0.3204 | d_fake_loss: 0.1593 | d_total_loss: 0.4797 |  g_loss: 0.3036
+Iteration [  500/10000] | d_real_loss: 0.1966 | d_fake_loss: 0.1988 | d_total_loss: 0.3954 |  g_loss: 0.4377
+Saved output/cyclegan/.._10clip_instance_dc_cycle_naive/sample-000500.png
+Iteration [  510/10000] | d_real_loss: 0.2338 | d_fake_loss: 0.2217 | d_total_loss: 0.4556 |  g_loss: 0.2128
+Iteration [  520/10000] | d_real_loss: 0.2057 | d_fake_loss: 0.2662 | d_total_loss: 0.4718 |  g_loss: 0.3950
+Iteration [  530/10000] | d_real_loss: 0.2102 | d_fake_loss: 0.2525 | d_total_loss: 0.4627 |  g_loss: 0.3555
+Iteration [  540/10000] | d_real_loss: 0.2939 | d_fake_loss: 0.1560 | d_total_loss: 0.4498 |  g_loss: 0.2296
+Iteration [  550/10000] | d_real_loss: 0.1801 | d_fake_loss: 0.2232 | d_total_loss: 0.4032 |  g_loss: 0.4864
+Iteration [  560/10000] | d_real_loss: 0.0696 | d_fake_loss: 0.5708 | d_total_loss: 0.6404 |  g_loss: 0.5841
+Iteration [  570/10000] | d_real_loss: 0.2226 | d_fake_loss: 0.3057 | d_total_loss: 0.5283 |  g_loss: 0.4539
+Iteration [  580/10000] | d_real_loss: 0.2671 | d_fake_loss: 0.2468 | d_total_loss: 0.5139 |  g_loss: 0.2848
+Iteration [  590/10000] | d_real_loss: 0.3301 | d_fake_loss: 0.1088 | d_total_loss: 0.4389 |  g_loss: 0.2485
+Iteration [  600/10000] | d_real_loss: 0.2882 | d_fake_loss: 0.2046 | d_total_loss: 0.4928 |  g_loss: 0.3063
+Iteration [  610/10000] | d_real_loss: 0.2160 | d_fake_loss: 0.2457 | d_total_loss: 0.4617 |  g_loss: 0.3190
+Iteration [  620/10000] | d_real_loss: 0.2918 | d_fake_loss: 0.1866 | d_total_loss: 0.4784 |  g_loss: 0.2695
+Iteration [  630/10000] | d_real_loss: 0.3023 | d_fake_loss: 0.1280 | d_total_loss: 0.4303 |  g_loss: 0.2988
+Iteration [  640/10000] | d_real_loss: 0.2053 | d_fake_loss: 0.2661 | d_total_loss: 0.4714 |  g_loss: 0.5051
+Iteration [  650/10000] | d_real_loss: 0.2387 | d_fake_loss: 0.2994 | d_total_loss: 0.5380 |  g_loss: 0.4995
+Iteration [  660/10000] | d_real_loss: 0.2814 | d_fake_loss: 0.1730 | d_total_loss: 0.4544 |  g_loss: 0.3443
+Iteration [  670/10000] | d_real_loss: 0.1236 | d_fake_loss: 0.3060 | d_total_loss: 0.4296 |  g_loss: 0.5540
+Iteration [  680/10000] | d_real_loss: 0.1517 | d_fake_loss: 0.2623 | d_total_loss: 0.4140 |  g_loss: 0.4668
+Iteration [  690/10000] | d_real_loss: 0.1647 | d_fake_loss: 0.2539 | d_total_loss: 0.4186 |  g_loss: 0.4503
+Iteration [  700/10000] | d_real_loss: 0.4270 | d_fake_loss: 0.0920 | d_total_loss: 0.5190 |  g_loss: 0.2062
+Iteration [  710/10000] | d_real_loss: 0.2188 | d_fake_loss: 0.2374 | d_total_loss: 0.4562 |  g_loss: 0.3413
+Iteration [  720/10000] | d_real_loss: 0.2631 | d_fake_loss: 0.1988 | d_total_loss: 0.4619 |  g_loss: 0.3194
+Iteration [  730/10000] | d_real_loss: 0.3245 | d_fake_loss: 0.1031 | d_total_loss: 0.4276 |  g_loss: 0.1391
+Iteration [  740/10000] | d_real_loss: 0.3419 | d_fake_loss: 0.1624 | d_total_loss: 0.5043 |  g_loss: 0.3093
+Iteration [  750/10000] | d_real_loss: 0.2897 | d_fake_loss: 0.1665 | d_total_loss: 0.4561 |  g_loss: 0.2830
+Iteration [  760/10000] | d_real_loss: 0.3374 | d_fake_loss: 0.1300 | d_total_loss: 0.4674 |  g_loss: 0.2671
+Iteration [  770/10000] | d_real_loss: 0.1291 | d_fake_loss: 0.4485 | d_total_loss: 0.5777 |  g_loss: 0.6452
+Iteration [  780/10000] | d_real_loss: 0.1507 | d_fake_loss: 0.1920 | d_total_loss: 0.3426 |  g_loss: 0.5452
+Iteration [  790/10000] | d_real_loss: 0.1993 | d_fake_loss: 0.2297 | d_total_loss: 0.4290 |  g_loss: 0.3948
+Iteration [  800/10000] | d_real_loss: 0.2117 | d_fake_loss: 0.2847 | d_total_loss: 0.4964 |  g_loss: 0.3274
+Iteration [  810/10000] | d_real_loss: 0.2933 | d_fake_loss: 0.1915 | d_total_loss: 0.4848 |  g_loss: 0.3509
+Iteration [  820/10000] | d_real_loss: 0.1797 | d_fake_loss: 0.2681 | d_total_loss: 0.4478 |  g_loss: 0.5782
+Iteration [  830/10000] | d_real_loss: 0.1856 | d_fake_loss: 0.2381 | d_total_loss: 0.4237 |  g_loss: 0.4499
+Iteration [  840/10000] | d_real_loss: 0.3962 | d_fake_loss: 0.1045 | d_total_loss: 0.5006 |  g_loss: 0.2162
+Iteration [  850/10000] | d_real_loss: 0.0738 | d_fake_loss: 0.5088 | d_total_loss: 0.5825 |  g_loss: 0.8279
+Iteration [  860/10000] | d_real_loss: 0.1596 | d_fake_loss: 0.3140 | d_total_loss: 0.4737 |  g_loss: 0.4753
+Iteration [  870/10000] | d_real_loss: 0.1047 | d_fake_loss: 0.3726 | d_total_loss: 0.4772 |  g_loss: 0.4713
+Iteration [  880/10000] | d_real_loss: 0.1894 | d_fake_loss: 0.2021 | d_total_loss: 0.3915 |  g_loss: 0.3829
+Iteration [  890/10000] | d_real_loss: 0.1450 | d_fake_loss: 0.2669 | d_total_loss: 0.4120 |  g_loss: 0.5346
+Iteration [  900/10000] | d_real_loss: 0.1502 | d_fake_loss: 0.2809 | d_total_loss: 0.4311 |  g_loss: 0.4461
+Iteration [  910/10000] | d_real_loss: 0.3632 | d_fake_loss: 0.0998 | d_total_loss: 0.4630 |  g_loss: 0.1618
+Iteration [  920/10000] | d_real_loss: 0.1947 | d_fake_loss: 0.2326 | d_total_loss: 0.4273 |  g_loss: 0.4688
+Iteration [  930/10000] | d_real_loss: 0.3056 | d_fake_loss: 0.1343 | d_total_loss: 0.4399 |  g_loss: 0.3006
+Iteration [  940/10000] | d_real_loss: 0.2129 | d_fake_loss: 0.2186 | d_total_loss: 0.4315 |  g_loss: 0.3292
+Iteration [  950/10000] | d_real_loss: 0.2845 | d_fake_loss: 0.1115 | d_total_loss: 0.3960 |  g_loss: 0.3877
+Iteration [  960/10000] | d_real_loss: 0.2654 | d_fake_loss: 0.1745 | d_total_loss: 0.4399 |  g_loss: 0.3540
+Iteration [  970/10000] | d_real_loss: 0.3834 | d_fake_loss: 0.0761 | d_total_loss: 0.4595 |  g_loss: 0.3245
+Iteration [  980/10000] | d_real_loss: 0.0727 | d_fake_loss: 0.4431 | d_total_loss: 0.5159 |  g_loss: 0.8718
+Iteration [  990/10000] | d_real_loss: 0.1545 | d_fake_loss: 0.3377 | d_total_loss: 0.4922 |  g_loss: 0.5261
+Iteration [ 1000/10000] | d_real_loss: 0.4443 | d_fake_loss: 0.0849 | d_total_loss: 0.5292 |  g_loss: 0.2813
+Saved output/cyclegan/.._10clip_instance_dc_cycle_naive/sample-001000.png
+Iteration [ 1010/10000] | d_real_loss: 0.2212 | d_fake_loss: 0.1825 | d_total_loss: 0.4037 |  g_loss: 0.3261
+Iteration [ 1020/10000] | d_real_loss: 0.0672 | d_fake_loss: 0.5209 | d_total_loss: 0.5881 |  g_loss: 0.8504
+Iteration [ 1030/10000] | d_real_loss: 0.2026 | d_fake_loss: 0.1684 | d_total_loss: 0.3710 |  g_loss: 0.5569
+Iteration [ 1040/10000] | d_real_loss: 0.2660 | d_fake_loss: 0.1152 | d_total_loss: 0.3812 |  g_loss: 0.3434
+Iteration [ 1050/10000] | d_real_loss: 0.3207 | d_fake_loss: 0.0724 | d_total_loss: 0.3931 |  g_loss: 0.2701
+Iteration [ 1060/10000] | d_real_loss: 0.6900 | d_fake_loss: 0.0791 | d_total_loss: 0.7692 |  g_loss: 0.2322
+Iteration [ 1070/10000] | d_real_loss: 0.1503 | d_fake_loss: 0.2472 | d_total_loss: 0.3975 |  g_loss: 0.5451
+Iteration [ 1080/10000] | d_real_loss: 0.4522 | d_fake_loss: 0.0855 | d_total_loss: 0.5377 |  g_loss: 0.1763
+Iteration [ 1090/10000] | d_real_loss: 0.2470 | d_fake_loss: 0.1629 | d_total_loss: 0.4099 |  g_loss: 0.3064
+Iteration [ 1100/10000] | d_real_loss: 0.3966 | d_fake_loss: 0.0732 | d_total_loss: 0.4698 |  g_loss: 0.3910
+Iteration [ 1110/10000] | d_real_loss: 0.1013 | d_fake_loss: 0.3343 | d_total_loss: 0.4356 |  g_loss: 0.6854
+Iteration [ 1120/10000] | d_real_loss: 0.1844 | d_fake_loss: 0.1987 | d_total_loss: 0.3831 |  g_loss: 0.4145
+Iteration [ 1130/10000] | d_real_loss: 0.2711 | d_fake_loss: 0.1355 | d_total_loss: 0.4066 |  g_loss: 0.3955
+Iteration [ 1140/10000] | d_real_loss: 0.0797 | d_fake_loss: 0.3989 | d_total_loss: 0.4786 |  g_loss: 1.0988
+Iteration [ 1150/10000] | d_real_loss: 0.1324 | d_fake_loss: 0.2999 | d_total_loss: 0.4323 |  g_loss: 0.6309
+Iteration [ 1160/10000] | d_real_loss: 0.2081 | d_fake_loss: 0.2059 | d_total_loss: 0.4140 |  g_loss: 0.3733
+Iteration [ 1170/10000] | d_real_loss: 0.2989 | d_fake_loss: 0.1479 | d_total_loss: 0.4468 |  g_loss: 0.3337
+Iteration [ 1180/10000] | d_real_loss: 0.1484 | d_fake_loss: 0.1540 | d_total_loss: 0.3025 |  g_loss: 0.6344
+Iteration [ 1190/10000] | d_real_loss: 0.1722 | d_fake_loss: 0.1967 | d_total_loss: 0.3690 |  g_loss: 0.5932
+Iteration [ 1200/10000] | d_real_loss: 0.2558 | d_fake_loss: 0.2381 | d_total_loss: 0.4938 |  g_loss: 0.4016
+Iteration [ 1210/10000] | d_real_loss: 0.1303 | d_fake_loss: 0.2777 | d_total_loss: 0.4080 |  g_loss: 0.5907
+Iteration [ 1220/10000] | d_real_loss: 0.2312 | d_fake_loss: 0.1322 | d_total_loss: 0.3634 |  g_loss: 0.4295
+Iteration [ 1230/10000] | d_real_loss: 0.3996 | d_fake_loss: 0.1090 | d_total_loss: 0.5086 |  g_loss: 0.2620
+Iteration [ 1240/10000] | d_real_loss: 0.3657 | d_fake_loss: 0.1243 | d_total_loss: 0.4900 |  g_loss: 0.2139
+Iteration [ 1250/10000] | d_real_loss: 0.1246 | d_fake_loss: 0.2643 | d_total_loss: 0.3889 |  g_loss: 0.7309
+Iteration [ 1260/10000] | d_real_loss: 1.0743 | d_fake_loss: 0.0714 | d_total_loss: 1.1457 |  g_loss: 0.0634
+Iteration [ 1270/10000] | d_real_loss: 0.1653 | d_fake_loss: 0.3052 | d_total_loss: 0.4705 |  g_loss: 0.3872
+Iteration [ 1280/10000] | d_real_loss: 0.2333 | d_fake_loss: 0.2042 | d_total_loss: 0.4375 |  g_loss: 0.3290
+Iteration [ 1290/10000] | d_real_loss: 0.1385 | d_fake_loss: 0.2736 | d_total_loss: 0.4121 |  g_loss: 0.5165
+Iteration [ 1300/10000] | d_real_loss: 0.3680 | d_fake_loss: 0.0954 | d_total_loss: 0.4633 |  g_loss: 0.3332
+Iteration [ 1310/10000] | d_real_loss: 0.4267 | d_fake_loss: 0.0678 | d_total_loss: 0.4945 |  g_loss: 0.2772
+Iteration [ 1320/10000] | d_real_loss: 0.1885 | d_fake_loss: 0.2809 | d_total_loss: 0.4693 |  g_loss: 0.5525
+Iteration [ 1330/10000] | d_real_loss: 0.2122 | d_fake_loss: 0.2247 | d_total_loss: 0.4369 |  g_loss: 0.4539
+Iteration [ 1340/10000] | d_real_loss: 0.1576 | d_fake_loss: 0.2246 | d_total_loss: 0.3822 |  g_loss: 0.5913
+Iteration [ 1350/10000] | d_real_loss: 0.1593 | d_fake_loss: 0.2128 | d_total_loss: 0.3721 |  g_loss: 0.5116
+Iteration [ 1360/10000] | d_real_loss: 0.6973 | d_fake_loss: 0.0186 | d_total_loss: 0.7159 |  g_loss: 0.0714
+Iteration [ 1370/10000] | d_real_loss: 0.3358 | d_fake_loss: 0.1112 | d_total_loss: 0.4471 |  g_loss: 0.3532
+Iteration [ 1380/10000] | d_real_loss: 0.2492 | d_fake_loss: 0.1240 | d_total_loss: 0.3732 |  g_loss: 0.4219
+Iteration [ 1390/10000] | d_real_loss: 0.2156 | d_fake_loss: 0.1916 | d_total_loss: 0.4073 |  g_loss: 0.4117
+Iteration [ 1400/10000] | d_real_loss: 0.3600 | d_fake_loss: 0.0779 | d_total_loss: 0.4379 |  g_loss: 0.1398
+Iteration [ 1410/10000] | d_real_loss: 0.2428 | d_fake_loss: 0.1543 | d_total_loss: 0.3971 |  g_loss: 0.3870
+Iteration [ 1420/10000] | d_real_loss: 0.0605 | d_fake_loss: 0.3358 | d_total_loss: 0.3963 |  g_loss: 0.7048
+Iteration [ 1430/10000] | d_real_loss: 0.1171 | d_fake_loss: 0.2584 | d_total_loss: 0.3756 |  g_loss: 0.7112
+Iteration [ 1440/10000] | d_real_loss: 0.1092 | d_fake_loss: 0.2701 | d_total_loss: 0.3793 |  g_loss: 0.6118
+Iteration [ 1450/10000] | d_real_loss: 0.1304 | d_fake_loss: 0.4360 | d_total_loss: 0.5664 |  g_loss: 0.6168
+Iteration [ 1460/10000] | d_real_loss: 0.2836 | d_fake_loss: 0.1350 | d_total_loss: 0.4186 |  g_loss: 0.3636
+Iteration [ 1470/10000] | d_real_loss: 0.1868 | d_fake_loss: 0.1747 | d_total_loss: 0.3615 |  g_loss: 0.4323
+Iteration [ 1480/10000] | d_real_loss: 0.1207 | d_fake_loss: 0.3563 | d_total_loss: 0.4770 |  g_loss: 0.6945
+Iteration [ 1490/10000] | d_real_loss: 0.3149 | d_fake_loss: 0.1278 | d_total_loss: 0.4427 |  g_loss: 0.3512
+Iteration [ 1500/10000] | d_real_loss: 0.1487 | d_fake_loss: 0.2044 | d_total_loss: 0.3532 |  g_loss: 0.5758
+Saved output/cyclegan/.._10clip_instance_dc_cycle_naive/sample-001500.png
+Iteration [ 1510/10000] | d_real_loss: 0.2374 | d_fake_loss: 0.1446 | d_total_loss: 0.3820 |  g_loss: 0.3586
+Iteration [ 1520/10000] | d_real_loss: 0.0979 | d_fake_loss: 0.2208 | d_total_loss: 0.3187 |  g_loss: 0.7782
+Iteration [ 1530/10000] | d_real_loss: 0.2142 | d_fake_loss: 0.2323 | d_total_loss: 0.4464 |  g_loss: 0.3660
+Iteration [ 1540/10000] | d_real_loss: 0.3707 | d_fake_loss: 0.0679 | d_total_loss: 0.4386 |  g_loss: 0.2720
+Iteration [ 1550/10000] | d_real_loss: 0.2183 | d_fake_loss: 0.1379 | d_total_loss: 0.3562 |  g_loss: 0.5760
+Iteration [ 1560/10000] | d_real_loss: 0.3523 | d_fake_loss: 0.1048 | d_total_loss: 0.4571 |  g_loss: 0.2674
+Iteration [ 1570/10000] | d_real_loss: 0.4200 | d_fake_loss: 0.0646 | d_total_loss: 0.4846 |  g_loss: 0.2122
+Iteration [ 1580/10000] | d_real_loss: 0.1418 | d_fake_loss: 0.2282 | d_total_loss: 0.3700 |  g_loss: 0.6210
+Iteration [ 1590/10000] | d_real_loss: 0.1502 | d_fake_loss: 0.2415 | d_total_loss: 0.3917 |  g_loss: 0.4677
+Iteration [ 1600/10000] | d_real_loss: 0.0872 | d_fake_loss: 0.2938 | d_total_loss: 0.3810 |  g_loss: 0.8160
+Iteration [ 1610/10000] | d_real_loss: 0.0837 | d_fake_loss: 0.2954 | d_total_loss: 0.3791 |  g_loss: 0.5459
+Iteration [ 1620/10000] | d_real_loss: 0.3035 | d_fake_loss: 0.0741 | d_total_loss: 0.3776 |  g_loss: 0.3424
+Iteration [ 1630/10000] | d_real_loss: 0.2105 | d_fake_loss: 0.2293 | d_total_loss: 0.4398 |  g_loss: 0.5380
+Iteration [ 1640/10000] | d_real_loss: 0.1202 | d_fake_loss: 0.2316 | d_total_loss: 0.3518 |  g_loss: 0.6523
+Iteration [ 1650/10000] | d_real_loss: 0.2925 | d_fake_loss: 0.1608 | d_total_loss: 0.4534 |  g_loss: 0.4460
+Iteration [ 1660/10000] | d_real_loss: 0.0577 | d_fake_loss: 0.4079 | d_total_loss: 0.4655 |  g_loss: 0.6303
+Iteration [ 1670/10000] | d_real_loss: 0.1536 | d_fake_loss: 0.2288 | d_total_loss: 0.3823 |  g_loss: 0.4822
+Iteration [ 1680/10000] | d_real_loss: 0.2720 | d_fake_loss: 0.1065 | d_total_loss: 0.3785 |  g_loss: 0.3758
+Iteration [ 1690/10000] | d_real_loss: 0.5532 | d_fake_loss: 0.0358 | d_total_loss: 0.5890 |  g_loss: 0.1828
+Iteration [ 1700/10000] | d_real_loss: 0.1288 | d_fake_loss: 0.2117 | d_total_loss: 0.3405 |  g_loss: 0.5890
+Iteration [ 1710/10000] | d_real_loss: 0.2209 | d_fake_loss: 0.1670 | d_total_loss: 0.3879 |  g_loss: 0.4216
+Iteration [ 1720/10000] | d_real_loss: 0.0413 | d_fake_loss: 0.4741 | d_total_loss: 0.5155 |  g_loss: 1.0687
+Iteration [ 1730/10000] | d_real_loss: 0.1610 | d_fake_loss: 0.1972 | d_total_loss: 0.3582 |  g_loss: 0.5973
+Iteration [ 1740/10000] | d_real_loss: 0.1653 | d_fake_loss: 0.1854 | d_total_loss: 0.3507 |  g_loss: 0.5267
+Iteration [ 1750/10000] | d_real_loss: 0.1921 | d_fake_loss: 0.1974 | d_total_loss: 0.3895 |  g_loss: 0.3698
+Iteration [ 1760/10000] | d_real_loss: 0.2436 | d_fake_loss: 0.1197 | d_total_loss: 0.3633 |  g_loss: 0.3976
+Iteration [ 1770/10000] | d_real_loss: 0.1322 | d_fake_loss: 0.2643 | d_total_loss: 0.3965 |  g_loss: 0.4793
+Iteration [ 1780/10000] | d_real_loss: 0.1659 | d_fake_loss: 0.2882 | d_total_loss: 0.4541 |  g_loss: 0.5453
+Iteration [ 1790/10000] | d_real_loss: 0.3084 | d_fake_loss: 0.1018 | d_total_loss: 0.4102 |  g_loss: 0.4582
+Iteration [ 1800/10000] | d_real_loss: 0.2314 | d_fake_loss: 0.1334 | d_total_loss: 0.3649 |  g_loss: 0.4530
+Iteration [ 1810/10000] | d_real_loss: 0.1635 | d_fake_loss: 0.1840 | d_total_loss: 0.3474 |  g_loss: 0.4117
+Iteration [ 1820/10000] | d_real_loss: 0.1296 | d_fake_loss: 0.2226 | d_total_loss: 0.3522 |  g_loss: 0.7534
+Iteration [ 1830/10000] | d_real_loss: 0.1065 | d_fake_loss: 0.2038 | d_total_loss: 0.3103 |  g_loss: 0.7613
+Iteration [ 1840/10000] | d_real_loss: 0.1354 | d_fake_loss: 0.3178 | d_total_loss: 0.4532 |  g_loss: 0.6276
+Iteration [ 1850/10000] | d_real_loss: 0.1166 | d_fake_loss: 0.2435 | d_total_loss: 0.3601 |  g_loss: 0.6884
+Iteration [ 1860/10000] | d_real_loss: 0.1621 | d_fake_loss: 0.1447 | d_total_loss: 0.3069 |  g_loss: 0.6870
+Iteration [ 1870/10000] | d_real_loss: 0.2971 | d_fake_loss: 0.0616 | d_total_loss: 0.3587 |  g_loss: 0.2504
+Iteration [ 1880/10000] | d_real_loss: 0.5174 | d_fake_loss: 0.0329 | d_total_loss: 0.5503 |  g_loss: 0.1155
+Iteration [ 1890/10000] | d_real_loss: 0.1873 | d_fake_loss: 0.2133 | d_total_loss: 0.4006 |  g_loss: 0.4592
+Iteration [ 1900/10000] | d_real_loss: 0.1245 | d_fake_loss: 0.2586 | d_total_loss: 0.3831 |  g_loss: 0.5129
+Iteration [ 1910/10000] | d_real_loss: 0.1053 | d_fake_loss: 0.2275 | d_total_loss: 0.3328 |  g_loss: 0.5929
+Iteration [ 1920/10000] | d_real_loss: 0.0989 | d_fake_loss: 0.2952 | d_total_loss: 0.3941 |  g_loss: 0.6628
+Iteration [ 1930/10000] | d_real_loss: 0.1422 | d_fake_loss: 0.2404 | d_total_loss: 0.3825 |  g_loss: 0.4822
+Iteration [ 1940/10000] | d_real_loss: 0.0669 | d_fake_loss: 0.4109 | d_total_loss: 0.4778 |  g_loss: 0.9099
+Iteration [ 1950/10000] | d_real_loss: 0.1663 | d_fake_loss: 0.1614 | d_total_loss: 0.3277 |  g_loss: 0.4587
+Iteration [ 1960/10000] | d_real_loss: 0.2308 | d_fake_loss: 0.1592 | d_total_loss: 0.3900 |  g_loss: 0.4080
+Iteration [ 1970/10000] | d_real_loss: 0.1827 | d_fake_loss: 0.1514 | d_total_loss: 0.3340 |  g_loss: 0.5117
+Iteration [ 1980/10000] | d_real_loss: 0.3713 | d_fake_loss: 0.0700 | d_total_loss: 0.4413 |  g_loss: 0.2795
+Iteration [ 1990/10000] | d_real_loss: 0.1238 | d_fake_loss: 0.2453 | d_total_loss: 0.3691 |  g_loss: 0.8988
+Iteration [ 2000/10000] | d_real_loss: 0.1807 | d_fake_loss: 0.1339 | d_total_loss: 0.3146 |  g_loss: 0.3493
+Saved output/cyclegan/.._10clip_instance_dc_cycle_naive/sample-002000.png
+Iteration [ 2010/10000] | d_real_loss: 0.3214 | d_fake_loss: 0.0880 | d_total_loss: 0.4094 |  g_loss: 0.3172
+Iteration [ 2020/10000] | d_real_loss: 0.2628 | d_fake_loss: 0.1210 | d_total_loss: 0.3838 |  g_loss: 0.3704
+Iteration [ 2030/10000] | d_real_loss: 0.0798 | d_fake_loss: 0.5701 | d_total_loss: 0.6499 |  g_loss: 0.8950
+Iteration [ 2040/10000] | d_real_loss: 0.1626 | d_fake_loss: 0.1608 | d_total_loss: 0.3233 |  g_loss: 0.5109
+Iteration [ 2050/10000] | d_real_loss: 0.2251 | d_fake_loss: 0.1428 | d_total_loss: 0.3679 |  g_loss: 0.3622
+Iteration [ 2060/10000] | d_real_loss: 0.1986 | d_fake_loss: 0.1919 | d_total_loss: 0.3905 |  g_loss: 0.3896
+Iteration [ 2070/10000] | d_real_loss: 0.2136 | d_fake_loss: 0.1666 | d_total_loss: 0.3802 |  g_loss: 0.4430
+Iteration [ 2080/10000] | d_real_loss: 0.2403 | d_fake_loss: 0.1670 | d_total_loss: 0.4073 |  g_loss: 0.5231
+Iteration [ 2090/10000] | d_real_loss: 0.1128 | d_fake_loss: 0.2579 | d_total_loss: 0.3707 |  g_loss: 0.6885
+Iteration [ 2100/10000] | d_real_loss: 0.1598 | d_fake_loss: 0.1529 | d_total_loss: 0.3126 |  g_loss: 0.5655
+Iteration [ 2110/10000] | d_real_loss: 0.0539 | d_fake_loss: 0.4025 | d_total_loss: 0.4564 |  g_loss: 0.9154
+Iteration [ 2120/10000] | d_real_loss: 0.1954 | d_fake_loss: 0.1427 | d_total_loss: 0.3381 |  g_loss: 0.4088
+Iteration [ 2130/10000] | d_real_loss: 0.1491 | d_fake_loss: 0.0905 | d_total_loss: 0.2396 |  g_loss: 0.6423
+Iteration [ 2140/10000] | d_real_loss: 0.0677 | d_fake_loss: 0.7145 | d_total_loss: 0.7822 |  g_loss: 1.2154
+Iteration [ 2150/10000] | d_real_loss: 0.1692 | d_fake_loss: 0.1912 | d_total_loss: 0.3604 |  g_loss: 0.5235
+Iteration [ 2160/10000] | d_real_loss: 0.0869 | d_fake_loss: 0.2839 | d_total_loss: 0.3708 |  g_loss: 0.7041
+Iteration [ 2170/10000] | d_real_loss: 0.3143 | d_fake_loss: 0.0905 | d_total_loss: 0.4048 |  g_loss: 0.2842
+Iteration [ 2180/10000] | d_real_loss: 0.2827 | d_fake_loss: 0.0784 | d_total_loss: 0.3610 |  g_loss: 0.4479
+Iteration [ 2190/10000] | d_real_loss: 0.0519 | d_fake_loss: 0.3017 | d_total_loss: 0.3536 |  g_loss: 0.7964
+Iteration [ 2200/10000] | d_real_loss: 0.3225 | d_fake_loss: 0.1150 | d_total_loss: 0.4375 |  g_loss: 0.2830
+Iteration [ 2210/10000] | d_real_loss: 0.2084 | d_fake_loss: 0.1769 | d_total_loss: 0.3854 |  g_loss: 0.4136
+Iteration [ 2220/10000] | d_real_loss: 0.1295 | d_fake_loss: 0.2696 | d_total_loss: 0.3991 |  g_loss: 0.6057
+Iteration [ 2230/10000] | d_real_loss: 0.2145 | d_fake_loss: 0.0848 | d_total_loss: 0.2993 |  g_loss: 0.3933
+Iteration [ 2240/10000] | d_real_loss: 0.1805 | d_fake_loss: 0.1022 | d_total_loss: 0.2827 |  g_loss: 0.4934
+Iteration [ 2250/10000] | d_real_loss: 0.1449 | d_fake_loss: 0.2584 | d_total_loss: 0.4033 |  g_loss: 0.7453
+Iteration [ 2260/10000] | d_real_loss: 0.2257 | d_fake_loss: 0.1064 | d_total_loss: 0.3321 |  g_loss: 0.4423
+Iteration [ 2270/10000] | d_real_loss: 0.2067 | d_fake_loss: 0.1997 | d_total_loss: 0.4065 |  g_loss: 0.8479
+Iteration [ 2280/10000] | d_real_loss: 0.3094 | d_fake_loss: 0.0908 | d_total_loss: 0.4002 |  g_loss: 0.3727
+Iteration [ 2290/10000] | d_real_loss: 0.0773 | d_fake_loss: 0.2526 | d_total_loss: 0.3299 |  g_loss: 0.8122
+Iteration [ 2300/10000] | d_real_loss: 0.5185 | d_fake_loss: 0.0263 | d_total_loss: 0.5447 |  g_loss: 0.1000
+Iteration [ 2310/10000] | d_real_loss: 0.1298 | d_fake_loss: 0.1724 | d_total_loss: 0.3021 |  g_loss: 0.5197
+Iteration [ 2320/10000] | d_real_loss: 0.0628 | d_fake_loss: 0.6386 | d_total_loss: 0.7014 |  g_loss: 1.0246
+Iteration [ 2330/10000] | d_real_loss: 0.1505 | d_fake_loss: 0.2133 | d_total_loss: 0.3638 |  g_loss: 0.5404
+Iteration [ 2340/10000] | d_real_loss: 0.2587 | d_fake_loss: 0.0918 | d_total_loss: 0.3505 |  g_loss: 0.3950
+Iteration [ 2350/10000] | d_real_loss: 0.0410 | d_fake_loss: 0.4655 | d_total_loss: 0.5066 |  g_loss: 1.2528
+Iteration [ 2360/10000] | d_real_loss: 0.1196 | d_fake_loss: 0.2623 | d_total_loss: 0.3820 |  g_loss: 0.4997
+Iteration [ 2370/10000] | d_real_loss: 0.1754 | d_fake_loss: 0.1866 | d_total_loss: 0.3620 |  g_loss: 0.5073
+Iteration [ 2380/10000] | d_real_loss: 0.1648 | d_fake_loss: 0.1379 | d_total_loss: 0.3027 |  g_loss: 0.5389
+Iteration [ 2390/10000] | d_real_loss: 0.1788 | d_fake_loss: 0.0970 | d_total_loss: 0.2758 |  g_loss: 0.4572
+Iteration [ 2400/10000] | d_real_loss: 0.7347 | d_fake_loss: 0.0352 | d_total_loss: 0.7699 |  g_loss: 0.0559
+Iteration [ 2410/10000] | d_real_loss: 0.1516 | d_fake_loss: 0.2497 | d_total_loss: 0.4013 |  g_loss: 0.5573
+Iteration [ 2420/10000] | d_real_loss: 0.1971 | d_fake_loss: 0.2404 | d_total_loss: 0.4375 |  g_loss: 0.4815
+Iteration [ 2430/10000] | d_real_loss: 0.1147 | d_fake_loss: 0.1947 | d_total_loss: 0.3094 |  g_loss: 0.5752
+Iteration [ 2440/10000] | d_real_loss: 0.2883 | d_fake_loss: 0.0711 | d_total_loss: 0.3594 |  g_loss: 0.2818
+Iteration [ 2450/10000] | d_real_loss: 0.1741 | d_fake_loss: 0.1645 | d_total_loss: 0.3386 |  g_loss: 0.4709
+Iteration [ 2460/10000] | d_real_loss: 0.1636 | d_fake_loss: 0.2190 | d_total_loss: 0.3826 |  g_loss: 0.5833
+Iteration [ 2470/10000] | d_real_loss: 0.0897 | d_fake_loss: 0.2761 | d_total_loss: 0.3657 |  g_loss: 0.9516
+Iteration [ 2480/10000] | d_real_loss: 0.2211 | d_fake_loss: 0.1011 | d_total_loss: 0.3222 |  g_loss: 0.5173
+Iteration [ 2490/10000] | d_real_loss: 0.1026 | d_fake_loss: 0.1870 | d_total_loss: 0.2896 |  g_loss: 0.7441
+Iteration [ 2500/10000] | d_real_loss: 0.0626 | d_fake_loss: 0.3743 | d_total_loss: 0.4370 |  g_loss: 0.8719
+Saved output/cyclegan/.._10clip_instance_dc_cycle_naive/sample-002500.png
 Traceback (most recent call last):
-  File "/mnt/hw5/final_proj/16726-finalproject/style_GAN.py", line 462, in <module>
-    os.system(cmd)
-  File "/mnt/hw5/final_proj/16726-finalproject/style_GAN.py", line 376, in main
-    # Create checkpoint and sample directories
-  File "/mnt/hw5/final_proj/16726-finalproject/style_GAN.py", line 279, in training_loop
-    images = next(iter_X)
-  File "/mnt/hw5/final_proj/16726-finalproject/utils.py", line 10, in to_var
-    #     x = x.cuda()
-KeyboardInterrupt
-/home/ubuntu/anaconda3/lib/python3.9/site-packages/torchvision/transforms/transforms.py:329: UserWarning: Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
-  warnings.warn(
-/home/ubuntu/anaconda3/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
-  warnings.warn(
-/home/ubuntu/anaconda3/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
-  warnings.warn(msg)
-================================================================================
-                                      Opts                                      
---------------------------------------------------------------------------------
-                             image_size: 128                                    
-                                   disc: dc                                     
-                                    gen: cycle                                  
-                                   iden: pretrained                             
-                             g_conv_dim: 32                                     
-                             d_conv_dim: 32                                     
-                                   norm: instance                               
-                              init_type: naive                                  
-                            train_iters: 10000                                  
-                             batch_size: 16                                     
-                            num_workers: 2                                      
-                                     lr: 0.0003                                 
-                                  beta1: 0.5                                    
-                                  beta2: 0.999                                  
-                           lambda_cycle: 10                                     
-                           lambda_style: 10                                     
-                                      X: ..                                     
-                                    ext: *.png                                  
-                        data_preprocess: vanilla                                
-                         checkpoint_dir: checkpoints_stylegan                   
-                   iden_checkpoint_dir: checkpoints_pretrained_style_id         
-                    sample_dir: output/cyclegan/.._10vanilla_instance_dc_cycle_naive
-                               log_step: 10                                     
-                           sample_every: 100                                    
-                       checkpoint_every: 1000                                   
-                                    gpu: 0                                      
-================================================================================
-Loaded 16 samples from ../labels
-Loading Style Identifier from checkpoints_pretrained_style_id/style_identifier_iter49600.pkl
-No checkpoint found, initializing new models.
-                 G                
----------------------------------------
-Generator(
-  (conv1): Sequential(
-    (0): Conv2d(3, 32, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
-    (1): InstanceNorm2d(32, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
-    (2): ReLU()
-  )
-  (conv2): Sequential(
-    (0): Conv2d(32, 64, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
-    (1): InstanceNorm2d(64, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
-    (2): ReLU()
-  )
-  (conv3): Sequential(
-    (0): Conv2d(64, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
-    (1): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
-    (2): ReLU()
-  )
-  (mlp): Sequential(
-    (0): Linear(in_features=31, out_features=128, bias=True)
-    (1): ReLU()
-    (2): Linear(in_features=128, out_features=128, bias=True)
-  )
-  (resnet_block): Sequential(
-    (0): ResnetBlock(
-      (conv_layer): Sequential(
-        (0): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-        (1): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
-        (2): ReLU()
-      )
-    )
-    (1): ResnetBlock(
-      (conv_layer): Sequential(
-        (0): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-        (1): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
-        (2): ReLU()
-      )
-    )
-    (2): ResnetBlock(
-      (conv_layer): Sequential(
-        (0): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-        (1): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
-        (2): ReLU()
-      )
-    )
-  )
-  (up_conv1): Sequential(
-    (0): Upsample(scale_factor=2.0, mode=nearest)
-    (1): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-    (2): InstanceNorm2d(64, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
-    (3): ReLU()
-  )
-  (up_conv2): Sequential(
-    (0): Upsample(scale_factor=2.0, mode=nearest)
-    (1): Conv2d(64, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-    (2): InstanceNorm2d(32, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
-    (3): ReLU()
-  )
-  (up_conv3): Sequential(
-    (0): Upsample(scale_factor=2.0, mode=nearest)
-    (1): Conv2d(32, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
-    (2): Tanh()
-  )
-)
----------------------------------------
-                 D                
----------------------------------------
-Discriminator(
-  (conv1): Sequential(
-    (0): Conv2d(3, 32, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
-    (1): InstanceNorm2d(32, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
-    (2): ReLU()
-  )
-  (conv2): Sequential(
-    (0): Conv2d(32, 64, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
-    (1): InstanceNorm2d(64, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
-    (2): ReLU()
-  )
-  (conv3): Sequential(
-    (0): Conv2d(64, 128, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
-    (1): InstanceNorm2d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
-    (2): ReLU()
-  )
-  (conv4): Sequential(
-    (0): Conv2d(128, 256, kernel_size=(4, 4), stride=(2, 2), padding=(1, 1), bias=False)
-    (1): InstanceNorm2d(256, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False)
-    (2): ReLU()
-  )
-  (conv5): Sequential(
-    (0): Conv2d(256, 1, kernel_size=(4, 4), stride=(1, 1))
-  )
-)
----------------------------------------
-                  style_identifier                  
----------------------------------------
-ResNet(
-  (conv1): Conv2d(3, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
-  (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-  (relu): ReLU(inplace=True)
-  (maxpool): MaxPool2d(kernel_size=3, stride=2, padding=1, dilation=1, ceil_mode=False)
-  (layer1): Sequential(
-    (0): BasicBlock(
-      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-    )
-    (1): BasicBlock(
-      (conv1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-    )
-  )
-  (layer2): Sequential(
-    (0): BasicBlock(
-      (conv1): Conv2d(64, 128, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (downsample): Sequential(
-        (0): Conv2d(64, 128, kernel_size=(1, 1), stride=(2, 2), bias=False)
-        (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      )
-    )
-    (1): BasicBlock(
-      (conv1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-    )
-  )
-  (layer3): Sequential(
-    (0): BasicBlock(
-      (conv1): Conv2d(128, 256, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (downsample): Sequential(
-        (0): Conv2d(128, 256, kernel_size=(1, 1), stride=(2, 2), bias=False)
-        (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      )
-    )
-    (1): BasicBlock(
-      (conv1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-    )
-  )
-  (layer4): Sequential(
-    (0): BasicBlock(
-      (conv1): Conv2d(256, 512, kernel_size=(3, 3), stride=(2, 2), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (downsample): Sequential(
-        (0): Conv2d(256, 512, kernel_size=(1, 1), stride=(2, 2), bias=False)
-        (1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      )
-    )
-    (1): BasicBlock(
-      (conv1): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn1): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-      (relu): ReLU(inplace=True)
-      (conv2): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
-      (bn2): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
-    )
-  )
-  (avgpool): AdaptiveAvgPool2d(output_size=(1, 1))
-  (fc): Linear(in_features=512, out_features=31, bias=True)
-)
----------------------------------------
-tensor([[0.0060, 0.0031, 0.0545, 0.0011, 0.0043, 0.0018, 0.0006, 0.0022, 0.0024,
-         0.0036, 0.0177, 0.0004, 0.0141, 0.0088, 0.0211, 0.0019, 0.0091, 0.0027,
-         0.0005, 0.0022, 0.0010, 0.0024, 0.0258, 0.0013, 0.0373, 0.0009, 0.0008,
-         0.0031, 0.0172, 0.0425, 0.0105]], grad_fn=<SigmoidBackward0>) tensor([[0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
-         0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0.]])
-Traceback (most recent call last):
-  File "/mnt/hw5/final_proj/16726-finalproject/style_GAN.py", line 467, in <module>
+  File "/mnt/hw5/final_proj/16726-finalproject/style_GAN using clip.py", line 514, in <module>
     main(opts)
-  File "/mnt/hw5/final_proj/16726-finalproject/style_GAN.py", line 381, in main
+  File "/mnt/hw5/final_proj/16726-finalproject/style_GAN using clip.py", line 423, in main
     training_loop(dataloader_X, opts)
-  File "/mnt/hw5/final_proj/16726-finalproject/style_GAN.py", line 314, in training_loop
-    fake_images = G(images_expanded, new_labels)
-  File "/home/ubuntu/anaconda3/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
-    return forward_call(*input, **kwargs)
-  File "/mnt/hw5/final_proj/16726-finalproject/models.py", line 138, in forward
-    x = self.conv2(x) 
-  File "/home/ubuntu/anaconda3/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
-    return forward_call(*input, **kwargs)
-  File "/home/ubuntu/anaconda3/lib/python3.9/site-packages/torch/nn/modules/container.py", line 204, in forward
-    input = module(input)
-  File "/home/ubuntu/anaconda3/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1194, in _call_impl
-    return forward_call(*input, **kwargs)
-  File "/home/ubuntu/anaconda3/lib/python3.9/site-packages/torch/nn/modules/instancenorm.py", line 74, in forward
-    return self._apply_instance_norm(input)
-  File "/home/ubuntu/anaconda3/lib/python3.9/site-packages/torch/nn/modules/instancenorm.py", line 34, in _apply_instance_norm
-    return F.instance_norm(
-  File "/home/ubuntu/anaconda3/lib/python3.9/site-packages/torch/nn/functional.py", line 2495, in instance_norm
-    return torch.instance_norm(
-KeyboardInterrupt
+  File "/mnt/hw5/final_proj/16726-finalproject/style_GAN using clip.py", line 387, in training_loop
+    g_loss.backward()
+  File "/home/ubuntu/anaconda3/lib/python3.9/site-packages/torch/_tensor.py", line 488, in backward
+    torch.autograd.backward(
+  File "/home/ubuntu/anaconda3/lib/python3.9/site-packages/torch/autograd/__init__.py", line 197, in backward
+    Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+torch.cuda.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.44 GiB (GPU 0; 14.61 GiB total capacity; 10.28 GiB already allocated; 1.01 GiB free; 12.64 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF

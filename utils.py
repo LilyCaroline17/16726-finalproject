@@ -6,8 +6,8 @@ import torch
 
 def to_var(x):
     """Converts numpy to variable."""
-    # if torch.cuda.is_available():
-    #     x = x.cuda()
+    if torch.cuda.is_available():
+        x = x.cuda()
     return x
 
 
