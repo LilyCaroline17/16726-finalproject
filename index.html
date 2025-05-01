@@ -160,6 +160,7 @@
       Our goal was to achieve similar results with less computation and smaller image sizes.
       <br><br>
       The dataset we used was from the K-Hairstyle paper, containing approximately 500k labeled images of 31 hairstyles.
+      You can find our complete code on <a href="https://github.com/LilyCaroline17/16726-finalproject/">Hair Transfer</a>. 
    </p>
    <div class="image-wrapper">
       <div class="image-container">
@@ -219,18 +220,14 @@
    <p>
       We considered the possibility that the training data might not be large enough or consistent enough for models to pick up features, 
       so we're using CLIP, which already has embeddings. so that it's learning straight from scratch and so that it can use what it has 
-      already to give us better style identifying (and style loss using cosine similarity loss)
+      already to give us better style identifying (and style loss using cosine similarity loss). 
+
+      We were unable to run it for more than 2500 iterations as we ran out of memory. 
    </p>
    <div class="image-wrapper">
-      <div class="image-row">
-         <div class="image-container">
-            <img src="clipLoss.png" alt="CLIP Loss Graph">
-            <figcaption>CLIP Model Style Identifier Loss</figcaption>
-         </div>
-         <div class="image-container">
-            <img src="clipPartialRes2500.png" alt="CLIP Results">
-            <figcaption>CLIP Results after 2500 Iterations</figcaption>
-         </div>
+      <div class="image-container">
+         <img src="clipPartialRes2500.png" alt="CLIP Results">
+         <figcaption>CLIP Results after 2500 Iterations</figcaption>
       </div>
    </div>
 
@@ -243,8 +240,23 @@
       facial features are visible which will be similar to our user input images where they send an image of themselves in. This ended up reducing 
       our dataset size to 97724, which is about 25% of our total dataset (validation taken from this dataset as well which is removed here), which 
       means that we lost a large portion of data that could be useful to train our models. 
-   </p>
 
+      We also tried changing the lambda cycle value, which changes the weight of the cycle consistency loss, so a lower lambda cycle means that images 
+      are more realistic and a higher lambda cycle means a more accurate reconstruction. There was no significant difference in the results as shown below, 
+      only that lambda cycle = 3 had a darker hair color, suggesting the more realistic hair than the other. 
+   </p>
+   <div class="image-wrapper">
+      <div class="image-row">
+         <div class="image-container">
+            <img src="front310Results.png" alt="Pretrained lambda cycle = 3 Results">
+            <figcaption>Using Front View Results after 10000 Iterations with Lambda Cycle = 3</figcaption>
+         </div>
+         <div class="image-container">
+            <img src="front1010Results.png" alt="Pretrained lambda cycle = 10 Results">
+            <figcaption>Using Front View Results after 10000 Iterations with Lambda Cycle = 10</figcaption>
+         </div>
+      </div>
+   </div>
    <h2>Application</h2>
    <p>
       Our final pipeline is as follows: <b>face input</b> → <i>blur face</i> → <b>generate hair</b> → <i>transplant face</i> → <b>output image</b>.
