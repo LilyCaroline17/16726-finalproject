@@ -6,7 +6,6 @@ import numpy as np
 from PIL import Image
 from torchvision import transforms
 from models import Generator
-# from main_hw2 import mixed_blend
 from proj2_starter import poisson_blend
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
