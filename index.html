@@ -226,26 +226,6 @@
         <div class="image-container">
          <img src="pretrainedResults.png" style="width:900px;">
         </div>
-      </div>
-        <div class="image-row">
-            <div class="image-container">
-                <img src="outputs/starry_night_tubingen/Synthesized Texture all.png"> 
-                <figcaption>Generated style with style loss after every convolution layer </figcaption>
-             </div>
-             <div class="image-container">
-                <img src="outputs/starry_night_tubingen/Synthesized Texture 1 3 5.png"> 
-                <figcaption>Generated style with style loss after the 1st, 3rd, and 5th convolution layer </figcaption>
-             </div>
-             <div class="image-container">
-                <img src="outputs/starry_night_tubingen/Synthesized Texture 1.png"> 
-                <figcaption>Generated style with style loss after the 1st convolution layer </figcaption>
-             </div>
-             <div class="image-container">
-                <img src="outputs/starry_night_tubingen/Synthesized Texture 5.png"> 
-                <figcaption>Generated style with style loss after the 5th convolution layer </figcaption>
-             </div>
-        </div>
-     </div>
      <p>We can see as we use less style layers, we end up with a less detailed texture result, where there's less notable brush stroke and theres larger blotches of colors. And in the cases with just a single layer, it's pretty noisy and isn't a very cohesive layer, where having just style loss in the earlier layers looks like noise with a couple strokes and having the style loss in a later layer results in more details but still a lot of noise.
         To get something with a closer texture to the original style image, I would pick to have style loss after each layer, such that we can guarantee the model's style is very close to the original style image.<br>
 
@@ -255,15 +235,6 @@
       <img src="outputs/picasso_dancing/Style Image.png"> 
       <figcaption>Style Image that the model is trying to match </figcaption>
    </div>
-      <div class="image-row">
-          <div class="image-container">
-              <img src="outputs/picasso_dancing/Synthesized Texture 1.png"> 
-              <figcaption>Style image 1</figcaption>
-           </div><div class="image-container">
-              <img src="outputs/picasso_dancing/Synthesized Texture 2.png"> 
-              <figcaption>Style image 2</figcaption>
-           </div>
-      </div>
    </div> 
 
       <h2>Part 3: CLIP</h2>
@@ -278,49 +249,10 @@
           <img src="clipPartialRes2500.png" style="width:900px;">
          </div>
        </div>
-        <table class="styled-table">
-            <thead>
-               <tr>
-                  <th>Content \ Style</th>
-                  <th><img src="outputs/the_scream_tubingen/Style Image.png" alt="The Scream Style"><br>The Scream</th>
-                  <th><img src="outputs/picasso_phipps/Style Image.png" alt="Picasso Style"><br>Picasso</th>
-               </tr>
-            </thead>
-            <tbody>
-               <tr>
-                  <td><img src="outputs/picasso_tubingen/Content Image.png" alt="Tubingen Content"><br>Tubingen</td>
-                  <td><img src="outputs/the_scream_tubingen/Output Image from noise.png" alt="Output Scream Tubingen"></td>
-                  <td><img src="outputs/picasso_tubingen/Output Image from noise.png" alt="Output Picasso Tubingen"></td>
-               </tr>
-               <tr>
-                  <td><img src="outputs/picasso_phipps/Content Image.png" alt="Phipps Content"><br>Phipps</td>
-                  <td><img src="outputs/the_scream_phipps/Output Image from noise.png" alt="Output Scream Phipps"></td>
-                  <td><img src="outputs/picasso_phipps/Output Image from noise.png" alt="Output Picasso Phipps"></td>
-               </tr>
-            </tbody>
-         </table>
+        
         <p>
         Note these images were generated with the input as random noise. However we could also try using the content image as input too. Because we are starting with the content image, we can note below that the content input image result has more accurate results?</p>
-        <div class="image-wrapper">
-            <div class="image-row">
-            <div class="image-container">
-                <img src="outputs/picasso_dancing/Style Image.png"> 
-                <figcaption>Style image</figcaption>
-             </div><div class="image-container">
-                <img src="outputs/picasso_dancing/Content Image.png"> 
-                <figcaption>Content image</figcaption>
-             </div>
-        </div>
-            <div class="image-row">
-                <div class="image-container">
-                    <img src="outputs/picasso_dancing/Output Image from noise.png"> 
-                    <figcaption>Noise as Input</figcaption>
-                 </div><div class="image-container">
-                    <img src="outputs/picasso_dancing/Output Image from content image.png"> 
-                    <figcaption>Content image as Input</figcaption>
-                 </div>
-            </div>
-         </div> 
+        
         <p>
         Now lets try the style transfer on some of my own images. I used an image taken at a lantern festival for the content and a background I drew a while ago as the style.
       </p>

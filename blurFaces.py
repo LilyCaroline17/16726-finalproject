@@ -6,6 +6,8 @@ import numpy as np
 from PIL import Image
 from torchvision import transforms
 from models import Generator
+# from main_hw2 import mixed_blend
+from proj2_starter import poisson_blend
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 face_detector = dlib.get_frontal_face_detector()
@@ -44,11 +46,13 @@ def blur_face(pil_img):
             mask = np.zeros((height, width, 3), dtype=np.uint8)
 
             center = (width // 2, height // 2)
-            axes = (int(width * 0.45), int(height * 0.55))
+            axes = (int(width * 0.4), int(height * 0.6))
             cv2.ellipse(mask, center, axes, 0, 0, 360, (255, 255, 255), -1)
 
             masked_blur = np.where(mask == 255, blurred_face, face_region)
             img_np[y1:y2, x1:x2] = masked_blur
+        img_res = Image.fromarray(img_np)
+        img_res.save("output0.jpg")
 
         return Image.fromarray(img_np), (x1, y1, x2, y2)
     return pil_img, None
@@ -65,34 +69,57 @@ def tensor_to_pil(tensor):
     tensor = (tensor * 0.5 + 0.5).clamp(0, 1)
     return transforms.ToPILImage()(tensor)
 
-def run_inference(img_path, G, output_path="output.jpg"):
+def get_dummy_one_hot(index=0, num_classes=31):
+    vec = torch.zeros(num_classes)
+    vec[index] = 1
+    return vec.unsqueeze(0).to(device)
+
+def run_inference(img_path, G, output_path="output", index=0):
     orig_img = preprocess_image(img_path)
     blurred_img, face_box = blur_face(orig_img)
 
     input_tensor = pil_to_tensor(blurred_img).to(device)
     with torch.no_grad():
-        output_tensor = G(input_tensor)
+        one_hot_vector = get_dummy_one_hot(index, num_classes=31)
+        output_tensor = G(input_tensor, one_hot_vector)
 
     gen_img = tensor_to_pil(output_tensor)
     gen_np = np.array(gen_img)
     orig_np = np.array(orig_img)
+    blend_img = gen_np
+    
+    gen_res = Image.fromarray(gen_np)
+    gen_res.save(output_path + "1.jpg")
 
     if face_box:
         x1, y1, x2, y2 = face_box
-        gen_np[y1:y2, x1:x2] = orig_np[y1:y2, x1:x2]
+        fg = orig_np
+        bg = gen_np
+        mask = np.zeros((128, 128, 3), dtype=np.uint8)
+        mask[y1:y2, x1:x2] = [255, 255, 255]
+        ratio = 1
+        mask = cv2.resize(mask, (0, 0), fx=ratio, fy=ratio)
 
-    final_img = Image.fromarray(gen_np)
-    final_img.save(output_path)
+        fg = fg / 255.
+        bg = bg / 255.
+        mask = (mask.sum(axis=2, keepdims=True) > 0)
+
+        blend_img = poisson_blend(fg, mask, bg)
+        blend_img_uint8 = (blend_img * 255).astype(np.uint8) if blend_img.dtype == np.float64 else blend_img.astype(np.uint8)
+        # gen_np[y1:y2, x1:x2] = orig_np[y1:y2, x1:x2]
+
+    final_img = Image.fromarray(blend_img_uint8)
+    final_img.save(output_path + '.jpg')
     print(f"Saved result to {output_path}")
 
 if __name__ == "__main__":
     class Opts:
-        g_conv_dim = 64
+        g_conv_dim = 32
         norm = 'instance'
-        checkpoint_dir = 'checkpoints_stylegan/10000itr/'
+        checkpoint_dir = 'checkpoints_stylegan_clip/2000itr'
 
     opts = Opts()
     generator = load_generator(opts.checkpoint_dir, opts)
 
     test_image_path = "test.jpg"
-    run_inference(test_image_path, generator)
+    run_inference(test_image_path, generator, output_path="output", index=2)
