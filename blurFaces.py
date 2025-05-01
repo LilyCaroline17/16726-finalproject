@@ -51,7 +51,7 @@ def blur_face(pil_img):
             masked_blur = np.where(mask == 255, blurred_face, face_region)
             img_np[y1:y2, x1:x2] = masked_blur
         img_res = Image.fromarray(img_np)
-        img_res.save("output0.jpg")
+        img_res.save("images/output0.jpg")
 
         return Image.fromarray(img_np), (x1, y1, x2, y2)
     return pil_img, None
@@ -73,7 +73,7 @@ def get_dummy_one_hot(index=0, num_classes=31):
     vec[index] = 1
     return vec.unsqueeze(0).to(device)
 
-def run_inference(img_path, G, output_path="output", index=0):
+def run_inference(img_path, G, output_path="images/output", index=0):
     orig_img = preprocess_image(img_path)
     blurred_img, face_box = blur_face(orig_img)
 
@@ -122,5 +122,5 @@ if __name__ == "__main__":
     opts = Opts()
     generator = load_generator(opts.checkpoint_dir, opts)
 
-    test_image_path = "test.jpg"
-    run_inference(test_image_path, generator, output_path="output", index=15)
+    test_image_path = "images/test.jpg"
+    run_inference(test_image_path, generator, output_path="images/output", index=15)

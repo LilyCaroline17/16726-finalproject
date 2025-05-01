@@ -64,14 +64,14 @@
 
       .image-container {
          text-align: center;
-         max-width: 600px;
+         /* max-width: 1900px; */
          margin: 0 auto; /* center horizontally */
       }
       
 
       img {
          width: 100%;
-         max-width: 500px;
+         max-width: 1000px;
          height: auto;
          display: block;
          margin: 0 auto; /* center the image */
@@ -148,97 +148,129 @@
 </head>
 <body>
    <div class="title-container">
-      <h1>FINAL PROJECT</h1>
+      <h1>Final Project: Hair Style Transfer</h1>
       <p>By Flora Cheng and Emily Guo<br>
          16-726 Learning-Based Image Synthesis (Spring 2025)</p>
    </div>
 
    <h2>Introduction</h2>
    <p>
-      In this project, our goal was to create a model that, given a photo of a face and a desired hairstyle, generates an image of the original face with the new hairstyle. This was inspired by prior work, including <i>Learning to Generate and Edit Hairstyles</i> and 
+      In this project, our goal was to create a model that, given a photo of a face and a desired hairstyle, generates an image of the original face with the new hairstyle. This was inspired by prior work, including <a href = "https://yanweifu.github.io/papers/hairstyle_v_14_weidong.pdf">Learning to Generate and Edit Hairstyles</a> and 
       <a href="https://psh01087.github.io/K-Hairstyle/">K-Hairstyle: A Large-scale Korean hairstyle dataset</a>. 
       Our goal was to achieve similar results with less computation and smaller image sizes.
-      <br><br>
-      The dataset we used was from the K-Hairstyle paper, containing approximately 500k labeled images of 31 hairstyles.
-      You can find our complete code on <a href="https://github.com/LilyCaroline17/16726-finalproject/">Hair Transfer</a>. 
-   </p>
-   <div class="image-wrapper">
+      <br><br>      You can find our complete code on <a href="https://github.com/LilyCaroline17/16726-finalproject/">Hair Transfer</a>. 
+The dataset we used was from the K-Hairstyle paper, containing approximately 500k labeled images of 31 hairstyles. These 31 hairstyles with the following counts are: 
+<p>
+<table class="styled-table">
+  <thead>
+    <tr>
+      <th>Hairstyle Name</th>
+      <th>Hairstyle Counts</th>
+      <th>Hairstyle Image</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Hershey</td><td>40695</td><td><img src="images/hershey.jpg" alt="Hershey Hairstyle"></td></tr>
+    <tr><td>Dandy</td><td>8494</td><td><img src="images/dandy.jpg" alt="Dandy Hairstyle"></td></tr>
+    <tr><td>Build</td><td>30370</td><td><img src="images/build.jpg" alt="Build Hairstyle"></td></tr>
+    <tr><td>Parted</td><td>15035</td><td><img src="images/parted.jpg" alt="Parted Hairstyle"></td></tr>
+    <tr><td>Short male</td><td>14530</td><td><img src="images/short_male.jpg" alt="Short Male Hairstyle"></td></tr>
+    <tr><td>Tassel</td><td>3778</td><td><img src="images/tassel.jpg" alt="Tassel Hairstyle"></td></tr>
+    <tr><td>other female</td><td>3961</td><td><img src="images/other_female.jpg" alt="Other Female Hairstyle"></td></tr>
+    <tr><td>Comma</td><td>2897</td><td><img src="images/comma.jpg" alt="Comma Hairstyle"></td></tr>
+    <tr><td>Short female</td><td>6620</td><td><img src="images/short_female.jpg" alt="Short Female Hairstyle"></td></tr>
+    <tr><td>Pomade</td><td>9741</td><td><img src="images/pomade.jpg" alt="Pomade Hairstyle"></td></tr>
+    <tr><td>Bob</td><td>23988</td><td><img src="images/bob.jpg" alt="Bob Hairstyle"></td></tr>
+    <tr><td>Hippi</td><td>18285</td><td><img src="images/hippi.jpg" alt="Hippi Hairstyle"></td></tr>
+    <tr><td>Misty</td><td>7679</td><td><img src="images/misty.jpg" alt="Misty Hairstyle"></td></tr>
+    <tr><td>Pleats</td><td>19986</td><td><img src="images/pleats.jpg" alt="Pleats Hairstyle"></td></tr>
+    <tr><td>As</td><td>9468</td><td><img src="images/as.jpg" alt="As Hairstyle"></td></tr>
+    <tr><td>See-through dandy</td><td>5983</td><td><img src="images/see_through_dandy.jpg" alt="See-through Dandy Hairstyle"></td></tr>
+    <tr><td>Leaf</td><td>9910</td><td><img src="images/leaf.jpg" alt="Leaf Hairstyle"></td></tr>
+    <tr><td>Air</td><td>37427</td><td><img src="images/air.jpg" alt="Air Hairstyle"></td></tr>
+    <tr><td>Body</td><td>25026</td><td><img src="images/body.jpg" alt="Body Hairstyle"></td></tr>
+    <tr><td>Spin swallow</td><td>6313</td><td><img src="images/spin_swallow.jpg" alt="Spin Swallow Hairstyle"></td></tr>
+    <tr><td>Soft two-block dandy</td><td>9415</td><td><img src="images/soft_two_block_dandy.jpg" alt="Soft Two-Block Dandy Hairstyle"></td></tr>
+    <tr><td>One-block dandy</td><td>4935</td><td><img src="images/one_block_dandy.jpg" alt="One-Block Dandy Hairstyle"></td></tr>
+    <tr><td>One length</td><td>41974</td><td><img src="images/one_length.jpg" alt="One Length Hairstyle"></td></tr>
+    <tr><td>other layered</td><td>61607</td><td><img src="images/other_layered.jpg" alt="Other Layered Hairstyle"></td></tr>
+    <tr><td>Loop</td><td>3316</td><td><img src="images/loop.jpg" alt="Loop Hairstyle"></td></tr>
+    <tr><td>other male</td><td>13250</td><td><img src="images/other_male.jpg" alt="Other Male Hairstyle"></td></tr>
+    <tr><td>Baby</td><td>3582</td><td><img src="images/baby.jpg" alt="Baby Hairstyle"></td></tr>
+    <tr><td>Regent</td><td>11630</td><td><img src="images/regent.jpg" alt="Regent Hairstyle"></td></tr>
+    <tr><td>Bonnie</td><td>18818</td><td><img src="images/bonnie.jpg" alt="Bonnie Hairstyle"></td></tr>
+    <tr><td>Shadow</td><td>13161</td><td><img src="images/shadow.jpg" alt="Shadow Hairstyle"></td></tr>
+    <tr><td>Short bob</td><td>18126</td><td><img src="images/short_bob.jpg" alt="Short Bob Hairstyle"></td></tr>
+  </tbody>
+</table>
+</p>
+<p>
+The labels were given in Korean, the previous names are the translated titles.  
+<br>
+      To build such an image generator, we needed to implement an image generation model. This was done using an GAN architecture as the input data we had wasn't 1-1 in changing a person's hairstyle. <br> The GAN architecture was built off of cycle GAN from HW3. We used the Generator and Discriminator classes with updates to accommodate conditioning with a one-hot style vector, such that the GAN model is able to generate different images using different vectors.<br>
+      The updated generator takes in an image and a hot vector as input. The encoder processes the image and generates a latent representation of the image. This latent vector is combined with the style vector before being passed through the resnet block and decoder to generate an image.</p>
       <div class="image-container">
-         <img src="structure.png" style="width:900px;">
+         <img src="images/structure.png" style="width:200%">
          <figcaption>GAN Structure Used</figcaption>
-      </div>
-   </div>
+      </div> 
+ <p>
+      To enforce the generated images to be similar to the original input image as well as have the correct style, we used the following losses:
+<ul> 
+<li>Realism loss <br>
+From typical GAN training, a goal of the generator is to generate realistic images. This is done by training the generator and discriminators as adversaries. The discriminator’s loss is found in how well it can differentiate generated images from real images. The generator’s realism loss is found by how much it can trick the discriminator. </li>
+<li>Reconstruction loss<br>
+If the generator was ran on a generated output (created with a different hairstyle) and given the original (correct) one-hot style vector, it’s expected that the generator will return an output that closely resembles the input image. This cycle-loss would help enforce that the generated images still resemble the original image, such that it looks like the original user with a different hairstyle and that the end result isn’t someone else.</li>
+<li>Style loss<br>
+A style identifier is trained beforehand to identify each hairstyle type from the dataset. Then during training, the generator’s output is passed through the identifier to determine if the generated output has the target style. This will help enforce the generator to generate images based on the input style vector. </li>
+</ul>
+    </p>
 
-   <h2>Part 1: Naive Model</h2>
+   <h2>Part 1: Style Identifier from Scratch</h2>
    <p>        
-      In the first part of the project, we used the architecture done in HW3 as a basis. We used the Generator and Discriminator classes we created in that homework with updates 
-      to accommodate our one-hot style vector. The updated generator takes in an image and a hot vector as input. The encoder processes the image and generates a latent, which is 
-      combined with the style vector. The resnet block decodes it back inito an image. The idea is that if the input image is given the original (correct) one-hot style vector that 
-      matches the image, the generator will return the input image. We also re-encode the image (get latent) with the original style vector to get the original input image (used for cycle loss). 
-      A style identifier is created to make sure that the images match the style that they are supposed to. It's similar to hw3 with convolution layers, then blocks of resnet blocks 
-      with average pools that halve the image size to 4x4. Then, we apply a linear and relu layer so that we get a 1 hot vector at the very end. The style loss measures how well the 
-      style identifier classifies the images into the target style. 
-
-      What we discovered is that our results weren't very good, and that our generated images for each of the one-hot vectors were the same image, suggesting that our style identifier is the issue. 
-      This means that it's not accurately predicting the style of images (as we discovered it was terribly wrong on even the training data). We also tried playing around with weights 
-      but the results were not significantly different. The results are below. 
+      The first attempt for creating the generator was with a style identifier that was trained from scratch. This model was built to with a similar structure to the generator model from HW3 as well as StarGANv2: convolution layers, then multiple resnet blocks with average pools that halve the image dimensions down to 4x4. Then, a linear and relu layer are applied to get a 1 hot style vector at the very end. This model was ran with 100k iterations over the dataset.<br> 
    </p>
-   <div class="image-wrapper">
-      <div class="image-row">
-         <div class="image-container">
-            <img src="naiveLoss.png" alt="Naive Loss Graph">
+<div class="image-container">
+            <img src="images/naiveLoss.png" alt="Naive Loss Graph" style="width:800px">
             <figcaption>Naive Model Style Identifier Loss</figcaption>
-         </div>
+         </div> 
+<p>We can see that the loss ended up decreasing a bit over the iterations however the loss could go down further as the training and validation loss have not diverged yet. </p>
          <div class="image-container">
-            <img src="naiveResults.png" alt="Naive Model Results">
+            <img src="images/naiveResults.png" alt="Naive Model Results" style="width:800px">
             <figcaption>Naive Results after 10000 Iterations</figcaption>
-         </div>
-      </div>
-   </div>
-
+         </div> 
+<p>What we discovered is that our generated results weren't very distinct. This suggests that the weights of the GAN training for cycle and style loss were off. Further investigation also uncovered that our style identifier was not accurately predicting the style of images (as we discovered it wasn’t able to even correctly identify styles of the training data images).</p>
    <h2>Part 2: Pretrained model</h2>
    <p>
-      In the second part of this project, we tried a pretrained model, hoping that it would be better at extracting features!
-      We changed the loss from L1/L2 to Binary Cross-Entropy. Once again, we seem to run across the same issue. It seems that 
-      our style identifier is failing us (which is not allowing the generator to be properly trained to actually generate 
-      hairstyles that we want). 
-   </p>
-   <div class="image-wrapper">
-      <div class="image-row">
+      In the second part of this project, we tried a pretrained model, hoping that it’s pretrained weights and structure would be better at extracting features that may assist in hairstyle identification!   </p> 
          <div class="image-container">
-            <img src="pretrainedLoss.png" alt="Pretrained Loss Graph">
+            <img src="images/pretrainedLoss.png" alt="Pretrained Loss Graph">
             <figcaption>Pretrained Model Style Identifier Loss</figcaption>
          </div>
+<p> We can see that the loss plateaus after … iterations.
+</p>
          <div class="image-container">
-            <img src="pretrainedResults.png" alt="Pretrained Results">
+            <img src="images/pretrainedResults.png" alt="Pretrained Results">
             <figcaption>Pretrained Results after 10000 Iterations</figcaption>
-         </div>
-      </div>
-   </div>
+         </div> 
+<p> However, based on the results again, we seem to run across the same issue. It seems that our style identifier is failing us (which is not allowing the generator to be properly trained to actually generate different hairstyles that we want). 
+</p>
 
    <h2>Part 3: CLIP</h2>
    <p>
-      We considered the possibility that the training data might not be large enough or consistent enough for models to pick up features, 
-      so we're using CLIP, which already has embeddings. so that it's learning straight from scratch and so that it can use what it has 
-      already to give us better style identifying (and style loss using cosine similarity loss). 
-
-      We were unable to run it for more than 2500 iterations as we ran out of memory. 
+      We considered the possibility that the training data might not be large enough or consistent enough for models to pick up features, so we're used CLIP, which already has text and image embeddings. Rather than learning straight from scratch or off the dataset that may cause the model confusion, we will use the CLIP embeddings of the image style labels as well as the images to find the style loss. This was ran for 2500 iterations due to memory constraints. 
    </p>
    <div class="image-wrapper">
       <div class="image-container">
-         <img src="clipPartialRes2500.png" alt="CLIP Results">
+         <img src="images/clipPartialRes2500.png" alt="CLIP Results">
          <figcaption>CLIP Results after 2500 Iterations</figcaption>
       </div>
    </div>
-
+  <p>
+      Result commentary here
+   </p>
    <h2>Part 4: Cutting Down on Dataset</h2>
    <p>
-      We realized that we were training on the entire hairstyle dataset, which includes images of hairstyles from all sides, and the goal 
-      of our hair transfer is to transfer these hairstyles onto a person, which would typically involve their face as an image of a hairstyle 
-      from the back wouldn't let the user know how it would actually look on them (not really any defining features to determine that that person 
-      is who they are), so we decided to limit the data to only use relatively front facing images with plus minus 45 degrees angle so that the 
-      facial features are visible which will be similar to our user input images where they send an image of themselves in. This ended up reducing 
-      our dataset size to 97724, which is about 25% of our total dataset (validation taken from this dataset as well which is removed here), which 
+     With further investigation on the model results, we considered if training on the entire hairstyle dataset, which includes images of hairstyles from all angles, would throw off the models. Considering that the goal of our hair transfer is to transfer these hairstyles onto an input image of a person, which would typically involve making their face visible. So we decided to limit the data to only use relatively front-facing images with plus minus 45 degrees angle, such that the model may be trained on a smaller range of images. This ended up reducing our dataset size to 97724, which is about 25% of the total dataset (validation taken from this dataset as well which is removed here), which 
       means that we lost a large portion of data that could be useful to train our models. 
 
       We also tried changing the lambda cycle value, which changes the weight of the cycle consistency loss, so a lower lambda cycle means that images 
@@ -248,11 +280,11 @@
    <div class="image-wrapper">
       <div class="image-row">
          <div class="image-container">
-            <img src="front310Results.png" alt="Pretrained lambda cycle = 3 Results">
+            <img src="images/front310Results.png" alt="Pretrained lambda cycle = 3 Results">
             <figcaption>Using Front View Results after 10000 Iterations with Lambda Cycle = 3</figcaption>
          </div>
          <div class="image-container">
-            <img src="front1010Results.png" alt="Pretrained lambda cycle = 10 Results">
+            <img src="images/front1010Results.png" alt="Pretrained lambda cycle = 10 Results">
             <figcaption>Using Front View Results after 10000 Iterations with Lambda Cycle = 10</figcaption>
          </div>
       </div>
@@ -272,23 +304,23 @@
    <div class="image-wrapper">
       <div class="image-row">
          <div class="image-container">
-            <img src="test.jpg" style="width:200px;">
+            <img src="images/test.jpg" style="width:200px;">
             <figcaption>Face Image</figcaption>
          </div>
          <div class="image-container">
-            <img src="blurredInput.jpg" style="width:200px;">
+            <img src="images/blurredInput.jpg" style="width:200px;">
             <figcaption>Blurred Face</figcaption>
          </div>
          <div class="image-container">
-            <img src="generatorRes.jpg" style="width:200px;">
+            <img src="images/generatorRes.jpg" style="width:200px;">
             <figcaption>Generated Hair</figcaption>
          </div>
          <div class="image-container">
-            <img src="transplantRes.jpg" style="width:200px;">
+            <img src="images/transplantRes.jpg" style="width:200px;">
             <figcaption>Transplanted Face</figcaption>
          </div>
          <div class="image-container">
-            <img src="finalRes.jpg" style="width:200px;">
+            <img src="images/finalRes.jpg" style="width:200px;">
             <figcaption>Final Output</figcaption>
          </div>
       </div>
