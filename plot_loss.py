@@ -2,7 +2,8 @@ import re
 import matplotlib.pyplot as plt
 
 # Load your log file
-log_path = 'pretrained_style_identifier_output.txt'
+log_path = 'log_outputs/clip_output_fail.txt'
+output_name = 'pretrainedLossFrontFacing.png'
 with open(log_path, 'r') as f:
     lines = f.readlines()
 
@@ -41,5 +42,5 @@ plt.ylabel('Loss')
 plt.title('Training and Validation Loss Over Time')
 plt.legend()
 plt.grid(True)
-plt.savefig('pretrained_style_iden_plot.png')
+plt.savefig(output_name)
 plt.show()
