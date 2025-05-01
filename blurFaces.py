@@ -105,7 +105,9 @@ def run_inference(img_path, G, output_path="output", index=0):
 
         blend_img = poisson_blend(fg, mask, bg)
         blend_img_uint8 = (blend_img * 255).astype(np.uint8) if blend_img.dtype == np.float64 else blend_img.astype(np.uint8)
-        # gen_np[y1:y2, x1:x2] = orig_np[y1:y2, x1:x2]
+        gen_np[y1:y2, x1:x2] = orig_np[y1:y2, x1:x2]
+        gen2_res = Image.fromarray(gen_np)
+        gen2_res.save(output_path + "2.jpg")
 
     final_img = Image.fromarray(blend_img_uint8)
     final_img.save(output_path + '.jpg')
@@ -121,4 +123,4 @@ if __name__ == "__main__":
     generator = load_generator(opts.checkpoint_dir, opts)
 
     test_image_path = "test.jpg"
-    run_inference(test_image_path, generator, output_path="output", index=2)
+    run_inference(test_image_path, generator, output_path="output", index=15)
