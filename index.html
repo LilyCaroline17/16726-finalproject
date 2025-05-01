@@ -160,7 +160,7 @@
         </div></div>
     </p>
 
-      <h2>Part 1: Naive Model????</h2>
+      <h2>Part 1: Naive Model</h2>
       <p>        
         In the first part of the project, we started from HW3 as a basis
         ...
@@ -169,9 +169,11 @@
       </p>
       <div class="image-wrapper"><div class="image-container">
          <img src="naiveLoss.png" style="width:900px;">
+         <figcaption>Naive Model Style Identifier Loss</figcaption>
         </div>
         <div class="image-container">
          <img src="naiveResults.png" style="width:700px;">
+         <figcaption>Naive Results after 10000 Iterations</figcaption>
         </div>
       </div>
         <div class="image-row">
@@ -223,8 +225,13 @@
         I'll run for some results...
       </p>
       <div class="image-wrapper">
+         <div class="image-container">
+            <img src="pretrainedLoss.png" style="width:900px;">
+            <figcaption>Pretrained Model Style Identifier Loss</figcaption>
+           </div>
         <div class="image-container">
          <img src="pretrainedResults.png" style="width:900px;">
+         <figcaption>Pretrained Results after 10000 Iterations</figcaption>
         </div>
      <p>We can see as we use less style layers, we end up with a less detailed texture result, where there's less notable brush stroke and theres larger blotches of colors. And in the cases with just a single layer, it's pretty noisy and isn't a very cohesive layer, where having just style loss in the earlier layers looks like noise with a couple strokes and having the style loss in a later layer results in more details but still a lot of noise.
         To get something with a closer texture to the original style image, I would pick to have style loss after each layer, such that we can guarantee the model's style is very close to the original style image.<br>
@@ -246,7 +253,12 @@
       </p>
       <div class="image-wrapper">
          <div class="image-container">
+            <img src="clipLoss.png" style="width:900px;">
+            <figcaption>CLIP Model Style Identifier Loss</figcaption>
+           </div>
+         <div class="image-container">
           <img src="clipPartialRes2500.png" style="width:900px;">
+          <figcaption>Clip Results after 2500 Iterations</figcaption>
          </div>
        </div>
         
