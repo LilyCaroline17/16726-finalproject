@@ -1,116 +1,143 @@
 <html>
    <head>
-    <style>
-        /* General Styles */
-        body {
-           font-family: "Optima", sans-serif;
-           color: darksalmon;
-           background-color:floralwhite;
-           margin: 0;
-           padding: 0;
-        }
-        h1 {
-           text-align: center;
-           font-size: 2.8em; 
-           margin: 0px;
-        }
-        h2 {
-           text-align: center;
-           background-color:blanchedalmond;
-           padding: 12px;
-           border-radius: 8px;
-           margin: 40px auto 20px auto;
-           width: 80%;
-           color:darksalmon;
-           font-size: 1.8em;
-        }
-        div {
-           text-align: center;
-           background-color:white;
-           border-radius: 12px;
-           /* padding: 20px; */
-           margin: 20px auto;
-           width: 85%;
-        }
-        p {
-           text-align: left;
-           font-size: 18px;
-           padding: 0 100px;
-           line-height: 1.6; 
-        }
-        /* Image Layout */
-        .image-wrapper {
-           display: flex;
-           flex-direction: column;
-           gap: 20px;
-           margin-top: 20px;
-           box-shadow: 0px 4px 10px peachpuff;
-        }
-        .image-row {
-           display: flex;
-           gap: 25px;
-           justify-content: center;
-           flex-wrap: wrap;
-        }
-        .image-container {
-           text-align: center;
-           max-width: 400px;
-        }
-        img {
-           width: 100%;
-           height: auto;
-           max-width: 500px;
-           border-radius: 8px;
-           transition: transform 0.3s ease-in-out;
-        }
-        img:hover {
-           transform: scale(1.03);
-        }
-        figcaption {
-           margin-top: 8px;
-           font-size: 16px;
-           /* color: #444; */
-           font-weight: bold;
-        }
-        /* Title and Header Section */
-        .title-container {
-           text-align: center; 
-           background-color:peachpuff;  
-           width: 85%; 
-        }
-        .title-container p { 
-           margin-top: 5px;
-           text-align: center;
-        }
-        .styled-table {
-   width: 85%;
-   margin: 20px auto;
-   border-collapse: collapse;
-   box-shadow: 0px 4px 10px peachpuff;
-   background: white;
-   text-align: center;
-   border-radius: 12px;
-   overflow: hidden;
-}
-
-.styled-table th, .styled-table td {
-   padding: 15px;
-   border: 1px solid peachpuff;
-}
-
-.styled-table th {
-   background-color: blanchedalmond;
-   font-size: 1.2em;
-   color: darksalmon;
-}
-
-.styled-table img {
-   width: 100px; /* Adjust image size */
-   height: auto;
-   border-radius: 8px;
-   transition: transform 0.3s ease-in-out;
-}
+      <style>
+         body {
+            font-family: "Optima", sans-serif;
+            color: #333;
+            background-color: #E6E6FA; /* Lavender */
+            margin: 0;
+            padding: 0;
+         }
+     
+         h1 {
+            text-align: center;
+            font-size: 2.8em;
+            margin: 30px 0 10px 0;
+            color: #483D8B; /* Dark Slate Blue */
+         }
+     
+         h2 {
+            text-align: center;
+            background-color: #D8BFD8; /* Thistle */
+            padding: 12px;
+            border-radius: 8px;
+            margin: 40px auto 20px auto;
+            width: 80%;
+            color: #483D8B;
+            font-size: 1.8em;
+            box-shadow: 0 2px 6px rgba(106, 90, 205, 0.2); /* Slate Blue soft shadow */
+         }
+     
+         div {
+            text-align: center;
+            background-color: white;
+            border-radius: 12px;
+            margin: 20px auto;
+            width: 85%;
+         }
+     
+         p {
+            text-align: left;
+            font-size: 18px;
+            padding: 0 100px;
+            line-height: 1.6;
+            color: #333;
+         }
+     
+         .image-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 20px;
+            box-shadow: 0px 4px 10px rgba(106, 90, 205, 0.2);
+         }
+     
+         .image-row {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            flex-wrap: wrap;
+         }
+     
+         .image-container {
+            text-align: center;
+            max-width: 900px;
+         }
+     
+         img {
+            width: 100%;
+            height: auto;
+            max-width: 500px;
+            border-radius: 8px;
+            transition: transform 0.3s ease-in-out;
+            box-shadow: 0 4px 8px rgba(106, 90, 205, 0.2);
+         }
+     
+         img:hover {
+            transform: scale(1.03);
+         }
+     
+         figcaption {
+            margin-top: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #483D8B;
+         }
+     
+         .title-container {
+            text-align: center;
+            background-color: #DDA0DD; /* Plum */
+            width: 85%;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 0 auto 30px auto;
+            box-shadow: 0px 4px 10px rgba(186, 85, 211, 0.3);
+         }
+     
+         .title-container p {
+            margin-top: 5px;
+            text-align: center;
+            font-size: 18px;
+            color: #444;
+         }
+     
+         .styled-table {
+            width: 85%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            box-shadow: 0px 4px 10px rgba(106, 90, 205, 0.2);
+            background: white;
+            text-align: center;
+            border-radius: 12px;
+            overflow: hidden;
+         }
+     
+         .styled-table th, .styled-table td {
+            padding: 15px;
+            border: 1px solid #D8BFD8; /* Thistle */
+         }
+     
+         .styled-table th {
+            background-color: #E6E6FA;
+            font-size: 1.2em;
+            color: #6A5ACD;
+         }
+     
+         .styled-table img {
+            width: 100px;
+            height: auto;
+            border-radius: 8px;
+            transition: transform 0.3s ease-in-out;
+         }
+     
+         footer {
+             text-align: center;
+             font-size: 14px;
+             color: #999;
+             margin: 40px 0;
+         }
      </style>
+     
    </head>
    <body>
       <div class="title-container">
@@ -127,8 +154,10 @@
         <br>
         The dataset used for training was from the 2nd paper, <a href =https://psh01087.github.io/K-Hairstyle/ >K-Hairstyle: A Large-scale Korean hairstyle dataset for virtual hair editing and hairstyle classification</a>, where there are approximately 500k labeled images of 31 types of hairstyles.
         
-        planned structure:
-        take from slides
+        planned structure: 
+        <div class="image-wrapper"><div class="image-container">
+         <img src="structure.png" style="width:900px;"><figcaption>GAN Structure Used</figcaption>
+        </div></div>
     </p>
 
       <h2>Part 1: Naive Model????</h2>
@@ -138,10 +167,13 @@
         this wasn't very good...
         why? 
       </p>
-    <div class="image-wrapper"><div class="image-container">
-        <img src="outputs/starry_night_tubingen/Content Image.png"> 
-        <figcaption>Content Image that the model is trying to match </figcaption>
-     </div>
+      <div class="image-wrapper"><div class="image-container">
+         <img src="naiveLoss.png" style="width:900px;">
+        </div>
+        <div class="image-container">
+         <img src="naiveResults.png" style="width:700px;">
+        </div>
+      </div>
         <div class="image-row">
             <div class="image-container">
                 <img src="outputs/starry_night_tubingen/Reconstructed Image conv 1.png"> 
@@ -190,10 +222,11 @@
         
         I'll run for some results...
       </p>
-      <div class="image-wrapper"><div class="image-container">
-        <img src="outputs/starry_night_phipps/Style Image.png"> 
-        <figcaption>Style Image that the model is matching </figcaption>
-     </div>
+      <div class="image-wrapper">
+        <div class="image-container">
+         <img src="pretrainedResults.png" style="width:900px;">
+        </div>
+      </div>
         <div class="image-row">
             <div class="image-container">
                 <img src="outputs/starry_night_tubingen/Synthesized Texture all.png"> 
@@ -240,6 +273,11 @@
          ==> updated flow chart: style loss if found w/ clip using cosine loss
         
       </p>
+      <div class="image-wrapper">
+         <div class="image-container">
+          <img src="clipPartialRes2500.png" style="width:900px;">
+         </div>
+       </div>
         <table class="styled-table">
             <thead>
                <tr>
