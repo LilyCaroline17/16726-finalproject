@@ -60,79 +60,7 @@ def create_model(opts):
     if torch.cuda.is_available():
         model.cuda()
         print("Models moved to GPU.")
-
-    # # 5. Loss + Optimizer
-    # style_counts = {
-    #     "가르마": 12510,
-    #     "기타남자스타일": 11242,
-    #     "기타레이어드": 48240,
-    #     "기타여자스타일": 2964,
-    #     "남자일반숏": 12577,
-    #     "댄디": 7798,
-    #     "루프": 2544,
-    #     "리젠트": 9837,
-    #     "리프": 7276,
-    #     "미스티": 6161,
-    #     "바디": 20810,
-    #     "베이비": 3076,
-    #     "보니": 15469,
-    #     "보브": 20811,
-    #     "빌드": 23617,
-    #     "소프트투블럭댄디": 7446,
-    #     "숏단발": 13614,
-    #     "쉐도우": 10298,
-    #     "쉼표": 2401,
-    #     "스핀스왈로": 4936,
-    #     "시스루댄디": 4981,
-    #     "애즈": 8143,
-    #     "에어": 29418,
-    #     "여자일반숏": 5527,
-    #     "원랭스": 34040,
-    #     "원블럭댄디": 3869,
-    #     "테슬": 2926,
-    #     "포마드": 7970,
-    #     "플리츠": 15370,
-    #     "허쉬": 34040,
-    #     "히피": 13455,
-    # }
-
-    # STYLE_CLASSES = sorted(set( [
-    #     "가르마",
-    #     "기타남자스타일",
-    #     "기타레이어드",
-    #     "기타여자스타일",
-    #     "남자일반숏",
-    #     "댄디",
-    #     "루프",
-    #     "리젠트",
-    #     "리프",
-    #     "미스티",
-    #     "바디",
-    #     "베이비",
-    #     "보니",
-    #     "보브",
-    #     "빌드",
-    #     "소프트투블럭댄디",
-    #     "숏단발",
-    #     "쉐도우",
-    #     "쉼표",
-    #     "스핀스왈로",
-    #     "시스루댄디",
-    #     "애즈",
-    #     "에어",
-    #     "여자일반숏",
-    #     "원랭스",
-    #     "원블럭댄디",
-    #     "테슬",
-    #     "포마드",
-    #     "플리츠",
-    #     "허쉬",
-    #     "히피",
-    # ]))
-    # STYLE_TO_IDX = {style: i for i, style in enumerate(STYLE_CLASSES)} 
-    # class_counts = torch.tensor([style_counts[style] for style in STYLE_CLASSES], dtype=torch.float)
-
-    # class_weights = 1.0 / (class_counts.float() + 1e-6) 
+ 
     optimizer = optim.Adam(model.fc.parameters(), lr=opts.lr)  # Only train the head
  
     print_model(model)
@@ -148,7 +76,7 @@ def create_model(opts):
         opts.resume_iter = 0
         print(f"Checkpoints not found. Starting from scratch.")
 
-    return model, optimizer#, criterion
+    return model, optimizer 
 
 
 def checkpoint(iteration, model, optimizer, opts):
@@ -163,8 +91,7 @@ def checkpoint(iteration, model, optimizer, opts):
         path,
     )
 
-
-# probably want update to dataloader_images dataloader_labels <--- @EMILY
+ 
 def training_loop(dataloader_X, validation_loader, opts):
     """Runs the training loop.
     * Saves checkpoint every opts.checkpoint_every iterations
@@ -176,11 +103,7 @@ def training_loop(dataloader_X, validation_loader, opts):
     params = list(model.parameters())
 
     iter_X = iter(dataloader_X)
-
-    # Get some fixed data for sampling test loss?
-    # that allow us to inspect the model's performance.
-    pair = next(iter_X)
-    fixed_X = (utils.to_var(pair[0]), utils.to_var(pair[1]))
+ 
     iter_per_epoch = len(dataloader_X)
 
     for iteration in range(opts.resume_iter + 1, opts.train_iters + 1):
@@ -191,8 +114,7 @@ def training_loop(dataloader_X, validation_loader, opts):
 
         images_X = next(iter_X)
         images_X, labels = (utils.to_var(images_X[0]), utils.to_var(images_X[1]))
-        # print(images_X.device, labels.device)
-
+        
 
         # TRAIN THE DISCRIMINATORS
         # 1. Compute the discriminator losses on real images
@@ -293,7 +215,7 @@ def create_parser():
     parser.add_argument("--resume_iter", type=int, default=0)
     parser.add_argument("--batch_size", type=int, default=16)
     parser.add_argument("--num_workers", type=int, default=2)
-    parser.add_argument("--lr", type=float, default=0.0001) # also lower cus finetuning
+    parser.add_argument("--lr", type=float, default=0.0001) # lower b/c finetuning
     parser.add_argument("--beta1", type=float, default=0.5)
     parser.add_argument("--beta2", type=float, default=0.999)
     parser.add_argument("--lambda_cycle", type=float, default=10)
