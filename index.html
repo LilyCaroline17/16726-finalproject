@@ -1,221 +1,242 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <meta charset="UTF-8">
-   <title>Final Project</title>
-   <style>
-      body {
-         font-family: "Optima", sans-serif;
-         color: #333;
-         background-color: #E6E6FA;
-         margin: 0;
-         padding: 0;
-      }
+  <meta charset="UTF-8">
+  <title>Final Project</title>
+  <style>
+     body {
+        font-family: "Optima", sans-serif;
+        color: #333;
+        background-color: #E6E6FA;
+        margin: 0;
+        padding: 0;
+     }
 
-      h1 {
-         text-align: center;
-         font-size: 2.8em;
-         margin: 30px 0 10px 0;
-         color: #483D8B;
-      }
 
-      h2 {
-         text-align: center;
-         background-color: #D8BFD8;
-         padding: 12px;
-         border-radius: 8px;
-         margin: 40px auto 20px auto;
-         width: 80%;
-         color: #483D8B;
-         font-size: 1.8em;
-         box-shadow: 0 2px 6px rgba(106, 90, 205, 0.2);
-      }
+     h1 {
+        text-align: center;
+        font-size: 2.8em;
+        margin: 30px 0 10px 0;
+        color: #483D8B;
+     }
 
-      .section-container {
-         text-align: center;
-         background-color: white;
-         border-radius: 12px;
-         margin: 20px auto;
-         width: 85%;
-      }
 
-      p {
-         text-align: left;
-         font-size: 18px;
-         padding: 0 100px;
-         line-height: 1.6;
-         color: #333;
-      }
+     h2 {
+        text-align: center;
+        background-color: #D8BFD8;
+        padding: 12px;
+        border-radius: 8px;
+        margin: 40px auto 20px auto;
+        width: 80%;
+        color: #483D8B;
+        font-size: 1.8em;
+        box-shadow: 0 2px 6px rgba(106, 90, 205, 0.2);
+     }
 
-      .image-wrapper {
-         display: flex;
-         flex-direction: column;
-         gap: 20px;
-         margin-top: 20px;
-         box-shadow: 0px 4px 10px rgba(106, 90, 205, 0.2);
-      }
 
-      .image-row {
-         display: flex;
-         justify-content: center;
-         gap: 25px;
-         flex-wrap: wrap;
-      }      
+     .section-container {
+        text-align: center;
+        background-color: white;
+        border-radius: 12px;
+        margin: 20px auto;
+        width: 85%;
+     }
 
-      .image-container {
-         text-align: center;
-         /* max-width: 1900px; */
-         margin: 0 auto; /* center horizontally */
-      }
-      
 
-      img {
-         width: 100%;
-         max-width: 1000px;
-         height: auto;
-         display: block;
-         margin: 0 auto; /* center the image */
-         border-radius: 8px;
-         transition: transform 0.3s ease-in-out;
-         box-shadow: 0 4px 8px rgba(106, 90, 205, 0.2);
-      }
-      
+     p {
+        text-align: left;
+        font-size: 18px;
+        padding: 0 100px;
+        line-height: 1.6;
+        color: #333;
+     }
 
-      img:hover {
-         transform: scale(1.03);
-      }
 
-      figcaption {
-         margin-top: 8px;
-         font-size: 16px;
-         font-weight: bold;
-         color: #483D8B;
-      }
+     .image-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-top: 20px;
+        box-shadow: 0px 4px 10px rgba(106, 90, 205, 0.2);
+     }
 
-      .title-container {
-         text-align: center;
-         background-color: #DDA0DD;
-         width: 85%;
-         padding: 20px;
-         border-radius: 12px;
-         margin: 0 auto 30px auto;
-         box-shadow: 0px 4px 10px rgba(186, 85, 211, 0.3);
-      }
 
-      .title-container p {
-         margin-top: 5px;
-         text-align: center;
-         font-size: 18px;
-         color: #444;
-      }
+     .image-row {
+        display: flex;
+        justify-content: center;
+        gap: 25px;
+        flex-wrap: wrap;
+     }     
 
-      .styled-table {
-         width: 85%;
-         margin: 20px auto;
-         border-collapse: collapse;
-         box-shadow: 0px 4px 10px rgba(106, 90, 205, 0.2);
-         background: white;
-         text-align: center;
-         border-radius: 12px;
-         overflow: hidden;
-      }
 
-      .styled-table th, .styled-table td {
-         padding: 15px;
-         border: 1px solid #D8BFD8;
-      }
+     .image-container {
+        text-align: center;
+        /* max-width: 1900px; */
+        margin: 0 auto; /* center horizontally */
+     }
+    
 
-      .styled-table th {
-         background-color: #E6E6FA;
-         font-size: 1.2em;
-         color: #6A5ACD;
-      }
 
-      .styled-table img {
-         width: 100px;
-         height: auto;
-         border-radius: 8px;
-         transition: transform 0.3s ease-in-out;
-      }
+     img {
+        width: 100%;
+        max-width: 1000px;
+        height: auto;
+        display: block;
+        margin: 0 auto; /* center the image */
+        border-radius: 8px;
+        transition: transform 0.3s ease-in-out;
+        box-shadow: 0 4px 8px rgba(106, 90, 205, 0.2);
+     }
+    
 
-      footer {
-         text-align: center;
-         font-size: 14px;
-         color: #999;
-         margin: 40px 0;
-      }
-   </style>
+
+     img:hover {
+        transform: scale(1.03);
+     }
+
+
+     figcaption {
+        margin-top: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #483D8B;
+     }
+
+
+     .title-container {
+        text-align: center;
+        background-color: #DDA0DD;
+        width: 85%;
+        padding: 20px;
+        border-radius: 12px;
+        margin: 0 auto 30px auto;
+        box-shadow: 0px 4px 10px rgba(186, 85, 211, 0.3);
+     }
+
+
+     .title-container p {
+        margin-top: 5px;
+        text-align: center;
+        font-size: 18px;
+        color: #444;
+     }
+
+
+     .styled-table {
+        width: 85%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        box-shadow: 0px 4px 10px rgba(106, 90, 205, 0.2);
+        background: white;
+        text-align: center;
+        border-radius: 12px;
+        overflow: hidden;
+     }
+
+
+     .styled-table th, .styled-table td {
+        padding: 15px;
+        border: 1px solid #D8BFD8;
+     }
+
+
+     .styled-table th {
+        background-color: #E6E6FA;
+        font-size: 1.2em;
+        color: #6A5ACD;
+     }
+
+
+     .styled-table img {
+        width: 100px;
+        height: auto;
+        border-radius: 8px;
+        transition: transform 0.3s ease-in-out;
+     }
+
+
+     footer {
+        text-align: center;
+        font-size: 14px;
+        color: #999;
+        margin: 40px 0;
+     }
+  </style>
 </head>
 <body>
-   <div class="title-container">
-      <h1>Final Project: Hair Style Transfer</h1>
-      <p>By Flora Cheng and Emily Guo<br>
-         16-726 Learning-Based Image Synthesis (Spring 2025)</p>
-   </div>
+  <div class="title-container">
+     <h1>Final Project: Hair Style Transfer</h1>
+     <p>By Flora Cheng and Emily Guo<br>
+        16-726 Learning-Based Image Synthesis (Spring 2025)</p>
+  </div>
 
-   <h2>Introduction</h2>
-   <p>
-      In this project, our goal was to create a model that, given a photo of a face and a desired hairstyle, generates an image of the original face with the new hairstyle. This was inspired by prior work, including <a href = "https://yanweifu.github.io/papers/hairstyle_v_14_weidong.pdf">Learning to Generate and Edit Hairstyles</a> and 
-      <a href="https://psh01087.github.io/K-Hairstyle/">K-Hairstyle: A Large-scale Korean hairstyle dataset</a>. 
-      Our goal was to achieve similar results with less computation and smaller image sizes.
-      <br><br>      You can find our complete code on <a href="https://github.com/LilyCaroline17/16726-finalproject/">Hair Transfer</a>. 
-The dataset we used was from the K-Hairstyle paper, containing approximately 500k labeled images of 31 hairstyles. These 31 hairstyles with the following counts are: 
+
+  <h2>Introduction</h2>
+  <p>
+     In this project, our goal was to create a model that, given a photo of a face and a desired hairstyle, generates an image of the original face with the new hairstyle. This was inspired by prior work, including <a href = "https://yanweifu.github.io/papers/hairstyle_v_14_weidong.pdf">Learning to Generate and Edit Hairstyles</a> and
+     <a href="https://psh01087.github.io/K-Hairstyle/">K-Hairstyle: A Large-scale Korean hairstyle dataset</a>.
+     Our goal was to achieve similar results with less computation and smaller image sizes.
+     <br><br>      You can find our complete code on <a href="https://github.com/LilyCaroline17/16726-finalproject/">Hair Transfer</a>.
+The dataset we used was from the K-Hairstyle paper, containing approximately 500k labeled images of 31 hairstyles. These 31 hairstyles with the following counts are:
 <p>
 <table class="styled-table">
   <thead>
     <tr>
       <th>Hairstyle Name</th>
-      <th>Hairstyle Counts</th>
       <th>Hairstyle Image</th>
     </tr>
   </thead>
   <tbody>
-    <tr><td>Hershey</td><td>40695</td><td><img src="images/hershey.jpg" alt="Hershey Hairstyle"></td></tr>
-    <tr><td>Dandy</td><td>8494</td><td><img src="images/dandy.jpg" alt="Dandy Hairstyle"></td></tr>
-    <tr><td>Build</td><td>30370</td><td><img src="images/build.jpg" alt="Build Hairstyle"></td></tr>
-    <tr><td>Parted</td><td>15035</td><td><img src="images/parted.jpg" alt="Parted Hairstyle"></td></tr>
-    <tr><td>Short male</td><td>14530</td><td><img src="images/short_male.jpg" alt="Short Male Hairstyle"></td></tr>
-    <tr><td>Tassel</td><td>3778</td><td><img src="images/tassel.jpg" alt="Tassel Hairstyle"></td></tr>
-    <tr><td>other female</td><td>3961</td><td><img src="images/other_female.jpg" alt="Other Female Hairstyle"></td></tr>
-    <tr><td>Comma</td><td>2897</td><td><img src="images/comma.jpg" alt="Comma Hairstyle"></td></tr>
-    <tr><td>Short female</td><td>6620</td><td><img src="images/short_female.jpg" alt="Short Female Hairstyle"></td></tr>
-    <tr><td>Pomade</td><td>9741</td><td><img src="images/pomade.jpg" alt="Pomade Hairstyle"></td></tr>
-    <tr><td>Bob</td><td>23988</td><td><img src="images/bob.jpg" alt="Bob Hairstyle"></td></tr>
-    <tr><td>Hippi</td><td>18285</td><td><img src="images/hippi.jpg" alt="Hippi Hairstyle"></td></tr>
-    <tr><td>Misty</td><td>7679</td><td><img src="images/misty.jpg" alt="Misty Hairstyle"></td></tr>
-    <tr><td>Pleats</td><td>19986</td><td><img src="images/pleats.jpg" alt="Pleats Hairstyle"></td></tr>
-    <tr><td>As</td><td>9468</td><td><img src="images/as.jpg" alt="As Hairstyle"></td></tr>
-    <tr><td>See-through dandy</td><td>5983</td><td><img src="images/see_through_dandy.jpg" alt="See-through Dandy Hairstyle"></td></tr>
-    <tr><td>Leaf</td><td>9910</td><td><img src="images/leaf.jpg" alt="Leaf Hairstyle"></td></tr>
-    <tr><td>Air</td><td>37427</td><td><img src="images/air.jpg" alt="Air Hairstyle"></td></tr>
-    <tr><td>Body</td><td>25026</td><td><img src="images/body.jpg" alt="Body Hairstyle"></td></tr>
-    <tr><td>Spin swallow</td><td>6313</td><td><img src="images/spin_swallow.jpg" alt="Spin Swallow Hairstyle"></td></tr>
-    <tr><td>Soft two-block dandy</td><td>9415</td><td><img src="images/soft_two_block_dandy.jpg" alt="Soft Two-Block Dandy Hairstyle"></td></tr>
-    <tr><td>One-block dandy</td><td>4935</td><td><img src="images/one_block_dandy.jpg" alt="One-Block Dandy Hairstyle"></td></tr>
-    <tr><td>One length</td><td>41974</td><td><img src="images/one_length.jpg" alt="One Length Hairstyle"></td></tr>
-    <tr><td>other layered</td><td>61607</td><td><img src="images/other_layered.jpg" alt="Other Layered Hairstyle"></td></tr>
-    <tr><td>Loop</td><td>3316</td><td><img src="images/loop.jpg" alt="Loop Hairstyle"></td></tr>
-    <tr><td>other male</td><td>13250</td><td><img src="images/other_male.jpg" alt="Other Male Hairstyle"></td></tr>
-    <tr><td>Baby</td><td>3582</td><td><img src="images/baby.jpg" alt="Baby Hairstyle"></td></tr>
-    <tr><td>Regent</td><td>11630</td><td><img src="images/regent.jpg" alt="Regent Hairstyle"></td></tr>
-    <tr><td>Bonnie</td><td>18818</td><td><img src="images/bonnie.jpg" alt="Bonnie Hairstyle"></td></tr>
-    <tr><td>Shadow</td><td>13161</td><td><img src="images/shadow.jpg" alt="Shadow Hairstyle"></td></tr>
-    <tr><td>Short bob</td><td>18126</td><td><img src="images/short_bob.jpg" alt="Short Bob Hairstyle"></td></tr>
+    <tr><td>허쉬</td><td><img src="images/허쉬.jpg"></td></tr>
+    <tr><td>댄디</td><td><img src="images/댄디.jpg"></td></tr>
+    <tr><td>빌드</td><td><img src="images/빌드.jpg"></td></tr>
+    <tr><td>가르마</td><td><img src="images/가르마.jpg"></td></tr>
+    <tr><td>남자일반숏</td><td><img src="images/남자일반숏.jpg"></td></tr>
+    <tr><td>테슬</td><td><img src="images/테슬.jpg"></td></tr>
+    <tr><td>기타여자스타일</td><td><img src="images/기타여자스타일.jpg"></td></tr>
+    <tr><td>쉼표</td><td><img src="images/쉼표.jpg"></td></tr>
+    <tr><td>여자일반숏</td><td><img src="images/여자일반숏.jpg"></td></tr>
+    <tr><td>포마드</td><td><img src="images/포마드.jpg"></td></tr>
+    <tr><td>보브</td><td><img src="images/보브.jpg"></td></tr>
+    <tr><td>히피</td><td><img src="images/히피.jpg"></td></tr>
+    <tr><td>미스티</td><td><img src="images/미스티.jpg"></td></tr>
+    <tr><td>플리츠</td><td><img src="images/플리츠.jpg"></td></tr>
+    <tr><td>애즈</td><td><img src="images/애즈.jpg"></td></tr>
+    <tr><td>시스루댄디</td><td><img src="images/시스루댄디.jpg"></td></tr>
+    <tr><td>리프</td><td><img src="images/리프.jpg"></td></tr>
+    <tr><td>에어</td><td><img src="images/에어.jpg"></td></tr>
+    <tr><td>바디</td><td><img src="images/바디.jpg"></td></tr>
+    <tr><td>스핀스왈로</td><td><img src="images/스핀스왈로.jpg"></td></tr>
+    <tr><td>소프트투블럭댄디</td><td><img src="images/소프트투블럭댄디.jpg"></td></tr>
+    <tr><td>원블럭댄디</td><td><img src="images/원블럭댄디.jpg"></td></tr>
+    <tr><td>원랭스</td><td><img src="images/원랭스.jpg"></td></tr>
+    <tr><td>기타레이어드</td><td><img src="images/기타레이어드.jpg"></td></tr>
+    <tr><td>루프</td><td><img src="images/루프.jpg"></td></tr>
+    <tr><td>기타남자스타일</td><td><img src="images/기타남자스타일.jpg"></td></tr>
+    <tr><td>베이비</td><td><img src="images/베이비.jpg"></td></tr>
+    <tr><td>리젠트</td><td><img src="images/리젠트.jpg"></td></tr>
+    <tr><td>보니</td><td><img src="images/보니.jpg"></td></tr>
+    <tr><td>쉐도우</td><td><img src="images/쉐도우.jpg"></td></tr>
+    <tr><td>숏단발</td><td><img src="images/숏단발.jpg"></td></tr>
   </tbody>
 </table>
+
+
+
+
 </p>
 <p>
-The labels were given in Korean, the previous names are the translated titles.  
+The labels were given in Korean, the previous names are the translated titles. 
 <br>
-      To build such an image generator, we needed to implement an image generation model. This was done using an GAN architecture as the input data we had wasn't 1-1 in changing a person's hairstyle. <br> The GAN architecture was built off of cycle GAN from HW3. We used the Generator and Discriminator classes with updates to accommodate conditioning with a one-hot style vector, such that the GAN model is able to generate different images using different vectors.<br>
-      The updated generator takes in an image and a hot vector as input. The encoder processes the image and generates a latent representation of the image. This latent vector is combined with the style vector before being passed through the resnet block and decoder to generate an image.</p>
-      <div class="image-container">
-         <img src="images/structure.png" style="width:200%">
-         <figcaption>GAN Structure Used</figcaption>
-      </div> 
- <p>
-      To enforce the generated images to be similar to the original input image as well as have the correct style, we used the following losses:
-<ul> 
+     To build such an image generator, we needed to implement an image generation model. This was done using an GAN architecture as the input data we had wasn't 1-1 in changing a person's hairstyle. <br> The GAN architecture was built off of cycle GAN from HW3. We used the Generator and Discriminator classes with updates to accommodate conditioning with a one-hot style vector, such that the GAN model is able to generate different images using different vectors.<br>
+     The updated generator takes in an image and a hot vector as input. The encoder processes the image and generates a latent representation of the image. This latent vector is combined with the style vector before being passed through the resnet block and decoder to generate an image.</p>
+     <div class="image-container">
+        <img src="images/structure.png" style="width:200%">
+        <figcaption>GAN Structure Used</figcaption>
+     </div>
+<p>
+     To enforce the generated images to be similar to the original input image as well as have the correct style, we used the following losses:
+<ul>
 <li>Realism loss <br>
 From typical GAN training, a goal of the generator is to generate realistic images. This is done by training the generator and discriminators as adversaries. The discriminator’s loss is found in how well it can differentiate generated images from real images. The generator’s realism loss is found by how much it can trick the discriminator. </li>
 <li>Reconstruction loss<br>
@@ -223,115 +244,122 @@ If the generator was ran on a generated output (created with a different hairsty
 <li>Style loss<br>
 A style identifier is trained beforehand to identify each hairstyle type from the dataset. Then during training, the generator’s output is passed through the identifier to determine if the generated output has the target style. This will help enforce the generator to generate images based on the input style vector. </li>
 </ul>
-    </p>
-
-   <h2>Part 1: Style Identifier from Scratch</h2>
-   <p>        
-      The first attempt for creating the generator was with a style identifier that was trained from scratch. This model was built to with a similar structure to the generator model from HW3 as well as StarGANv2: convolution layers, then multiple resnet blocks with average pools that halve the image dimensions down to 4x4. Then, a linear and relu layer are applied to get a 1 hot style vector at the very end. This model was ran with 100k iterations over the dataset.<br> 
    </p>
+
+
+  <h2>Part 1: Style Identifier from Scratch</h2>
+  <p>       
+     The first attempt for creating the generator was with a style identifier that was trained from scratch. This model was built to with a similar structure to the generator model from HW3 as well as StarGANv2: convolution layers, then multiple resnet blocks with average pools that halve the image dimensions down to 4x4. Then, a linear and relu layer are applied to get a 1 hot style vector at the very end. This model was ran with 100k iterations over the dataset.<br>
+  </p>
 <div class="image-container">
-            <img src="images/naiveLoss.png" alt="Naive Loss Graph" style="width:800px">
-            <figcaption>Naive Model Style Identifier Loss</figcaption>
-         </div> 
+           <img src="images/naiveLoss.png" alt="Naive Loss Graph" style="width:800px">
+           <figcaption>Naive Model Style Identifier Loss</figcaption>
+        </div>
 <p>We can see that the loss ended up decreasing a bit over the iterations however the loss could go down further as the training and validation loss have not diverged yet. </p>
-         <div class="image-container">
-            <img src="images/naiveResults.png" alt="Naive Model Results" style="width:800px">
-            <figcaption>Naive Results after 10000 Iterations</figcaption>
-         </div> 
+        <div class="image-container">
+           <img src="images/naiveResults.png" alt="Naive Model Results" style="width:800px">
+           <figcaption>Naive Results after 10000 Iterations</figcaption>
+        </div>
 <p>What we discovered is that our generated results weren't very distinct. This suggests that the weights of the GAN training for cycle and style loss were off. Further investigation also uncovered that our style identifier was not accurately predicting the style of images (as we discovered it wasn’t able to even correctly identify styles of the training data images).</p>
-   <h2>Part 2: Pretrained model</h2>
-   <p>
-      In the second part of this project, we tried a pretrained model, hoping that it’s pretrained weights and structure would be better at extracting features that may assist in hairstyle identification!   </p> 
-         <div class="image-container">
-            <img src="images/pretrainedLoss.png" alt="Pretrained Loss Graph">
-            <figcaption>Pretrained Model Style Identifier Loss</figcaption>
-         </div>
-<p> We can see that the loss plateaus after … iterations.
-</p>
-         <div class="image-container">
-            <img src="images/pretrainedResults.png" alt="Pretrained Results">
-            <figcaption>Pretrained Results after 10000 Iterations</figcaption>
-         </div> 
-<p> However, based on the results again, we seem to run across the same issue. It seems that our style identifier is failing us (which is not allowing the generator to be properly trained to actually generate different hairstyles that we want). 
-</p>
-
-   <h2>Part 3: CLIP</h2>
-   <p>
-      We considered the possibility that the training data might not be large enough or consistent enough for models to pick up features, so we're used CLIP, which already has text and image embeddings. Rather than learning straight from scratch or off the dataset that may cause the model confusion, we will use the CLIP embeddings of the image style labels as well as the images to find the style loss. This was ran for 2500 iterations due to memory constraints. 
-   </p>
-   <div class="image-wrapper">
-      <div class="image-container">
-         <img src="images/clipPartialRes2500.png" alt="CLIP Results">
-         <figcaption>CLIP Results after 2500 Iterations</figcaption>
-      </div>
-   </div>
+  <h2>Part 2: Pretrained model</h2>
   <p>
-      Result commentary here
-   </p>
-   <h2>Part 4: Cutting Down on Dataset</h2>
-   <p>
-     With further investigation on the model results, we considered if training on the entire hairstyle dataset, which includes images of hairstyles from all angles, would throw off the models. Considering that the goal of our hair transfer is to transfer these hairstyles onto an input image of a person, which would typically involve making their face visible. So we decided to limit the data to only use relatively front-facing images with plus minus 45 degrees angle, such that the model may be trained on a smaller range of images. This ended up reducing our dataset size to 97724, which is about 25% of the total dataset (validation taken from this dataset as well which is removed here), which 
-      means that we lost a large portion of data that could be useful to train our models. 
+     In the second part of this project, we tried a pretrained model, hoping that it’s pretrained weights and structure would be better at extracting features that may assist in hairstyle identification!   </p>
+        <div class="image-container">
+           <img src="images/pretrainedLoss.png" alt="Pretrained Loss Graph">
+           <figcaption>Pretrained Model Style Identifier Loss</figcaption>
+        </div>
+<p> We can see that the training loss drops a lot faster with a pretrained model and plateaus much faster. 
+</p>
+        <div class="image-container">
+           <img src="images/pretrainedResults.png" alt="Pretrained Results">
+           <figcaption>Pretrained Results after 10000 Iterations</figcaption>
+        </div>
+<p> However, based on the results again, we seem to run across the same issue. It seems that our style identifier is failing us (which is not allowing the generator to be properly trained to actually generate different hairstyles that we want).
+</p>
 
-      We also tried changing the lambda cycle value, which changes the weight of the cycle consistency loss, so a lower lambda cycle means that images 
-      are more realistic and a higher lambda cycle means a more accurate reconstruction. There was no significant difference in the results as shown below, 
-      only that lambda cycle = 3 had a darker hair color, suggesting the more realistic hair than the other. 
-   </p>
-   <div class="image-wrapper">
-      <div class="image-row">
-         <div class="image-container">
-            <img src="images/front310Results.png" alt="Pretrained lambda cycle = 3 Results">
-            <figcaption>Using Front View Results after 10000 Iterations with Lambda Cycle = 3</figcaption>
-         </div>
-         <div class="image-container">
-            <img src="images/front1010Results.png" alt="Pretrained lambda cycle = 10 Results">
-            <figcaption>Using Front View Results after 10000 Iterations with Lambda Cycle = 10</figcaption>
-         </div>
-      </div>
-   </div>
-   <h2>Application</h2>
-   <p>
-      Our final pipeline is as follows: <b>face input</b> → <i>blur face</i> → <b>generate hair</b> → <i>transplant face</i> → <b>output image</b>.
-      When given an input image of a person's face, we start off by blurring the face of the image, which becomes our input image into the pre-trained 
-      Generator from our trainings, along with a style vector of what that person wishes their hairstyle to be. The generated image is based on the 
-      blurred face, so we want to add the face back in. If we do that, there may have been aspects in the generation process that makes the coloring, 
-      contrasting, lighting, etc. different so we use poisson blend from homework 2 to make the input face back into the generated hairstyle look more 
-      normal. 
 
-      For the blurred face, we used an existing face detection software called get_frontal_face_detector from the dlib library to detect faces so that 
-      we're accurately blurring the face of our person instead of having a set location blurred for an image. 
-   </p>
-   <div class="image-wrapper">
-      <div class="image-row">
-         <div class="image-container">
-            <img src="images/test.jpg" style="width:200px;">
-            <figcaption>Face Image</figcaption>
-         </div>
-         <div class="image-container">
-            <img src="images/blurredInput.jpg" style="width:200px;">
-            <figcaption>Blurred Face</figcaption>
-         </div>
-         <div class="image-container">
-            <img src="images/generatorRes.jpg" style="width:200px;">
-            <figcaption>Generated Hair</figcaption>
-         </div>
-         <div class="image-container">
-            <img src="images/transplantRes.jpg" style="width:200px;">
-            <figcaption>Transplanted Face</figcaption>
-         </div>
-         <div class="image-container">
-            <img src="images/finalRes.jpg" style="width:200px;">
-            <figcaption>Final Output</figcaption>
-         </div>
-      </div>
-   </div>
+  <h2>Part 3: CLIP</h2>
+  <p>
+     We considered the possibility that the training data might not be large enough or consistent enough for models to pick up features, so we're used CLIP, which already has text and image embeddings. Rather than learning straight from scratch or off the dataset that may cause the model confusion, we will use the CLIP embeddings of the image style labels as well as the images to find the style loss. This was ran for 2500 iterations due to memory constraints.
+  </p>
+  <div class="image-wrapper">
+     <div class="image-container">
+        <img src="images/clipPartialRes2500.png" alt="CLIP Results">
+        <figcaption>CLIP Results after 2500 Iterations</figcaption>
+     </div>
+  </div>
+ <p>
+     We can see that because we've run it only for a quarter of the iterations we usually do, it is quite pixelated and not far enough in the learning process. It seems that our style identifier is still failing us. 
+  </p>
+  <h2>Part 4: Cutting Down on Dataset</h2>
+  <p>
+    With further investigation on the model results, we considered if training on the entire hairstyle dataset, which includes images of hairstyles from all angles, would throw off the models. Considering that the goal of our hair transfer is to transfer these hairstyles onto an input image of a person, which would typically involve making their face visible. So we decided to limit the data to only use relatively front-facing images with plus minus 45 degrees angle, such that the model may be trained on a smaller range of images. This ended up reducing our dataset size to 97724, which is about 25% of the total dataset (validation taken from this dataset as well which is removed here), which
+     means that we lost a large portion of data that could be useful to train our models.
 
-   <h2>Final Results</h2>
-   <p>
-      We were able to demonstrate that CLIP-based embeddings and better architecture choices significantly improved visual fidelity and consistency.
-      However, our results seem to be suffering from our style identifier, which is resulting in not having different generate images (besides the 
-      slight change in the hair part as you see above). Future work would involve more existing models for the style identifier to determine how that 
-      could improve our results. 
-   </p>
+
+     We also tried changing the lambda cycle value, which changes the weight of the cycle consistency loss, so a lower lambda cycle means that images
+     are more realistic and a higher lambda cycle means a more accurate reconstruction. There was no significant difference in the results as shown below,
+     only that lambda cycle = 3 had a darker hair color, suggesting the more realistic hair than the other.
+  </p>
+  <div class="image-wrapper">
+     <div class="image-row">
+        <div class="image-container">
+           <img src="images/front310Results.png" alt="Pretrained lambda cycle = 3 Results">
+           <figcaption>Using Front View Results after 10000 Iterations with Lambda Cycle = 3</figcaption>
+        </div>
+        <div class="image-container">
+           <img src="images/front1010Results.png" alt="Pretrained lambda cycle = 10 Results">
+           <figcaption>Using Front View Results after 10000 Iterations with Lambda Cycle = 10</figcaption>
+        </div>
+     </div>
+  </div>
+  <h2>Application</h2>
+  <p>
+     Our final pipeline is as follows: <b>face input</b> → <i>blur face</i> → <b>generate hair</b> → <i>transplant face</i> → <b>output image</b>.
+     When given an input image of a person's face, we start off by blurring the face of the image, which becomes our input image into the pre-trained
+     Generator from our trainings, along with a style vector of what that person wishes their hairstyle to be. The generated image is based on the
+     blurred face, so we want to add the face back in. If we do that, there may have been aspects in the generation process that makes the coloring,
+     contrasting, lighting, etc. different so we use poisson blend from homework 2 to make the input face back into the generated hairstyle look more
+     normal.
+
+
+     For the blurred face, we used an existing face detection software called get_frontal_face_detector from the dlib library to detect faces so that
+     we're accurately blurring the face of our person instead of having a set location blurred for an image.
+  </p>
+  <div class="image-wrapper">
+     <div class="image-row">
+        <div class="image-container">
+           <img src="images/test.jpg" style="width:200px;">
+           <figcaption>Face Image</figcaption>
+        </div>
+        <div class="image-container">
+           <img src="images/blurredInput.jpg" style="width:200px;">
+           <figcaption>Blurred Face</figcaption>
+        </div>
+        <div class="image-container">
+           <img src="images/generatorRes.jpg" style="width:200px;">
+           <figcaption>Generated Hair</figcaption>
+        </div>
+        <div class="image-container">
+           <img src="images/transplantRes.jpg" style="width:200px;">
+           <figcaption>Transplanted Face</figcaption>
+        </div>
+        <div class="image-container">
+           <img src="images/finalRes.jpg" style="width:200px;">
+           <figcaption>Final Output</figcaption>
+        </div>
+     </div>
+  </div>
+
+
+  <h2>Final Results</h2>
+  <p>
+     We were able to demonstrate that CLIP-based embeddings and better architecture choices significantly improved visual fidelity and consistency.
+     However, our results seem to be suffering from our style identifier, which is resulting in not having different generate images (besides the
+     slight change in the hair part as you see above). Future work would involve more existing models for the style identifier to determine how that
+     could improve our results.
+  </p>
 </body>
 </html>
+
+
